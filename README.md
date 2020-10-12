@@ -2,37 +2,70 @@
 
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
 
-Flutter mediator is a MVC state management package base on InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
+Flutter mediator is a MVC state management package base on the InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
+
+By providing automatic generated aspects and management, flutter mediator makes you feel comfortable using the InheritedModel just like the InheritedWidget and rebuild widgets only when necessary.
 
 <p align="center"><img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/main.gif"></p>
 
 ## Features
 
-- **_Easy and simple to use_** - automatically make things work by only a few steps
-- **_Efficiency and Performance_** - use InheritedModel as the underlying layer to make the app quick response
-- **_Lightweight_** - small package size
-- **_Flexible_** - provide both automatic and manual observation
-- **_Intuitive_** - three main classes: **_`Publisher`, `Subscriber`, `Host`_**
-  <br /> &emsp; **_`Publisher`_** - publish aspects
-  <br /> &emsp; **_`Subscriber`_** - subscribe aspects
-  <br /> &emsp; **_`Host`_** - dispatch aspects
+- **_Easy and simple_** - Automatically make things work only by a few steps. Dependency injection, IoC, Proxy to make the state management much easier.
+- **_Efficiency and Performance_** - Use InheritedModel as the underlying layer, rebuild widgets only when necessary.
+- **_Lightweight_** - Small package size.
+- **_Flexible_** - Provide both automatic and manual publish.
+- **_Intuitive_** - Three main classes: **_`Pub`, `Subscriber`, `Host`_**
+  <br /> &emsp; **_`Pub`_** - to publish aspects
+  <br /> &emsp; **_`Subscriber`_** - to subscribe aspects
+  <br /> &emsp; **_`Host`_** - to dispatch aspects
 
 ### Flutter Widget of the Week: InheritedModel explained
 
-&emsp; InheritedModel provides an aspect parameter to its descendants to indicate which fields they care about to determine whether that widget needs to rebuild. InheritedModel can help you rebuild its descendants only when necessary.
+InheritedModel provides an aspect parameter to its descendants to indicate which fields they care about to determine whether that widget needs to rebuild. InheritedModel can help you rebuild its descendants only when necessary.
 
 <p align="center">
 <a href="https://www.youtube.com/watch?feature=player_embedded&v=ml5uefGgkaA
 " target="_blank"><img src="https://img.youtube.com/vi/ml5uefGgkaA/0.jpg" 
 alt="Flutter Widget of the Week: InheritedModel Explained" /></a></p>
 
-# Setting up
+## Key contepts
+
+#### Subscribe and Publish
+
+A widget subscribes with aspects and will rebuild whenever a model controller publishs one of those aspects.
+
+#### Rx Variable
+
+A proxy object of the package, by design pattern, proxy provides a surrogate or placeholder for another object to control access to it.
+Variables in the model can turn into a proxy object by denoting **_`.rx`_**
+
+#### Widget Aspects
+
+Aspects denote what the widget is interested in. That widget will rebuild whenever one of those aspects is published.
+
+#### Rx Related Widget
+
+When subscribing a widget, any rx variables used inside the create method will rebuild the widget automatically when updated.
+
+#### Rx Automatic Aspect
+
+By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
+
+#### View Map
+
+<!-- same as View Map section-->
+
+View map consists of two create function maps, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
+
+<br />
+
+## Setting up
 
 Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^1.0.0+3"
+  flutter_mediator: "^1.1.0"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -45,147 +78,804 @@ For help getting started with Flutter, view the online [documentation](https://f
 
 <br />
 
-# Getting Started Quick Steps
+## Getting Started Quick Steps
 
-### **_`Model`_**, **_`View`_**, **_`Controller`_**, **_`Host`_**:
+### **_Host_**, **_Model_**, **_View_**, **_Controller_**:
 
-### **_`Model`_**:
+### 1. **_Model:_**
 
-&emsp; 1-1. Extend the model from **_`Publisher`_**
+&emsp; 1-1. Implement the model by extending from **_`Pub`_**
 <br />
-&emsp; 1-2. Declare rx variables with **_`.rx`_**, which will automatically rebuild the aspect-related-widget when updated.
+&emsp; 1-2. Use **_`.rx`_** to turn model variables into rx variables, which will automatically rebuild the rx related widget when updated.
 <br />
-&emsp; 1-3. Implement the update methods.
+&emsp; 1-3. Implement the controller method of that variable.
 
 &emsp; For example,
 
 ```dart
-/// MyModel.dart
-
-class MyModel extends Publisher {
-  /// `.rx` make the var automatically rebuild the aspect-related-widget when updated
-  var int1 =  0.rx;
+/// my_model.dart
+class MyModel extends Pub {
+  /// `.rx` make the var automatically rebuild the rx related widget when updated
+  var int1 = 0.rx;
 
   void updateInt1() {
     /// since int1 is a rx variable,
     /// it will automatically rebuild the aspect-realted-widget when updated
     int1 +=  1;
   }
-```
-
-### **_`Subscribe the View`_**:
-
-2. **_Subscribe the widget with one or multiple aspects._**
-
-   - Subscribe one aspect:
-     <br /> **_`aspect`_**`.subModel`**_`<Model>`_**`((context, model) {/*create method*/})`
-   - Subscribe multiple aspects: (place aspects in a list)
-     <br /> **_`[a1, a2]`_**`.subModel`**_`<Model>`_**`((context, model) {/*create method*/})`
-   - Broadcast to all aspects of the model: (`null` aspect to broadcast)
-     <br /> **_`null`_**`.subModel`**_`<Model>`_**`((context, model) {/*create method*/})`
-
-   Place the subscriber in the widget tree then any rx variables inside the create method will automatically rebuild the aspect-related-widget when updated. _(triggered by getter and setter)_
-   <br />
-
-   For example, subscribe the widget with aspect of String **_`'int1'`_** of class **_`<MyModel>`_**
-
-- simple form - create the subscriber directly
-
-```dart
-'int1'.subModel<MyModel>((context, model) => Text('${model.int1}')),
-```
-
-- class form - wrap the subscriber in a class
-
-```dart
-class Int1Subscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return 'int1'.subModel<MyModel>((context, model) {
-      /// Since model.int1 is a rx variable,
-      /// it will automatically rebuild the aspect-related-widget when updated.
-      /// In this example, the aspect is 'int1' of <MyModel>.
-      return Text('Int1 is ${model.int1}');
-    });
-  }
 }
 ```
 
-### **_`Controller`_**:
+&emsp; **Then, later, get the model by**
 
-3. Place the controller in the widget tree.
-   <br /> For example, get the model of class **_`<MyModel>`_** and execute it's update method within a RaisedButton.
+- `Pub.getModel`**_`<Model>`_**`()`
 
-```dart
-RaisedButton(
-  child: const Text('Update Int1'),
-  onPressed: () => context.getModel<MyModel>().updateInt1(),
-);
-```
+> Note that you don't need `context` to get the model, this provides you the flexibility to do things anywhere.
 
-### **_`Host`_**:
+### 2. **_Host:_**
 
-4. Place **_host_** at the top level of the widget tree.
+Register the models to the **_`Host`_**, and place it at the top level of the widget tree.
+<br />**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
+<br /> For example, register `2` models, **_`MyModel`_** and **_`ListModel`_**, to the host.
 
 ```dart
-void  main() {
+void main() {
   runApp(
     MultiHost.create2(
-      MyModel(updateMs:  1000), // model extends from Publisher
-      ListModel(updateMs:  500),// model extends from Publisher
-      child:  MyApp(),
+      MyModel(updateMs:  1000), // model extends from Pub
+      ListModel(updateMs:  500),// model extends from Pub
+      child: MyApp(),
     ),
-  /// MultiHost.create1 to MultiHost.create9 are provided by the package.
   );
 }
 ```
 
-### **_`Works automatically!`_**
+### 3. **_View: Subscribe widgets_**
 
-5. Then whenever rx variables updates, the aspect-related-widget will rebuild automatically!
+There are two ways to subscribe a widget:
 
-<br /> These steps can help you in most situations. The following details explain the package one step further.
+- rx automatic aspect: (_Recommend_)
+
+  - The package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
+    <br /> `rxSub`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+
+- specific aspect:
+
+  - Subscribe an aspect:
+    <br /> **_`aspect`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+  - Subscribe multiple aspects: (Place aspects in a list)
+    <br /> **_`[a1, a2]`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+  - Broadcast to all aspects of the model: (Subscribe with `null` aspect to broadcast)
+    <br /> **_`null`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+
+Place that `Subscriber` in the widget tree then any rx variables used inside the create method will automatically rebuild the related widget when updated. _(triggered by getter and setter)_
+<br />
+
+For example, subscribes a widget with model class **_`<MyModel>`_**
+
+- Case 1: Use rx automatic aspect.
+
+```dart
+rxSub<MyModel>((context, model) => Text('Int1 is ${model.int1}'))
+```
+
+- Case 2: With specific aspect **_`'int1'`_**.
+
+```dart
+'int1'.subModel<MyModel>((context, model) => Text('Int1 is ${model.int1}'))
+```
+
+<!-- same as detail: Touch the rx variable -->
+
+- Case 3: When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
+  <br /> For example, when changing locale, the create method doesn't need to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+
+```dart
+rxSub<MyModel>((context, model) {
+  model.locale.touch();
+  final hello = 'app.hello'.i18n(context);
+  return const Text('$hello');
+})
+```
+
+### 4. **_Controller:_**
+
+Place the controller in the widget tree.
+<br /> For example, to get the model class **_`<MyModel>`_** and execute its controller method within a `RaisedButton`.
+
+```dart
+Controller<MyModel>(
+  create: (context, model) => RaisedButton(
+    child: const Text('Update Int1'),
+    onPressed: () => model.updateInt1(), // or simplely, `model.int1++`
+  ),
+)
+```
+
+Or implement a `controller function` of `MyModel.updateInt1()`, then place it in the widget tree.
+
+```dart
+Widget int1Controller() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('Update Int1'),
+      onPressed: () => model.updateInt1(), // or simplely, `model.int1++`
+    ),
+  );
+}
+```
+
+### 5. **_Works automatically!_**
+
+Then whenever the rx variable updates, the related widgets will rebuild automatically!
 
 <br />
 
-# Example
+<!-- same as detail: Access the underlying value of rx variables -->
+
+## Access the underlying value of rx variables
+
+Sometimes, an operation of a rx variable can not be done, then you need to do that with the underlying value by denoting **`.value`** .
+<br /> For example,
+
+```dart
+/// my_model.dart
+var int1 = 0.rx;   // turn int1 into a rx variable (i.e. a proxy object)
+var str1 = 'A'.rx; // turn str1 into a rx variable (i.e. a proxy object)
+void updateInt1() {
+  // int1 *= 5; // can not do this (dart doesn't support operator*= to override)
+  int1.value *= 5; // need to do that with the underlying value
+  // str1 = 'B'; // can not do this
+  str1.value = 'B'; // need to do that with the underlying value
+}
+```
+
+<br />
+
+## Visual Studio Code snippets
+
+These are code snippets, for example, for visual studio code to easy using the package.
+<br /> To add these code snippets in visual studio code, press
+
+`control+shift+p => Preferences: Configure user snippets => dart.json`
+<br /> Then add the content of [vscode_snippets.json](https://github.com/rob333/flutter_mediator/blob/main/example/lib/vscode_snippets.json) to the `dart.json`.
+
+Now you can type these shortcuts for code templates to easy using the package:
+
+- `mmodel` - **Generate a Model Boilerplate Code of Flutter Mediator**
+- `getmodel` - Get the Model of Flutter Mediator
+
+&emsp; View Map shortcuts: (See View Map)
+
+- `addsub` - Add a Creator to the Subscriber Map of the Model.
+- `addcon` - Add a Creator to the Controller Map of the Model.
+- `pubsub` - Create a Subscriber Widget from the Subscriber Map of the Model.
+- `pubcon` - Create a Controller Widget from the Controller Map of the Model.
+
+&emsp; Shortcuts:
+
+- `controller` - Create a Flutter Mediator Controller Function.
+- `subscriber` - Create a Flutter Mediator Subscriber Function with Aspect.
+- `rxfun` - Create a Flutter Mediator Subscriber Function with RX Automatic Aspect.
+- `submodel` - Create a Flutter Mediator Subscriber with Aspect.
+- `rxsub` - Create a Flutter Mediator Subscriber with RX Automatic Aspect.
+
+<br />
+
+## View Map - one step further of dependency injection
+
+<!-- same as key concept View Map -->
+
+View map consists of two create function maps, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
+
+First, let's see what's the difference by an original view and after using the view map.
+
+#### Original View
+
+```dart
+/// Original view
+class LocalePanel extends StatelessWidget {
+  const LocalePanel({Key key}) : super(key: key);
+
+  Widget txt(BuildContext context, String name) {
+    return SizedBox(
+      width: 250,
+      child: Row(
+        children: [
+          rxSub<ListModel>(
+            (context, model) {
+              model.locale.touch(); // to activate rx automatic aspect
+              final hello = 'app.hello'.i18n(context);
+              return Text('$hello ');
+            },
+          ),
+          Text('$name, '),
+          rxSub<ListModel>(
+            (context, model) {
+              model.locale.touch(); // to activate rx automatic aspect
+              final thanks = 'app.thanks'.i18n(context);
+              return Text('$thanks.');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+/// ...
+```
+
+#### After using the View Map
+
+```dart
+/// After using the View Map
+class LocalePanel extends StatelessWidget {
+  const LocalePanel({Key key}) : super(key: key);
+
+  Widget txt(BuildContext context, String name) {
+    return SizedBox(
+      width: 250,
+      child: Row(
+        children: [
+          Pub.sub<ListModel>('hello'), // use `pubsub` shortcut for boilerplate
+          Text('$name, '),
+          Pub.sub<ListModel>('thanks'), // use `pubsub` shortcut for boilerplate
+        ],
+      ),
+    );
+  }
+/// ...
+```
+
+Isn't it cleaner.
+
+### Here's how to use View Map.
+
+1. Add these code into the model and change `<Model>` to the class name of the model.
+   > Use the code snippet shortcut, `mmodel`, to generate these boilerplate code.
+
+```dart
+/// some_model.dart
+  void addSub(Object key, CreatorFn<Model> sub) => regSub<Model>(key, sub);
+  void addCon(Object key, CreatorFn<Model> con) => regCon<Model>(key, con);
+
+  @override
+  void init() {
+    // addSub('', (context, model) {
+    //   return Text('foo is ${model.foo}');
+    // });
+
+    // addCon('', (context, model) {
+    //   return RaisedButton(child: const Text('Update foo'),
+    //     onPressed: () => model.increaseFoo(),);
+    // });
+
+    super.init();
+  }
+```
+
+2. Use the `addsub` or `addcon` shortcut to add create functions of `Subscriber` or `Controller` in the `init()` method.
+   > `'hello'` and `'thanks'` are the keys to the map, later, you can use these keys to create corresponding widgets.
+
+```dart
+/// in the init() of some_model.dart
+    // use `addsub` shortcut to generate boilerplate code
+    addSub('hello', (context, model) {
+      model.locale.touch(); // to activate rx automatic aspect
+      final hello = 'app.hello'.i18n(context);
+      return Text('$hello ');
+    });
+
+    // use `addsub` shortcut to generate boilerplate code
+    addSub('thanks', (context, model) {
+      model.locale.touch(); // to activate rx automatic aspect
+      final thanks = 'app.thanks'.i18n(context);
+      return Text('$thanks.');
+    });
+```
+
+3. Then use the `pubsub` shortcut to place the `Subscriber` widget in the widget tree.
+   > Change `<Model>` to the class name of the model.
+
+```dart
+/// in the widget tree
+      child: Row(
+        children: [
+          Pub.sub<Model>('hello'), // use `pubsub` shortcut for boilerplate
+          Text('$name, '),
+          Pub.sub<Model>('thanks'),// use `pubsub` shortcut for boilerplate
+        ],
+      ),
+```
+
+#### Done.
+
+<br />
+
+**Now you just need to use these shortcuts, or commands, to do state management.**
+
+- `mmodel` - Generate a Model Boilerplate Code.
+- `addsub` - Add a Creator to the Subscriber Map of the Model.
+- `addcon` - Add a Creator to the Controller Map of the Model.
+- `pubsub` - Create a Subscriber Widget from the Subscriber Map of the Model.
+- `pubcon` - Create a Controller Widget from the Controller Map of the Model.
+
+Plus with,
+
+- `.rx` - Turn model variables into rx variables, thus, you can use rx automatic aspect.
+- `rxVar.touch()` - Used when the create function doesn't need to display the value of that rx variable, then you `touch()` that rx variable to activate rx automatic aspect.
+- `getmodel` - Get the model. (Note that `context` is not needed to get the model.)
+
+<br /> Happy Coding!
+
+<br />
+
+## Use Case - explain how the package works
+
+> This use case explains how the package works, you can skip this if you don't need to. There is a [use case for i18n with Web View](#use-case---i18n-with-view-map), it's much more straight forward to use.
+
+First of all, implement the **`Model`** and place the **`Host`** at the top level of the widget tree,
+
+```dart
+/// my_model.dart
+class MyModel extends Pub {
+  var int1 = 0.rx; // turn int1 into a rx variable (i.e. a proxy object)
+  var star = 0.rx; // turn str1 into a rx variable (i.e. a proxy object)
+  var m = 0;       // ordinary variable
+
+  /// controller function for case 1
+  void ifUpdateInt1({bool update = true}) {
+    if (update == true) {
+      int1 += 1; // int1 is a rx variable, will rebuild the related widget when updated.
+    } else {
+      int1.touch(); // `touch()` to activate rx automatic aspect, will also rebuild the related widget.
+    }
+  }
+
+  /// controller function for case 2
+  void increaseStar() => star++; // star is a rx variable, will rebuild the related widget when updated.
+
+  /// controller function for case 3
+  void increaseManual(Object aspect) {
+    m++;
+    publish(aspect); // m is an ordinary variable, needs to publish the aspect manually.
+  }
+}
+```
+
+```dart
+/// main.dart
+void main() {
+  runApp(
+    MultiHost.create1(
+      MyModel(updateMs:  1000), // model extends from Pub
+      child: MyApp(),
+    ),
+  );
+}
+```
+
+#### Case 1: use rx automatic aspect
+
+Implement the `Subscriber` and `Controller` functions, and place them in the widget tree.
+
+```dart
+/// main.dart
+/// Subscriber function
+Widget rxAAInt1Subscriber() {
+  return rxSub<MyModel>((context, model) {
+    return Text('int1: ${model.int1}');
+  });
+}
+/// Controller function
+Widget rxAAInt1Controller() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('ifInt1'),
+      onPressed: () => model.ifUpdateInt1(),
+    ),
+  );
+}
+/// widget tree
+Widget mainPage() {
+  return Column(
+    children: [
+      rxAAInt1Subscriber(),
+      rxAAInt1Controller(),
+    ],
+  );
+}
+```
+
+#### Case 2: with specific aspect
+
+Specific an aspect, for example, `'star'`, then implement the `Subscriber` and `Controller` functions for that aspect, and place them in the widget tree.
+
+```dart
+/// main.dart
+/// Subscriber function
+Widget starSubscriber() {
+  return 'star'.subModel<MyModel>((context, model) {
+    return Text('star: ${model.star}');
+  });
+}
+/// Controller function
+Widget starController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('update star'),
+      onPressed: () => increaseStar(), // or simplely model.star++,
+    ),
+  );
+}
+/// widget tree
+Widget mainPage() {
+  return Column(
+    children: [
+      starSubscriber(),
+      starController(),
+    ],
+  );
+}
+```
+
+#### Case 3: manual publish aspect
+
+Specific an aspect, for example, `'manual'`, then implement the `Subscriber` and `Controller` functions for that aspect, and place them in the widget tree, and do `publish` the aspect in the controller function.
+
+```dart
+/// main.dart
+/// Subscriber function
+Widget manualSubscriber() {
+  return 'manual'.subModel<MyModel>((context, model) {
+    return Text('manual: ${model.manual}');
+  });
+}
+/// Controller function
+Widget manualController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('update manual'),
+      onPressed: () => increaseManual('manual'),
+    ),
+  );
+}
+/// widget tree
+Widget mainPage() {
+  return Column(
+    children: [
+      manualSubscriber(),
+      manualController(),
+    ],
+  );
+}
+```
+
+<br />
+
+## Use Case - i18n with View Map
+
+For example, to write a i18n app using flutter_i18n with View Map.
+
+> These are all boilerplate code, you may just need to look at the lines with comments, that's where to put the code in.
+
+1. Edit `pubspec.yaml` to use flutter_i18n and flutter_mediator.
+
+```yaml
+dependencies:
+  flutter_i18n: ^0.20.0
+  flutter_mediator: ^1.1.0
+
+flutter:
+  assets:
+    - assets/flutter_i18n/
+```
+
+2. Create the i18n folder `asserts/flutter_i18n` and edit the locale files, [see folder](https://github.com/rob333/flutter_mediator/tree/main/example/assets/flutter_i18n).
+   <br /> For example, an [`en.json`](https://github.com/rob333/flutter_mediator/blob/main/example/assets/flutter_i18n/en.json) locale file.
+
+```json
+{
+  "app": {
+    "hello": "Hello",
+    "thanks": "Thanks",
+    "~": ""
+  }
+}
+```
+
+3. Create a folder `models` then new a file `setting_model.dart` in the folder and use `mmodel` shortcut to generate a model boilerplate code with the class name `Setting`.
+
+4. Add a `i18n` extension to the `setting_model.dart`.
+
+```dart
+//* i18n extension
+extension StringI18n on String {
+  String i18n(BuildContext context) {
+    return FlutterI18n.translate(context, this);
+  }
+}
+```
+
+5. Add the `locale` variable and make it a rx variable along with the `changeLocale` function, then add create functions to the `Setting` model. (in the `init()` method)
+   <br /> Add the `SettingEnum` to represent the map keys of the view map.
+
+```dart
+/// setting_model.dart
+enum SettingEnum {
+  hello,
+  thanks,
+}
+
+class Setting extends Pub {
+  //* member variables
+  var locale = 'en'.rx;
+
+  //* controller function
+  Future<void> changeLocale(BuildContext context, String countryCode) async {
+    final loc = Locale(countryCode);
+    await FlutterI18n.refresh(context, loc);
+    locale.value = countryCode;
+    // locale is a rx variable, will rebuild related widget when updated.
+  }
+
+  //* View Map:
+  // ...
+
+  @override
+  void init() {
+    addSub(SettingEnum.hello, (context, model) { // SettingEnum.hello is the map key
+      model.locale.touch(); // to activate rx automatic aspect
+      final hello = 'app.hello'.i18n(context); // app.hello is the json field in the locale file
+      return Text('$hello ');
+    });
+
+    addSub(SettingEnum.thanks, (context, model) { // SettingEnum.thanks is the map key
+      model.locale.touch(); // to activate rx automatic aspect
+      final thanks = 'app.thanks'.i18n(context); // app.thanks is the json field in the locale file
+      return Text('$thanks.');
+    });
+    //...
+```
+
+6. Setup `main.dart`.
+   <br /> Import files, add `Setting` model to the host, i18n stuff and set `home` to `infoPage()`.
+
+```dart
+/// main.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_mediator/mediator.dart';
+
+import 'models/setting_model.dart';
+
+void main() {
+  runApp(
+    MultiHost.create1(
+      Setting(), // add `Setting` model to the host
+      child: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Mediator Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      // add flutter_i18n support, i18n stuff
+      localizationsDelegates: [
+        FlutterI18nDelegate(
+          translationLoader: FileTranslationLoader(
+            decodeStrategies: [JsonDecodeStrategy()],
+          ),
+          missingTranslationHandler: (key, locale) {
+            print('--- Missing Key: $key, languageCode: ${locale.languageCode}');
+          },
+        ),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      home: infoPage(), // set `infoPage` as home page
+    );
+  }
+}
+
+```
+
+7. Implement `infoPage()` with View Map.
+   > These are boilerplate code, just look at the lines with comments, that's where to put the code in.
+
+```dart
+/// main.dart
+Widget infoPage() {
+  return Scaffold(
+    body: Column(
+      children: [
+        SizedBox(height: 50),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              RadioGroup(),
+              LocalePanel(),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class LocalePanel extends StatelessWidget {
+  const LocalePanel({Key key}) : super(key: key);
+
+  Widget txt(BuildContext context, String name) {
+    return SizedBox(
+      width: 250,
+      child: Row(
+        children: [
+          Pub.sub<Setting>(SettingEnum.hello), // Use `pubsub` shortcut for boilerplate, SettingEnum.hello is the map key.
+          Text('$name, '),
+          Pub.sub<Setting>(SettingEnum.thanks), // Use `pubsub` shortcut for boilerplate, SettingEnum.thanks is the map key.
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [for (final name in names) txt(context, name)],
+    );
+  }
+}
+
+class RadioGroup extends StatefulWidget {
+  const RadioGroup({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _RadioGroupState createState() => _RadioGroupState();
+}
+
+class _RadioGroupState extends State<RadioGroup> {
+  final locales = ['en', 'fr', 'nl', 'de', 'it', 'zh', 'jp', 'kr']; // locale values
+  final languages = [ // the language options to let the user to select, need to be corresponded with the locale values
+    'English',
+    'français',
+    'Dutch',
+    'Deutsch',
+    'Italiano',
+    '中文',
+    '日文',
+    '한글',
+  ];
+
+  Future<void> _handleRadioValueChange1(String value) async {
+    final model = Pub.getModel<Setting>(); // use `getmodel` shortcut to get the model
+    await model.changeLocale(context, value); // change the locale
+    setState(() {
+      /// model.locale.value = value; // changed in model.changeLocale
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final model = Pub.getModel<Setting>(); // use `getmodel` shortcut to get the model
+    final _radioValue1 = model.locale.value; // get the locale value back to maintain state
+
+    Widget panel(int index) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Radio(
+            value: locales[index],
+            groupValue: _radioValue1,
+            onChanged: _handleRadioValueChange1,
+          ),
+          Text(
+            languages[index],
+            style: const TextStyle(fontSize: 16.0),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      width: 130,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [for (var i = 0; i < locales.length; i++) panel(i)],
+      ),
+    );
+  }
+}
+
+
+final names = [
+  'Aarron',
+  'Josh',
+  'Ibraheem',
+  'Rosemary',
+  'Clement',
+  'Kayleigh',
+  'Elisa',
+  'Pearl',
+  'Aneesah',
+  'Tom',
+  'Jordana',
+  'Taran',
+  'Bethan',
+  'Haydon',
+  'Olivia-Mae',
+  'Anam',
+  'Kelsie',
+  'Denise',
+  'Jenson',
+  'Piotr',
+];
+```
+
+8. Work completed. Now you get an app with i18n support.
+
+&emsp; &emsp;
+
+## Example
 
 You can find the example in the [example](https://github.com/rob333/flutter_mediator/tree/main/example/lib) folder.
 <br /> Try it once, you will see it's simple and easy to use.
 
 <br />
 
-# Detail
+**These steps can help you in most situations. The following details explain the package one step further, you can skip it if you don't need to.**
+
+<br />
+
+## Detail
+
+<!-- These details explains the package one step further, you can skip this section if you don't need to use it. -->
 
 1.  [**Single model**](#1-single-model) - host
 2.  [**Multiple models**](#2-multiple-models) - host
-3.  [**Automatically update the widget** with rx variable](#3-automatically-update-the-widget) - Publisher
-4.  [**Access the underlying value directly** of rx variable](#4-access-the-underlying-value-directly) - Publisher
-5.  [**Update the value by call style** of rx variable](#5-update-the-value-by-call-style) - Publisher
-6.  [**Manually publish an aspect** of the model](#6-manually-publish-an-aspect) - Publisher
-7.  [**Manually publish multiple aspects** of the model](#7-manually-publish-multiple-aspects) - Publisher
-8.  [**Manually publish all aspects - broadcasting** of the model](#8-manually-publish-all-aspects---broadcasting) - Publisher
-9.  [**Future publish** of the model](#9-future-publish) - Publisher
-10. [**Rebuild only once per frame** for the same aspect](#10-rebuild-only-once-per-frame) - Publisher
-11. [**Writing model helper**](#11-writing-model-helper) - Publisher
-12. [**Get the model**](#12-get-the-model) - Subscriber
-13. [**Subscribe an aspect** of the model](#13-subscribe-an-aspect) - Subscriber
-14. [**Subscribe multiple aspects** of the model](#14-subscribe-multiple-aspects) - Subscriber
-15. [**Subscribe all aspects** of the model](#15-subscribe-all-aspects) - Subscriber
-16. [**Subscribe with enum aspects** of the model](#16-subscribe-with-enum-aspects) - Subscriber
-17. [**Manage rx aspects - Chain react aspects**](#17-manage-rx-aspects---Chain-react-aspects) - advance topic
-18. [**Implement custom rx class**](#18-implement-custom-rx-class) - advance topic
-19. [**Aspect type**](#19-aspect-type) - terminology
+3.  [**Automatically rebuild the widget whenever the rx variable updates**](#3-automatically-rebuild-the-widget-whenever-the-rx-variable-updates) - Pub
+4.  [**Access the underlying value of rx variables**](#4-access-the-underlying-value-of-rx-variables) - Pub
+5.  [**Update the rx variables by call style**](#5-update-the-rx-variables-by-call-style) - Pub
+6.  [**Manually publish an aspect**](#6-manually-publish-an-aspect) - Pub
+7.  [**Manually publish multiple aspects**](#7-manually-publish-multiple-aspects) - Pub
+8.  [**Broadcast to the model**](#8-broadcast-to-the-model) - Pub
+9.  [**Publish aspects of a rx variable**](#9-publish-aspects-of-a-rx-variable) - Pub
+10. [**Future publish**](#10-future-publish) - Pub
+11. [**Rebuild only once per frame** for the same aspect](#11-rebuild-only-once-per-frame) - Pub
+12. [**Writing model extension**](#12-writing-model-extension) - Pub
+13. [**Get the model**](#13-get-the-model) - Controller and Subscriber
+14. [**Subscribe with rx automatic aspect** - rx automatic aspect](#14-subscribe-with-rx-automatic-aspect) - Subscriber
+15. [**Touch the rx variable** - rx automatic aspect](#15-touch-the-rx-variable) - Subscriber
+16. [**Subscribe an aspect** - specific aspect](#16-subscribe-an-aspect) - Subscriber
+17. [**Subscribe multiple aspects** - specific aspect](#17-subscribe-multiple-aspects) - Subscriber
+18. [**Subscribe all aspects** - specific aspect](#18-subscribe-all-aspects) - Subscriber
+19. [**Subscribe with enum aspects** - specific aspect](#19-subscribe-with-enum-aspects) - Subscriber
+20. [**Manage rx aspects - Chain react aspects**](#20-manage-rx-aspects---Chain-react-aspects) - advance topic
+21. [**Implement custom rx class**](#21-implement-custom-rx-class) - advance topic
+22. [**Aspect type**](#22-aspect-type) - terminology
 
 <br />
 
 ## 1. Single model
 
+Register a model to the Host, and place it at the top level of the widget tree.
+
 ```dart
+/// main.dart
 void main() {
   runApp(
     Host(
-      model: AppModel(), // model extends from Publisher
+      model: AppModel(), // model extends from Pub
       child: MyApp(),
     ),
   );
@@ -198,15 +888,17 @@ void main() {
 
 ## 2. Multiple models
 
-**_`MultiHost.create1`_** to **_`MultiHost.create9`_** are provided by the package.
+Register multiple models to the Host, and place it at the top level of the widget tree.
+<br />**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
 <br /> You can add more `MultiHost.createN` methods, see [multi_host.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/multi_host.dart) for example.
 
 ```dart
+/// main.dart
 void main() {
   runApp(
     MultiHost.create2(
-      MyModel(updateMs: 1000),  // model extends from Publisher
-      ListModel(updateMs: 500), // model extends from Publisher
+      MyModel(updateMs: 1000),  // model extends from Pub
+      ListModel(updateMs: 500), // model extends from Pub
       child:  MyApp(),
     ),
   );
@@ -217,33 +909,37 @@ void main() {
 
 <br />
 
-## 3. Automatically update the widget
+## 3. Automatically rebuild the widget whenever the rx variable updates
 
-**_`.rx`_** wraps the variable into a rx variable, which will automatically rebuild the aspect-related-widget when updated
+Denoting **_`.rx`_** turns a variable of the model into a rx variable, a proxy object, which will automatically rebuild the related widget when updated. For Example,
 
 #### rx int:
 
 ```dart
-class MyModel extends Publisher {
-/// `.rx` make the var automatically update the aspect-related-widget
+/// my_model.dart
+class MyModel extends Pub {
+/// `.rx` turn the var into a rx variable(i.e. a proxy object)
+/// and rebuild the related widget when updated.
 var int1 = 0.rx;
 
 void  updateInt1() {
-  int1 += 1; // automatically update the aspect-related-widget
+  int1 += 1; // automatically update the rx related widget
 }
 ```
 
 #### rx list:
 
 ```dart
-class ListModel extends Publisher {
-  /// `.rx` make the var automatically update the aspect-related-widget
+/// list_model.dart
+class ListModel extends Pub {
+  /// `.rx` turn the var into a rx variable(i.e. a proxy object)
+  /// and rebuild the related widget when updated
   final data =  <ListItem>[].rx;
 
   void updateListItem() {
     // get new item data...
     final newItem = ListItem(itemName, units, color);
-    data.add(newItem); // automatically update the aspect-related-widget
+    data.add(newItem); // automatically update the rx related widget
   }
 ```
 
@@ -256,18 +952,21 @@ rx variable of type `int`, `double`, `num`, `string`, `bool`, `list`, `map`, `se
 
 <br />
 
-## 4. Access the underlying value directly
+<!-- same as Access the underlying value of rx variables -->
 
-Access the underlying value directly by `.value`.
+## 4. Access the underlying value of rx variables
+
+Sometimes, you can not do an operation with the rx variable, then you need to do that with the underlying value by denoting **`.value`**, for example,
 
 ```dart
-/// MyModel.dart
-
-var int1 = 0.rx;
+/// my_model.dart
+var int1 = 0.rx;   // turn int1 into a rx variable (i.e. a proxy object)
+var str1 = 'A'.rx; // turn str1 into a rx variable (i.e. a proxy object)
 void updateInt1() {
-  // int1 += 1;
-  /// is the same as
-  int1.value += 1; // automatically update the aspect-related-widget
+  // int1 *= 5; // can not do this (dart doesn't support operator*= to override)
+  int1.value *= 5; // need to do that with the underlying value
+  // str1 = 'B'; // can not do this
+  str1.value = 'B'; // need to do that with the underlying value
 }
 ```
 
@@ -275,14 +974,15 @@ void updateInt1() {
 
 <br />
 
-## 5. Update the value by call style
+## 5. Update the rx variables by call style
+
+Dart provides a `call(T)` to override, you can use `rxVar(value)` to update the underlying value.
 
 ```dart
-/// MyModel.dart
-
+/// my_model.dart
 var _foo = 1.rx;
 set foo(int value) {
-  _foo(value); // update rx variable by call() style
+  _foo(value); // update the rx variable by call() style
   /// is the same as
   // _foo = value;
   /// is the same as
@@ -296,11 +996,10 @@ set foo(int value) {
 
 ## 6. Manually publish an aspect
 
-Use `publish()` method of class `Publisher` to manually publish an aspect.
+Use the `publish()` method of the model to manually publish an aspect.
 
 ```dart
-/// MyModel.dart
-
+/// my_model.dart
 int manuallyInt = 0;
 void manuallyPublishDemo(int value) {
   manuallyInt = value;
@@ -317,14 +1016,13 @@ void manuallyPublishDemo(int value) {
 Place aspects in a list to publish multiple aspects.
 
 ```dart
-/// MyModel.dart
-
+/// my_model.dart
 int _foo = 0;
 int _bar = 0;
 void increaseBoth() {
   _foo += 1;
   _bar += 1;
-  publish(['foo', 'bar']); // manually publish multiple aspects in a list
+  publish(['foo', 'bar']); // manually publish multiple aspects
 }
 ```
 
@@ -332,16 +1030,15 @@ void increaseBoth() {
 
 <br />
 
-## 8. Manually publish all aspects - broadcasting
+## 8. Broadcast to the model
 
-Publish null value to publish all aspects of the model.
+Publish null value to broadcast to all aspects of the model.
 
 ```dart
-/// MyModel.dart
-
+/// my_model.dart
 void increaseAll() {
   //...
-  publish(); // manually publish all aspects of the model
+  publish(); // broadcasting, publish all aspects of the model
 }
 ```
 
@@ -349,17 +1046,33 @@ void increaseAll() {
 
 <br />
 
-## 9. Future publish
+## 9. Publish aspects of a rx variable
 
-Use rx variables within an async method, for example,
+Publish a rx variable to publish the aspects that rx variable attached.
 
 ```dart
-/// MyModel.dart
+/// my_model.dart
+var int1 = 0.rx;
+void publishInt1Related() {
+  //...
+  publish(int1); // publish the aspects that int1 attached
+}
+```
 
+&emsp; [back to detail](#detail)
+
+<br />
+
+## 10. Future publish
+
+Use rx variables within an async method.
+
+```dart
+/// my_model.dart
 int int1 = 0.rx;
 Future<void> futureInt1() async {
   await Future.delayed(const Duration(seconds: 1));
-  int1 += 1; // int1 is an rx variable, it'll automatically update the aspect-related-widget when updated
+  int1 += 1; // int1 is a rx variable, it'll automatically update the rx related widget when updated
 }
 ```
 
@@ -367,17 +1080,16 @@ Future<void> futureInt1() async {
 
 <br />
 
-## 10. Rebuild only once per frame
+## 11. Rebuild only once per frame
 
-InheritedModel uses `Set` to accumulate aspects thus the same aspect only causes the related widget to rebuild once for the same aspect.
-<br /> The following code only causes the aspect-related-widget to rebuild once.
+InheritedModel uses `Set` to accumulate aspects thus the same aspect only causes the related widget to rebuild once per frame for the same aspect.
+<br /> The following code only causes the rx related widget to rebuild once.
 
 ```dart
-/// MyModel.dart
-
+/// my_model.dart
 int int1 = 0.rx;
 void incermentInt1() async {
-  int1 += 1; // int1 is an rx variable, it'll automatically update the aspect-related-widget when updated
+  int1 += 1; // int1 is a rx variable, it'll automatically update the rx related widget when updated
   publish('int1'); // manually publish 'int1'
   publish('int1'); // manually publish 'int1', again
   // only cause the aspected-related-widget to rebuild once per frame
@@ -388,23 +1100,23 @@ void incermentInt1() async {
 
 <br />
 
-## 11. Writing model helper
+## 12. Writing model extension
 
-You can write model helpers to simplified the typing, for example,
+You can write model extensions to simplified the typing. For example,
+
+> Use shortcut `mmodel` will generate these extensions automatically.
 
 ```dart
-/// Helper function of MyModel
-MyModel getMyModel(BuildContext context) {
-  return Host.getInheritOfModel<MyModel>(context);
-}
+/// MyModel extension
+MyModel getMyModel(BuildContext context) => Pub.getModel<MyModel>();
 
-Subscriber<MyModel> subMyModel(CreaterOfSubscriber<MyModel> create,
+Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
     {Key key, Object aspects}) {
   return Subscriber<MyModel>(key: key, aspects: aspects, create: create);
 }
 
-extension MyModelHelperT<T> on T {
-  Subscriber<MyModel> subMyModel(CreaterOfSubscriber<MyModel> create,
+extension MyModelExtT<T> on T {
+  Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
       {Key key}) {
     return Subscriber<MyModel>(key: key, aspects: this, create: create);
   }
@@ -412,99 +1124,100 @@ extension MyModelHelperT<T> on T {
 ```
 
 ```dart
-/// Helper function of ListModel
-ListModel getListModel(BuildContext context) {
-  return Host.getInheritOfModel<ListModel>(context);
-}
+/// ListModel extension
+ListModel getListModel(BuildContext context) => Pub.getModel<ListModel>();
 
-Subscriber<ListModel> subListModel(CreaterOfSubscriber<ListModel> create,
+Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
     {Key key, Object aspects}) {
   return Subscriber<ListModel>(key: key, aspects: aspects, create: create);
 }
 
-extension ListModelHelperT<T> on T {
-  Subscriber<ListModel> subListModel(CreaterOfSubscriber<ListModel> create,
+extension ListModelExtT<T> on T {
+  Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
       {Key key}) {
     return Subscriber<ListModel>(key: key, aspects: this, create: create);
   }
 }
 ```
 
-_See also [mediator_helper.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/mediator_helper.dart) for package helper._
+> _See also [mediator_extension.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/mediator_extension.dart) for package extension._
 
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 12. Get the model
+## 13. Get the model
 
 To get the model, for example, getting `MyModel`,
+
+> Note that you don't need `context` to get the model, this provides you the flexibility to do things anywhere.
 
 - original form
 
 ```dart
-final model = Host.getInheritOfModel<MyModel>(context);
+final model = Pub.getModel<MyModel>();
 ```
 
-- package helper of context extension
+- with user extension
 
 ```dart
-final model = context.getModel<MyModel>();
+final model = getMyModel();
 ```
 
-- model helper on your own
+#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L146).
 
 ```dart
-final model = getMyModel(context);
-```
-
-#### **Get current triggered frame aspects of the model**. See also [AllSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L167).
-
-```dart
-final model = context.getModel<MyModel>();
-final aspects = model.frameAspect;
+final model = Pub.getModel<MyModel>();
+final aspects = model.frameAspects;
 ```
 
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 13. Subscribe an aspect
+## 14. Subscribe with rx automatic aspect
+
+By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
+<br /> For example,
+
+```dart
+/// my_model.dart
+int tick1 = 0.rx;
+```
+
+```dart
+/// main.dart
+rxSub<MyModel>((context, model) {
+  return Text('tick1 is ${model.tick1}');
+}),
+```
+
+&emsp; [back to detail](#detail)
+
+<br />
+
+<!-- same as Case 3: Use rx automatic aspect -->
+
+## 15. Touch the rx variable
+
+When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
+<br /> For example, when changing locale, the create method doesn't need to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+
+```dart
+rxSub<MyModel>((context, model) {
+  model.locale.touch();
+  final hello = 'app.hello'.i18n(context);
+  return const Text('$hello');
+})
+```
+
+&emsp; [back to detail](#detail)
+
+<br />
+
+## 16. Subscribe an aspect
 
 For example, subscribe to a `String` aspect **_`'int1'`_** of class **_`<MyModel>`_**.
-
-- original form within a class
-
-```dart
-class Int1Subscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Subscriber<MyModel>(
-      aspects: 'int1',
-      create: (context, model) {
-        return Text('Int1 is ${model.int1}');
-      },
-    );
-  }
-}
-```
-
-- with helper
-
-```dart
-class Int1Subscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return 'int1'.subMyModel((_, m) => Text('${m.int1}')); // simple form
-    // return 'int1'.subMyModel(     // with model helper on your own
-    return 'int1'.subModel<MyModel>( // with package helper
-      (context, model) {
-        return Text('Int1 is ${model.int1}');
-      },
-    );
-  }
-}
-```
 
 - simple form
 
@@ -512,53 +1225,30 @@ class Int1Subscriber extends StatelessWidget {
 'int1'.subModel<MyModel>((context, model) => Text('Int1 is ${model.int1}')),
 ```
 
+- original form
+
+```dart
+Subscriber<MyModel>(
+  aspects: 'int1',
+  create: (context, model) {
+    return Text('Int1 is ${model.int1}');
+  },
+),
+```
+
+- with user extension
+
+```dart
+'int1'.subMyModel((context, model) => Text('Int1 is ${model.int1}')),
+```
+
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 14. Subscribe multiple aspects
+## 17. Subscribe multiple aspects
 
 Place aspects in a list to subscribe multiple aspects.
-
-- original form within a class
-
-```dart
-class TwoSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Subscriber<MyModel>(
-      aspects: ['int1', 'star'],
-      create: (context, model) {
-        return Text(
-          'Int1 is ${model.int1} and Star is ${model.star}',
-          softWrap: true,
-          textAlign: TextAlign.center,
-        );
-      },
-    );
-  }
-}
-```
-
-- with helper
-
-```dart
-class TwoSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return ['int1', 'star'].subMyModel(     // with model helper on your own
-    return ['int1', 'star'].subModel<MyModel>( // with package helper
-      (context, model) {
-        return Text(
-          'Int1 is ${model.int1} and Star is ${model.star}',
-          softWrap: true,
-          textAlign: TextAlign.center,
-        );
-      },
-    );
-  }
-}
-```
 
 - simple form
 
@@ -572,57 +1262,74 @@ class TwoSubscriber extends StatelessWidget {
 ),
 ```
 
+- original form
+
+```dart
+Subscriber<MyModel>(
+  aspects: ['int1', 'star'],
+  create: (context, model) {
+    return Text(
+      'Int1 is ${model.int1} and Star is ${model.star}',
+      softWrap: true,
+      textAlign: TextAlign.center,
+    );
+  },
+),
+```
+
+- with user extension
+
+```dart
+['int1', 'star'].subMyModel(
+  (context, model) => Text(
+    'Int1 is ${model.int1} and Star is ${model.star}',
+    softWrap: true,
+    textAlign: TextAlign.center,
+  ),
+),
+```
+
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 15. Subscribe all aspects
+## 18. Subscribe all aspects
 
-Provide no aspects parameter, or use null as aspect to subscribe to all aspects.
-<br /> See also [AllSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L167).
-
-- original form within a class
-
-```dart
-class AllSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Subscriber<MyModel>(
-      // aspects: , // no aspects parameter means subscribe to all aspects
-      create: (context, model) {
-        final aspects = model.frameAspect;
-        final str = aspects.isEmpty ? '' : '$aspects received';
-        return Text(str, softWrap: true, textAlign: TextAlign.center);
-      },
-    );
-  }
-}
-```
-
-- with helper
-
-```dart
-class AllSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return null.subMyModel(     // with model helper on your own
-    return null.subModel<MyModel>( // with package helper
-      (context, model) {
-        final aspects = model.frameAspect;
-        final str = aspects.isEmpty ? '' : '$aspects received';
-        return Text(str, softWrap: true, textAlign: TextAlign.center);
-      },
-    );
-  }
-}
-```
+Provide no aspects parameter, or use null as aspect to subscribe to all aspects of the model.
+<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L146).
 
 - simple form
 
 ```dart
-null.subModel<MyModel>(
+null.subModel<MyModel>( // null aspects means broadcasting to the model
   (context, model) {
-    final aspects = model.frameAspect;
+    final aspects = model.frameAspects;
+    final str = aspects.isEmpty ? '' : '$aspects received';
+    return Text(str, softWrap: true, textAlign: TextAlign.center);
+  },
+),
+
+```
+
+- original form
+
+```dart
+Subscriber<MyModel>(
+   // aspects: , // no aspects parameter means broadcasting to the model
+  create: (context, model) {
+    final aspects = model.frameAspects;
+    final str = aspects.isEmpty ? '' : '$aspects received';
+    return Text(str, softWrap: true, textAlign: TextAlign.center);
+  },
+),
+```
+
+- with user extension
+
+```dart
+null.subMyModel( // null aspects means broadcasting to the model
+  (context, model) {
+    final aspects = model.frameAspects;
     final str = aspects.isEmpty ? '' : '$aspects received';
     return Text(str, softWrap: true, textAlign: TextAlign.center);
   },
@@ -634,60 +1341,52 @@ null.subModel<MyModel>(
 
 <br />
 
-## 16. Subscribe with enum aspects
+## 19. Subscribe with enum aspects
 
-You can use `enum` as aspect, for example, first, define the enum.
+You can use `enum` as aspect.
+<br /> For example, first, define the enum.
 
 ```dart
-/// ListModel.dart
+/// list_model.dart
 enum ListEnum {
   ListUpdate,
 }
 ```
 
 Then everything is the same as `String` aspect, just to replace the `String` with `enum`.
-<br /> See also [ListItemView@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L96).
-
-- original form within a class
-
-```dart
-class ListItemView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Subscriber<ListModel>(
-      aspects: ListEnum.ListUpdate,
-      create: (context, model) {
-      //...
-    });
-  }
-}
-```
-
-- with helper
-
-```dart
-class ListItemView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return  ListEnum.ListUpdate.subListModel((context, model) { // with model helper on your own
-    return ListEnum.ListUpdate.subModel<ListModel>((context, model) { // with package helper
-      //...
-    });
-  }
-}
-```
+<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L104).
 
 - simple form
 
 ```dart
-ListEnum.ListUpdate.subModel<ListModel>((context, model) { ... }),
+ListEnum.ListUpdate.subModel<ListModel>((context, model) {
+  /* create method */
+}),
+```
+
+- original form
+
+```dart
+Subscriber<ListModel>(
+  aspects: ListEnum.ListUpdate,
+  create: (context, model) {
+    /* create method */
+}),
+```
+
+- with user extension
+
+```dart
+ListEnum.ListUpdate.subMyModel((context, model) {
+  /* create method */
+}),
 ```
 
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 17. Manage rx aspects - Chain react aspects
+## 20. Manage rx aspects - Chain react aspects
 
 ### **Chain react aspects:**
 
@@ -695,38 +1394,35 @@ Supposed you need to rebuild a widget whenever a model variable is updated, but 
 <br /> For example, to rebuild a widget whenever **_`str1`_** of class **_`<MyModel>`_** is updated, and chained by the aspect **`'chainStr1'`**.
 
 ```dart
-/// MyModel.dart
+/// my_model.dart
 final str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
 ```
 
 ```dart
 /// main.dart
 int httpResCounter = 0;
+Future<int> _futureHttpTask() async {
+  await Future.delayed(const Duration(milliseconds: 0));
+  return ++httpResCounter;
+}
 
-class ChainReactSubscriber extends StatelessWidget {
-  Future<int> _futureHttpTask() async {
-    await Future.delayed(const Duration(milliseconds: 0));
-    return ++httpResCounter;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return 'chainStr1'.subModel<MyModel>((context, model) {
-      return FutureBuilder(
-        future: _futureHttpTask(),
-        initialData: httpResCounter,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          Widget child;
-          if (snapshot.hasData) {
-            child = Text('str1 chain counter: $httpResCounter');
-          } else {
-            child = Text('str1 init counter: $httpResCounter');
-          }
-          return Center(child: child);
-        },
-      );
-    });
-  }
+//* Chain subscribe binding myModel.str1 with aspect 'chainStr1'.
+Widget chainReactSubscriber() {
+  return 'chainStr1'.subModel<MyModel>((context, model) {
+    return FutureBuilder(
+      future: _futureHttpTask(),
+      initialData: httpResCounter,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        Widget child;
+        if (snapshot.hasData) {
+          child = Text('str1 chain counter: $httpResCounter');
+        } else {
+          child = Text('str1 init counter: $httpResCounter');
+        }
+        return Center(child: child);
+      },
+    );
+  });
 }
 ```
 
@@ -762,20 +1458,33 @@ Then whenever **_`str1`_** of class **_`<MyModel>`_** updates, the widget rebuil
 
 <br />
 
-## 18. Implement custom rx class
+## 21. Implement custom rx class
 
 If you need to write your own rx class, see [custom_rx_class.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/custom_rx_class.dart) for example.
+<br /> Or you can manipulate the underlying `value` directly.
+
+> By the extension method, package can turn anything into a rx variable.
+
+```dart
+/// some_model.dart
+final someClassRx = someClass.rx;
+void updateSomeClass() {
+  someClassRx.value.counter++;
+}
+```
 
 &emsp; [back to detail](#detail)
 
 <br />
 
-## 19. Aspect type
+## 22. Aspect type
 
-- Widget aspects - aspects that the widget subscribes.
-- Frame aspects - aspects that this UI frame will update.
-- Registered aspects - aspects that the model has registered.
-- Rx aspects - aspects that the rx variable is attached. Once the rx variable gets updated, it will publish these aspects to the host.
+<!-- same as Key contepts : widget aspects -->
+
+- Widget aspects - aspects denotes what the widget is interested in.
+- Frame aspects - aspects that will update the related widgets in the next UI frame.
+- Registered aspects - aspects of the model that has been registered.
+- RX aspects - aspects that the rx variable is attached. Once the rx variable updated, it will rebuild the related widgets.
 
 &emsp; [back to detail](#detail)
 
@@ -783,12 +1492,12 @@ If you need to write your own rx class, see [custom_rx_class.dart](https://githu
 
 <!-- &nbsp;&nbsp; -->
 
-# Changelog
+## Changelog
 
 Please see the [Changelog](https://github.com/rob333/flutter_mediator/blob/main/CHANGELOG.md) page.
 
 <br />
 
-# License
+## License
 
-[MIT](https://github.com/rob333/flutter_mediator/blob/main/LICENSE)
+Flutter mediator is distributed by [MIT license](https://github.com/rob333/flutter_mediator/blob/main/LICENSE).

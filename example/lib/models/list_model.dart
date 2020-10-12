@@ -2,42 +2,14 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* aspect enum
 enum ListEnum {
   ListUpdate,
 }
-
-//* Helper function of ListModel
-ListModel getListModel(BuildContext context) {
-  return Host.getInheritOfModel<ListModel>(context);
-}
-
-Subscriber<ListModel> subListModel(CreaterOfSubscriber<ListModel> create,
-    {Key key, Object aspects}) {
-  // return aspects.subModel<ListModel>(create, key: key);
-  return Subscriber<ListModel>(key: key, aspects: aspects, create: create);
-}
-
-extension ListModelHelperT<T> on T {
-  Subscriber<ListModel> subListModel(CreaterOfSubscriber<ListModel> create,
-      {Key key}) {
-    return Subscriber<ListModel>(key: key, aspects: this, create: create);
-  }
-}
-
-// extension ListModelHelper on ListEnum {
-//   Subscriber<ListModel> subListModel({Key key, @required CreaterOfSubscriber<ListModel> create}) {
-//     return Subscriber<ListModel>(key: key, aspects: this, create: create);
-//   }
-// }
-
-// extension ListListModelHelper on List<ListEnum> {
-//   Subscriber<ListModel> subListModel({Key key, @required CreaterOfSubscriber<ListModel> create}) {
-//     return Subscriber<ListModel>(key: key, aspects: this, create: create);
-//   }
-// }
 
 //* List item
 class ListItem {
@@ -53,7 +25,7 @@ class ListItem {
 }
 
 //* model class
-class ListModel extends Publisher {
+class ListModel extends Pub {
   ListModel({this.updateMs}) : assert(updateMs > 0) {
     resetTimer();
   }
@@ -91,6 +63,16 @@ class ListModel extends Publisher {
   void stopTimer() {
     updateTimer?.cancel();
   }
+
+  //* locale section
+  var locale = 'en'.rx;
+  Future<void> changeLocale(BuildContext context, String countryCode) async {
+    final loc = Locale(countryCode);
+    await FlutterI18n.refresh(context, loc);
+    locale.value = countryCode;
+    // locale is a rx variable, will rebuild related widget whenever updates.
+  }
+  //! end locale section
 }
 
 //* item data
@@ -149,3 +131,30 @@ const List<Color> itemColors = [
 //   ListItem('Binder', 80),
 //   ListItem('Desk', 5),
 // ];
+
+//* ListModel extension
+ListModel getListModel(BuildContext context) => Pub.getModel<ListModel>();
+
+Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
+    {Key key, Object aspects}) {
+  // return aspects.subModel<ListModel>(create, key: key);
+  return Subscriber<ListModel>(key: key, aspects: aspects, create: create);
+}
+
+extension ListModelExtT<T> on T {
+  Subscriber<ListModel> subListModel(CreatorFn<ListModel> create, {Key key}) {
+    return Subscriber<ListModel>(key: key, aspects: this, create: create);
+  }
+}
+
+// extension ListModelExt on ListEnum {
+//   Subscriber<ListModel> subListModel({Key key, @required CreatorFn<ListModel> create}) {
+//     return Subscriber<ListModel>(key: key, aspects: this, create: create);
+//   }
+// }
+
+// extension ListListModelExt on List<ListEnum> {
+//   Subscriber<ListModel> subListModel({Key key, @required CreatorFn<ListModel> create}) {
+//     return Subscriber<ListModel>(key: key, aspects: this, create: create);
+//   }
+// }

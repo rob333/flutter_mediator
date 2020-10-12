@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 import 'models/list_model.dart';
 import 'models/my_model.dart';
-import 'widgets/BottomNavigationController.dart';
+import 'models/setting_model.dart';
+import 'pages/info_page.dart';
+import 'widgets/bottom_navigation_controller.dart';
 import 'widgets/widget_extension.dart';
 
 const double Width = 150;
 
 void main() {
   runApp(
-    MultiHost.create2(
-      MyModel(updateMs: 1000), // model that extends Publisher
-      ListModel(updateMs: 500), // model that extends Publisher
+    MultiHost.create3(
+      MyModel(updateMs: 1000), // model that extends Pub
+      ListModel(updateMs: 500), // model that extends Pub
+      Setting(),
       child: MyApp(),
     ),
-
-    /// single host: the original form, or use MultiHost.create1
-    // Host(
-    //   model: MyModel(updateMs: 1000),
-    //   child: MyApp(),
-    // ),
   );
 }
 
@@ -40,6 +40,24 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.black54.withOpacity(0.5),
         selectedIndex: 0,
       ),
+      // add flutter_i18n support
+      localizationsDelegates: [
+        FlutterI18nDelegate(
+          translationLoader: FileTranslationLoader(
+            // forcedLocale: ,
+            // useCountryCode: true,
+            // fallbackFile: 'en',
+            basePath: 'assets/flutter_i18n',
+            decodeStrategies: [JsonDecodeStrategy()],
+          ),
+          missingTranslationHandler: (key, locale) {
+            print(
+                '--- Missing Key: $key, languageCode: ${locale.languageCode}');
+          },
+        ),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
     );
   }
 }
@@ -50,39 +68,33 @@ Widget buttonPage() {
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AllSubscriber(),
-          /* inline subscriber of two aspects */
-          ['int1', 'star'].subModel<MyModel>(
-            (context, model) => Text(
-              'Int1 is ${model.int1} and Star is ${model.star}',
-              softWrap: true,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          FooSubscriber(),
-          BarSubscriber(),
-          /* inline subscriber of an aspect */
+          allSubscriber(),
+          Pub.sub<MyModel>('int1AndStr1'),
+          //int1AndStr1Subscriber(),
+          fooSubscriber(),
+          barSubscriber(),
+          // inline subscriber
           'bar'.subModel<MyModel>((_, model) => Text('Bar is ${model.bar}')),
-          StarSubscriber(),
-          Str1Subscriber(),
-          Int1Subscriber(),
-          ChainReactSubscriber(),
+          starSubscriber(),
+          str1Subscriber(),
+          int1Subscriber(),
+          chainReactSubscriber(),
         ],
       ),
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FooUpdater(),
-          BarUpdater(),
-          BothUpdater(),
-          AllUpdater(),
-          Str1Updater(),
-          Int1Updater(),
-          FutureUpdater(),
-          NoUpdater(),
-          Tick1(),
-          Tick2(),
-          Tick3(),
+          fooController(),
+          barController(),
+          bothController(),
+          allController(),
+          str1Controller(),
+          int1Controller(),
+          futureController(),
+          noController(),
+          tick1(),
+          tick2(),
+          tick3(),
         ],
       ),
     ],
@@ -90,335 +102,281 @@ Widget buttonPage() {
 }
 
 Widget cardPage() {
-  return ListItemView();
+  //* Original form:
+  // return Subscriber<ListModel>(
+  //   aspects: ListEnum.ListUpdate,
+  //   create: (context, model) {
+  //* Extension form:
+  // return ListEnum.ListUpdate.subListModel((context, model) {
+  return ListEnum.ListUpdate.subModel<ListModel>((context, model) {
+    final data = model.data;
+    return GridView.builder(
+      itemCount: data.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              (MediaQuery.of(context).orientation == Orientation.portrait)
+                  ? 5
+                  : 10),
+      itemBuilder: (context, index) {
+        final item = data[index];
+        return Card(
+          color: item.color,
+          child: GridTile(
+            footer: Text(item.units.toString()),
+            child: Text(item.item),
+          ).padding(const EdgeInsets.all(7.0)),
+        );
+      },
+    );
+
+    //* List View
+    // return ListView.builder(
+    //   itemCount: data.length,
+    //   itemBuilder: (context, index) {
+    //     final item = data[index];
+    //     return ListTile(
+    //       title: Text(item.item),
+    //       subtitle: Text(item.units.toString()),
+    //     ).background(item.color);
+    //   },
+    // );
+  });
 }
 
-class ListItemView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    /// original form
-    // return Subscriber<ListModel>(
-    //   aspects: ListEnum.ListUpdate,
-    //   create: (context, model) {
-
-    /// with helper
-    // return ListEnum.ListUpdate.subModel<ListModel>((context, model) {
-    return ListEnum.ListUpdate.subListModel((context, model) {
-      final data = model.data;
-      return GridView.builder(
-        itemCount: data.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:
-                (MediaQuery.of(context).orientation == Orientation.portrait)
-                    ? 5
-                    : 10),
-        itemBuilder: (context, index) {
-          final item = data[index];
-          return Card(
-            color: item.color,
-            child: GridTile(
-              footer: Text(item.units.toString()),
-              child: Text(item.item),
-            ).padding(const EdgeInsets.all(7.0)),
-          );
-        },
+//* Subscriber all aspects of the model
+//* Get the frame aspects with `model.frameAspects`
+Widget allSubscriber() {
+  return null.subModel<MyModel>(
+    (context, model) {
+      final aspects = model.frameAspects;
+      final str = aspects.isEmpty ? '' : '$aspects received';
+      return Text(
+        str,
+        softWrap: true,
+        textAlign: TextAlign.center,
       );
-
-      //* List View
-      // return ListView.builder(
-      //   itemCount: data.length,
-      //   itemBuilder: (context, index) {
-      //     final item = data[index];
-      //     return ListTile(
-      //       title: Text(item.item),
-      //       subtitle: Text(item.units.toString()),
-      //     ).background(item.color);
-      //   },
-      // );
-    });
-  }
+    },
+  ).sizeBox(width: Width, height: 30);
 }
 
-Widget infoPage() {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      const Text('MyModel:'),
-      'tick1'.subMyModel((context, myModel) {
-        return Text('tick1 is ${myModel.tick1}');
-      }),
-
-      const SizedBox(height: 30),
-
-      // ListEnum.ListUpdate.subListModel((context, listModel) {
-      ListEnum.ListUpdate.subModel<ListModel>((context, listModel) {
-        return Column(
-          children: [
-            const Text('ListModel:'),
-            Text('sales:${listModel.data.length}'),
-            Text('Total units:${listModel.getTotalUnits()}'),
-          ],
-        );
-      }),
-    ],
-  ).center();
+//* Subscribe two aspects
+Widget int1AndStr1Subscriber() {
+  return
+      // ['int1', 'star'].subModel<MyModel>(
+      //* Rx automatic aspect form:
+      rxSub<MyModel>(
+    (context, model) => Text(
+      'Int1 is ${model.int1} and Str1 is ${model.str1}',
+      softWrap: true,
+      textAlign: TextAlign.center,
+    ),
+  );
 }
 
-class AllSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return Subscriber<MyModel>(
-    // return null.subMyModel(
-    return null.subModel<MyModel>(
-      (context, model) {
-        final aspects = model.frameAspect;
-        final str = aspects.isEmpty ? '' : '$aspects received';
-        return Text(
-          str,
-          softWrap: true,
-          textAlign: TextAlign.center,
-        );
-      },
-    ).sizeBox(width: Width, height: 30);
-  }
+//* Subscribe in the original form.
+Widget fooSubscriber() {
+  return Subscriber<MyModel>(
+    aspects: 'foo',
+    create: (context, model) {
+      print('foo build');
+      return Text('Foo is ${model.foo}');
+    },
+  );
 }
 
-class FooSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Subscriber<MyModel>(
-      aspects: 'foo',
-      create: (context, model) {
-        print('foo build');
-        return Text('Foo is ${model.foo}');
-      },
-    );
-  }
+//* Subscriber in simple form.
+Widget barSubscriber() {
+  return 'bar'.subModel<MyModel>((context, model) {
+    print('bar build');
+    return Text('bar is ${model.bar}');
+  });
 }
 
-class BarSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return 'bar'.subModel<MyModel>(
-      (context, model) {
-        print('bar build');
-        return Text('Bar is ${model.bar}');
-      },
-    );
-  }
+//* Subscriber with user extension.
+Widget starSubscriber() {
+  return 'star'.subMyModel((context, model) {
+    print('star build');
+    return Text('Star is ${model.star}');
+  });
 }
 
-class StarSubscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return 'star'.subModel<MyModel>(
-      (context, model) {
-        print('star build');
-        return Text('Star is ${model.star}');
-      },
-    );
-  }
+//* Subscriber in simple form.
+Widget str1Subscriber() {
+  return 'str1'.subModel<MyModel>((context, model) {
+    print('str1 build');
+    return Text('Str1 is ${model.str1}');
+  });
 }
 
-class Str1Subscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return 'str1'.subMyModel(
-      (context, model) {
-        print('str1 build');
-        return Text('Str1 is ${model.str1}');
-      },
-    );
-  }
+//* Subscriber in the rx automatic aspect extension form.
+Widget int1Subscriber() {
+  //* Original form:
+  // return Subscriber<MyModel>(
+  //   aspects: 'int1',
+  //   create:
+  //* Extension form:
+  // return 'int1'.subMyModel(
+  // return 'int1'.subModel<MyModel>(
+  //* Automatic aspect form:
+  // return rxSub<MyModel>((_, model) => Text('Int1 is ${model.int1}'));
+  //* Automatic aspect extension form:
+  return (context, model) {
+    print('int1 build');
+    return Text('Int1 is ${model.int1}');
+  }.rxSub<MyModel>();
 }
 
-class Int1Subscriber extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // return 'int1'.subMyModel((_, m) => Text('${m.int1}')); // simple form
-    /// original form:
-    // return Subscriber<MyModel>(
-    //   aspects: 'int1',
-    //   create:
-    return 'int1'.subModel<MyModel>(
-      (context, model) {
-        print('int1 build');
-        return Text('Int1 is ${model.int1}');
-      },
-    );
-  }
-}
-
+//* Future function for chainReactSubscriber
 int httpResCounter = 0;
-
-class ChainReactSubscriber extends StatelessWidget {
-  Future<int> _futureHttpTask() async {
-    await Future.delayed(const Duration(milliseconds: 0));
-    return ++httpResCounter;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return 'chainStr1'.subModel<MyModel>((context, model) {
-      return FutureBuilder(
-        future: _futureHttpTask(),
-        initialData: httpResCounter,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          Widget child;
-          if (snapshot.hasData) {
-            child = Text('str1 chain counter: $httpResCounter');
-          } else {
-            child = Text('str1 init counter: $httpResCounter');
-          }
-          return Center(child: child);
-        },
-      );
-    });
-  }
+Future<int> _futureHttpTask() async {
+  await Future.delayed(const Duration(milliseconds: 0));
+  return ++httpResCounter;
 }
 
-class FooUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = context.getModel<MyModel>();
-    return RaisedButton(
+//* Chain subscribe binding myModel.str1 with aspect 'chainStr1'.
+Widget chainReactSubscriber() {
+  return 'chainStr1'.subModel<MyModel>((context, model) {
+    return FutureBuilder(
+      future: _futureHttpTask(),
+      initialData: httpResCounter,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        Widget child;
+        if (snapshot.hasData) {
+          child = Text('str1 chain counter: $httpResCounter');
+        } else {
+          child = Text('str1 init counter: $httpResCounter');
+        }
+        return Center(child: child);
+      },
+    );
+  });
+}
+
+//* Controller example
+Widget fooController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Update foo'),
       onPressed: () => model.foo++,
-    );
-  }
+    ),
+  );
 }
 
-class BarUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = getMyModel(context);
-    return RaisedButton(
-        child: const Text('Update bar'), onPressed: () => model.bar++);
-  }
+//* Controller example, using fat arrow expression
+Widget barController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('Update bar'),
+      onPressed: () => model.bar++,
+    ),
+  );
 }
 
-class BothUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = getMyModel(context);
-    return const Text('Update both').raisedButton(
+//* Controller example, update two variables.
+Widget bothController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
+      child: const Text('Update both'),
       onPressed: () => model.increaseBoth(),
-    );
-  }
+    ),
+  );
 }
 
-class AllUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = getMyModel(context);
-    return RaisedButton(
+//* Controller example, update all variables.
+Widget allController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Update all'),
       onPressed: () => model.increaseAll(),
-    );
-  }
+    ),
+  );
 }
 
-class Str1Updater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = getMyModel(context);
-    return RaisedButton(
+Widget str1Controller() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Update Str1'),
       onPressed: () => model.updateStr1(),
-    );
-  }
+    ),
+  );
 }
 
-class Int1Updater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = context.getModel<MyModel>();
-    return RaisedButton(
+Widget int1Controller() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Update Int1'),
       onPressed: () => model.updateInt1(),
-    );
-  }
+    ),
+  );
 }
 
-class FutureUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
+Widget futureController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Future Int1:1sec'),
-      onPressed: () => context.getModel<MyModel>().futureInt1(),
-    );
-  }
+      onPressed: () => model.futureInt1(),
+    ),
+  );
 }
 
-class NoUpdater extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final model = getMyModel(context);
-    return RaisedButton(
+Widget noController() {
+  return Controller<MyModel>(
+    create: (context, model) => RaisedButton(
       child: const Text('Update none'),
       onPressed: () => model.updateNone(),
-    );
-  }
+    ),
+  );
 }
 
-class Tick1 extends StatelessWidget {
-  final _ColorRegistry r = _ColorRegistry();
+final _ColorRegistry tick1r = _ColorRegistry();
+final _ColorRegistry tick2r = _ColorRegistry();
+final _ColorRegistry tick3r = _ColorRegistry();
 
-  @override
-  Widget build(BuildContext context) {
-    return 'tick1'
-        .subMyModel(
-          (context, model) {
-            // print('tick1 build');
-            return _ColoredBox(
-              color: r.nextColor(),
-              child: Text('tick1 is ${model.tick1}'),
-            );
-          },
-        )
-        .padding(const EdgeInsets.all(5.0))
-        .sizeBox(width: Width, height: 60);
-  }
+//* rxSub tick1 with timer update
+Widget tick1() {
+  // return 'tick1'.subMyModel(
+  // return 'tick1'.subModel<MyModel>(
+  return rxSub<MyModel>(
+    (context, model) {
+      // print('tick1 build');
+      return _ColoredBox(
+        color: tick1r.nextColor(),
+        child: Text('tick1 is ${model.tick1}'),
+      );
+    },
+  ).padding(const EdgeInsets.all(5.0)).sizeBox(width: Width, height: 60);
 }
 
-class Tick2 extends StatelessWidget {
-  final _ColorRegistry r = _ColorRegistry();
-
-  @override
-  Widget build(BuildContext context) {
-    return 'tick2'
-        .subMyModel(
-          (context, model) {
-            // print('tick2 build');
-            return _ColoredBox(
-              color: r.nextColor(),
-              child: Text('tick2 is ${model.tick2}'),
-            );
-          },
-        )
-        .padding(const EdgeInsets.all(5.0))
-        .sizeBox(width: Width, height: 60);
-  }
+//* Subscribe tick2 with timer update
+Widget tick2() {
+  return 'tick2'
+      .subModel<MyModel>(
+        (context, model) {
+          // print('tick2 build');
+          return _ColoredBox(
+            color: tick2r.nextColor(),
+            child: Text('tick2 is ${model.tick2}'),
+          );
+        },
+      )
+      .padding(const EdgeInsets.all(5.0))
+      .sizeBox(width: Width, height: 60);
 }
 
-class Tick3 extends StatelessWidget {
-  final _ColorRegistry r = _ColorRegistry();
-
-  @override
-  Widget build(BuildContext context) {
-    return 'tick3'
-        .subMyModel(
-          (context, model) {
-            // print('tick3 build');
-            return _ColoredBox(
-              color: r.nextColor(),
-              child: Text('tick3 is ${model.tick3}'),
-            );
-          },
-        )
-        .padding(const EdgeInsets.all(5.0))
-        .sizeBox(width: Width, height: 60);
-  }
+//* Subscribe tick3 with timer update
+Widget tick3() {
+  return 'tick3'
+      .subModel<MyModel>(
+        (context, model) {
+          // print('tick3 build');
+          return _ColoredBox(
+            color: tick3r.nextColor(),
+            child: Text('tick3 is ${model.tick3}'),
+          );
+        },
+      )
+      .padding(const EdgeInsets.all(5.0))
+      .sizeBox(width: Width, height: 60);
 }
 
 class _ColorRegistry {
@@ -459,6 +417,25 @@ class _ColoredBox extends StatelessWidget {
     );
   }
 }
+
+//* Comment out Tick1 class.
+// class Tick1 extends StatelessWidget {
+//   final _ColorRegistry r = _ColorRegistry();
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//         // 'tick1'.subMyModel(
+//         rxSub<MyModel>(
+//       (context, model) {
+//         // print('tick1 build');
+//         return _ColoredBox(
+//           color: r.nextColor(),
+//           child: Text('tick1 is ${model.tick1}'),
+//         );
+//       },
+//     ).padding(const EdgeInsets.all(5.0)).sizeBox(width: Width, height: 60);
+//   }
+// }
 
 final bottomNavItems = [
   const BottomNavigationBarItem(

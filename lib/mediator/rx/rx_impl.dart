@@ -1,72 +1,102 @@
-import '../mediator_publisher.dart';
+import 'dart:collection';
+
+import '../assert.dart';
+import '../pub.dart';
 
 class RxImpl<T> {
   //* constructor
   RxImpl([T initial]) : _value = initial {
     // variables and constructor calling sequence:
     // 1. Model inline variables ->
-    // 2. Publisher inline variables ->
-    // 3. Publisher constructor ->
+    // 2. Pub inline variables ->
+    // 3. Pub constructor ->
     // 4. Model constructor
-    staticContainer.add(this);
+    staticRxContainer.add(this);
   }
 
-  //* static section
-  static final List<RxImpl> staticContainer = [];
+  //* region member variables
+  Pub pub; // the pub attached to this rx variable
+  final rxAspects = HashSet<Object>(); // aspects attached to this rx variable
+  bool isNullBroadcast = false; // if this rx variable is broadcasting
+
+  T _value; // the underlying value with template type T
+  final _tag = <String>{};
+  //! endregion
+
+  //* region static section
+  static final List<RxImpl> staticRxContainer = [];
 
   /// set observer for each rx variable
-  static void setPublisher(Publisher pub) {
-    void fn(element) => element.publisher = pub;
-    staticContainer.forEach(fn);
-    staticContainer.clear();
+  static void setPub(Pub pub) {
+    for (final element in staticRxContainer) {
+      element.pub = pub;
+    }
+    staticRxContainer.clear();
   }
 
   //* in case member variables initialized inside constructor, or member functions.
-  static Publisher statePublisher;
-  static void enableVarCollect(Publisher pub) => statePublisher = pub;
+  static Pub statePub;
+  static void enableVarCollect(Pub pub) => statePub = pub;
   static void disableVarCollect() {
-    setPublisher(statePublisher); // set observer for every rx variable
-    statePublisher = null;
+    setPub(statePub); // set observer for every rx variable
+    statePub = null;
   }
-  //* end section
 
-  /// static aspects and the flag of if enabled
-  static Iterable stateRxAspects;
-  static bool stateRxAspectsFlag = false;
+  //* static aspects and the flag of if enabled
+  static Iterable stateWidgetAspects;
+  static bool stateWidgetAspectsFlag = false;
 
   /// enable auto add static aspects to aspects of rx - by getter
   static void enableCollectAspect(Iterable widgetAspects) {
-    stateRxAspects = widgetAspects;
-    stateRxAspectsFlag = true;
+    stateWidgetAspects = widgetAspects;
+    stateWidgetAspectsFlag = true;
   }
 
   /// disable auto add static aspects to aspects of rx - by getter
   static void disableCollectAspect() {
-    stateRxAspects = null;
-    stateRxAspectsFlag = false;
+    stateWidgetAspects = null;
+    stateWidgetAspectsFlag = false;
+  }
+  //! endregion
+
+  //* region rx auto aspect static section
+  static int rxTagCounter = 0;
+  static String nextRxTag() {
+    assert(ifTagMaximum(rxTagCounter));
+    // print('nextRxTag: #$rxTagCounter');
+    // return '#${rxTagCounter++}';
+    return numToString128(rxTagCounter++);
   }
 
-  //* member variables
-  Publisher publisher; // the publisher that attach to this rx variable
-  final Set rxAspects = {}; // the aspects that attach to this rx variable
-  bool isNullBroadcast = false; // if this rx variable is broadcasting
+  static bool stateRxAutoAspectFlag = false;
+  static List<Object> stateRxAutoAspects = [];
 
-  T _value; // the underlying value with template type T
-
-  //* setter value
-  set value(T value) {
-    if (_value != value) {
-      _value = value;
-      if (publisher == null) return;
-      publishRxAspects();
-    }
+  static void enableRxAutoAspect() => stateRxAutoAspectFlag = true;
+  static void disableRxAutoAspect() => stateRxAutoAspectFlag = false;
+  static List<Object> getRxAutoAspects() => stateRxAutoAspects;
+  static void clearRxAutoAspects() => stateRxAutoAspects.clear();
+  // get RxAutoAspects and disable RxAutoAspectFlag
+  static List<Object> getAndDisableRxAutoAspect() {
+    stateRxAutoAspectFlag = false;
+    return stateRxAutoAspects;
   }
+
+  // disable RxAutoAspectFlag And clear RxAutoAspects
+  static void disableAndClearRxAutoAspect() {
+    stateRxAutoAspectFlag = false;
+    stateRxAutoAspects.clear();
+  }
+  //! endregion
 
   //* getter value
   T get value {
-    if (stateRxAspectsFlag == true) {
-      if (stateRxAspects != null) {
-        rxAspects.addAll(stateRxAspects);
+    // if rx automatic aspect is enabled. (precede over state rx aspect)
+    if (stateRxAutoAspectFlag == true) {
+      touch(); // Touch to activate rx automatic aspect management.
+      //
+    } else if (stateWidgetAspectsFlag == true) {
+      if (stateWidgetAspects != null) {
+        rxAspects.addAll(stateWidgetAspects);
       } else {
         isNullBroadcast = true;
       }
@@ -75,10 +105,36 @@ class RxImpl<T> {
     return _value;
   }
 
+  //* setter value
+  set value(T value) {
+    if (_value != value) {
+      _value = value;
+      if (pub != null) {
+        publishRxAspects();
+      }
+    }
+  }
+
+  /// Touch to activate rx automatic aspect management.
+  void touch() {
+    // if _tag is empty, this is the first time. (lazy _tag initialize)
+    if (_tag.isEmpty) {
+      final tag = nextRxTag();
+      _tag.add(tag);
+      // adds tag to registered aspects of the model
+      pub.regAspects.add(tag);
+      // adds tag to rx aspects of self
+      rxAspects.add(tag);
+    }
+    // add the _tag to rx automatic aspect list,
+    // for later getRxAutoAspects() to register to host
+    stateRxAutoAspects.addAll(_tag);
+  }
+
   /// add [aspects] to the rx aspects.
   /// param aspects:
   ///   Iterable: add [aspects] to the rx aspects
-  ///   null: broadcast to the model - the publisher
+  ///   null: broadcast to the model
   /// RxImpl: add [(aspects as RxImpl).rxAspects] to the rx aspects
   ///       : add `aspects` to the rx aspects
   void addRxAspects([Object aspects]) {
@@ -96,7 +152,7 @@ class RxImpl<T> {
   /// remove [aspects] from the rx aspects.
   /// param aspects:
   ///   Iterable: remove [aspects] from the rx aspects
-  ///   null: don't broadcast to the model - the publisher
+  ///   null: don't broadcast to the model
   /// RxImpl: remove [(aspects as RxImpl).rxAspects] from the rx aspects
   ///       : remove `aspects` from the rx aspects
   void removeRxAspects([Object aspects]) {
@@ -131,17 +187,18 @@ class RxImpl<T> {
 
   /// copy info from another rx variable
   void copyInfo(RxImpl<T> other) {
-    publisher = other.publisher;
+    _tag.addAll(other._tag);
+    pub = other.pub;
     rxAspects.addAll(other.rxAspects);
   }
 
   /// publish rx aspects to host
   void publishRxAspects() {
-    assert(publisher != null, 'Publisher in the RxImpl should not be null.');
+    assert(shouldExists(pub, 'Pub of RxImpl should not be null.'));
     if (isNullBroadcast) {
-      return publisher.publish();
+      return pub.publish();
     } else if (rxAspects.isNotEmpty) {
-      return publisher.publish(rxAspects);
+      return pub.publish(rxAspects);
     }
   }
 
@@ -157,27 +214,6 @@ class RxImpl<T> {
   //* override method
   @override
   String toString() => value.toString();
-
-  /// This equality override works for RxImpl instances and the internal
-  /// values.
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(dynamic o) {
-    if (o is T) return value == o;
-    if (o is RxImpl<T>) return value == o.value;
-    return false;
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode {
-    // return hashCode;
-    if (_value == null) {
-      // ignore: recursive_getters
-      return hashCode;
-    }
-    return _value.hashCode;
-  }
 }
 
 //* Rx class for `bool` Type.
@@ -221,4 +257,50 @@ extension RxBoolExtension on bool {
 extension RxExtension<T> on T {
   /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get rx => Rx<T>(this);
+}
+
+String numToString128(int value) {
+  /// ascii code:
+  /// 32: space /// 33: !  (first character except space)
+  /// 48: 0
+  /// 65: A  /// 90: Z
+  /// 97: a  /// 122
+  // const int charBase = 33;
+  //'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"#%&()*+,-./:;<=>?@[\\]^_`{|}~€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ';
+  const charBase =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!"#%&()*+,-./:;<=>?@[]^_`{|}~€‚ƒ„…†‡•–™¢£¤¥©®±µ¶º»¼½¾ÀÆÇÈÌÐÑÒ×ØÙÝÞßæç';
+  assert(charBase.length >= 128, 'numToString64 const charBase length < 128');
+
+  if (value == 0) {
+    return '#0';
+  }
+
+  String res = '#';
+
+  assert(value >= 0, 'numToString should provide positive value.');
+  // if (value < 0) {
+  //   value = -value;
+  //   res += '-';
+  // }
+
+  final list = <String>[];
+  while (value > 0) {
+    /// 64 group
+    // final remainder = value & 63;
+    // value = value >> 6; // == divide by 64
+
+    /// 128 group
+    final remainder = value & 127;
+    value = value >> 7; // == divide by 128
+    /// num to char, base on charBase
+    //final char = String.fromCharCode(remainder + charBase);
+    final char = charBase[remainder];
+    list.add(char);
+  }
+
+  for (int i = list.length - 1; i >= 0; i--) {
+    res += list[i];
+  }
+
+  return res;
 }

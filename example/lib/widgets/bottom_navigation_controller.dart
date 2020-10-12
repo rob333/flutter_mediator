@@ -42,17 +42,20 @@ void makeBottomNavBarIconDifferentType(
     var icon = item.icon;
     final iconType = item.icon.runtimeType;
 
-    if (iconType == activeIcon.runtimeType) {
-      // assume if iconType is Icon, then it's widget tree is one depth below than the activeIcon widget tree
-      final iconFlag = iconType == Icon;
-      if (item.activeIcon is LimitedBox) {
-        activeIcon = SizedBox(child: activeIcon);
-        // try to make icon widget tree and activeIcon widget tree the same depth, Can reduce rebuild
-        if (iconFlag) icon = LimitedBox(child: item.icon);
-      } else {
-        activeIcon = LimitedBox(child: activeIcon);
-        // try to make icon widget tree and activeIcon widget tree the same depth, Can reduce rebuild
-        if (iconFlag) icon = SizedBox(child: item.icon);
+    // if activeIcon is not the same Icon with icon, otherwise, just as is
+    if (activeIcon != icon) {
+      if (iconType == activeIcon.runtimeType) {
+        // assume if iconType is Icon, then it's widget tree is one depth below than the activeIcon widget tree
+        final iconFlag = iconType == Icon;
+        if (item.activeIcon is LimitedBox) {
+          activeIcon = SizedBox(child: activeIcon);
+          // try to make icon widget tree and activeIcon widget tree the same depth, Can reduce rebuild
+          if (iconFlag) icon = LimitedBox(child: item.icon);
+        } else {
+          activeIcon = LimitedBox(child: activeIcon);
+          // try to make icon widget tree and activeIcon widget tree the same depth, Can reduce rebuild
+          if (iconFlag) icon = SizedBox(child: item.icon);
+        }
       }
     }
 

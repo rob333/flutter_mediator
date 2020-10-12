@@ -3,7 +3,7 @@ import 'package:flutter_mediator/mediator.dart';
 
 void main() {
   test('test RxInt operator+', () {
-    var a = 1.rx..publisher = Publisher();
+    var a = 1.rx..pub = Pub();
 
     expect(a.value, 1);
     final b = a + 1;
@@ -20,7 +20,7 @@ void main() {
   });
 
   test('test RxInt operator-', () {
-    var a = 5.rx..publisher = Publisher();
+    var a = 5.rx..pub = Pub();
 
     expect(a.value, 5);
     final b = a - 1;
@@ -65,5 +65,19 @@ void main() {
     // mix rx aspect
     a.addRxAspects(['aspect1', 1, 2, 3, 'aspect2']);
     expect(a.rxAspects, ['aspect1', 1, 2, 3, 'aspect2']);
+  });
+
+  test('test rx_impl numToString', () {
+    const len = 2000;
+    final coll = <String>{};
+    int count = 0;
+
+    for (final int i in Iterable.generate(len)) {
+      final tag = numToString128(i);
+      coll.add(tag);
+      // print('$tag, $count, ${coll.length}');
+      expect(coll.length, count + 1);
+      count++;
+    }
   });
 }

@@ -1,8 +1,10 @@
 library flutter_mediator;
 
-export 'mediator/mediator_helper.dart';
-export 'mediator/mediator_host.dart';
-export 'mediator/mediator_publisher.dart';
-export 'mediator/mediator_subscriber.dart';
+export 'mediator/assert.dart';
+export 'mediator/controller.dart';
+export 'mediator/extension.dart';
+export 'mediator/host.dart';
 export 'mediator/multi_host.dart';
+export 'mediator/pub.dart';
 export 'mediator/rx/rx.dart';
+export 'mediator/subscriber.dart';

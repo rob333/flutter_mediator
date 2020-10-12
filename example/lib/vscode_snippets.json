@@ -1,0 +1,157 @@
+{
+  "Create a Flutter Mediator Controller Function": {
+    "prefix": "controller",
+    "body": [
+      "Widget $1Controller() {",
+      "  return Controller<${2:Model}>(",
+      "    create: (context, model) => RaisedButton(",
+      "      child: const Text('$3'),",
+      "      onPressed: () => model.${4:modelVar},",
+      "    ),",
+      "  );",
+      "}",
+      ""
+    ],
+    "description": "Create a Flutter Mediator Controller Function"
+  },
+
+  "Create a Flutter Mediator Subscriber Function with Aspect": {
+    "prefix": "subscriber",
+    "body": [
+      "Widget $1Subscriber() {",
+      "  return '$2'.subModel<${3:Model}>((context, model) {",
+      "    return Text('$4 ${model.${5:modelVar}}');",
+      "  });",
+      "}"
+    ],
+    "description": "Create a Flutter Mediator Subscriber Function with Aspect"
+  },
+
+  "Create a Flutter Mediator Subscriber Function with RX Auto Aspect": {
+    "prefix": "rxfun",
+    "body": [
+      "Widget $1Subscriber() {",
+      "  return rxSub<${2:Model}>((context, model) {",
+      "    return Text('$3 ${model.${4:rxVar}}');",
+      "  });",
+      "}"
+    ],
+    "description": "Create a Flutter Mediator Subscriber Function with RX Auto Aspect"
+  },
+
+  "Create a Flutter Mediator Subscriber with Aspect": {
+    "prefix": "submodel",
+    "body": [
+      "'$1'.subModel<${2:Model}>((context, model) {",
+      "  return Text('$3 ${model.${4:modelVar}}');",
+      "},)$0"
+    ],
+    "description": "Create a Flutter Mediator Subscriber with Aspect"
+  },
+
+  "Create a Flutter Mediator Subscriber with RX Auto Aspect": {
+    "prefix": "rxsub",
+    "body": [
+      "rxSub<${1:Model}>((context, model) {",
+      "  return Text('$2 ${model.${3:rxVar}}');",
+      "},)$0"
+    ],
+    "description": "Create a Flutter Mediator Subscriber with RX Auto Aspect"
+  },
+
+  "Get the Model of Flutter Mediator": {
+    "prefix": "getmodel",
+    "body": [
+      "Pub.getModel<${1:Model}>()$0"
+    ],
+    "description": "Get the Model of Flutter Mediator"
+  },
+
+  "Add a Creator to the Subscriber Map of the Model": {
+    "prefix": "addsub",
+    "body": [
+      "addSub(${1:key}, (context, model) {",
+      "  $2",
+      "});$0"
+    ],
+    "description": "Add a Creator to the Subscriber Map of the Model"
+  },
+
+  "Add a Creator to the Controller Map of the Model": {
+    "prefix": "addcon",
+    "body": [
+      "addCon(${1:key}, (context, model) {",
+      "  $2",
+      "});$0"
+    ],
+    "description": "Add a Creator to the Controller Map of the Model"
+  },
+
+  "Create a Subscriber Widget from the View Map of the Model": {
+    "prefix": "pubsub",
+    "body": [
+      "Pub.sub<${1:model}>('${2:key}'),$0"
+    ],
+    "description": "Create a Subscriber Widget from the View Map of the Model"
+  },
+
+  "Create a Controller Widget from the View Map of the Model": {
+    "prefix": "pubcon",
+    "body": [
+      "Pub.con<${1:model}>('${2:key}'),$0"
+    ],
+    "description": "Create a Widget from the View Map of the Model"
+  },
+
+
+  "Generate a Model Boilerplate Code of Flutter Mediator": {
+    "prefix": "mmodel",
+    "body": [
+      "import 'package:flutter/widgets.dart';",
+      "import 'package:flutter_mediator/mediator.dart';",
+      "",
+      "class ${1:Model} extends Pub {",
+      "  //* member variables",
+      "  var foo = 0.rx;",
+      "",
+      "  //* controller function",
+      "  void increaseFoo() => foo++;",
+      "",
+      "  //* View Map:",
+      "  void addSub(Object o, CreatorFn<${1:Model}> sub) => regSub<${1:Model}>(o, sub);",
+      "  void addCon(Object o, CreatorFn<${1:Model}> con) => regCon<${1:Model}>(o, con);",
+      "",
+      "  @override",
+      "  void init() {",
+      "    addSub('', (context, model) {",
+      "      // return Text('foo is ${model.foo}');",
+      "    });",
+      "",
+      "    addCon('', (context, model) {",
+      "      // return RaisedButton(child: const Text('Update foo'),",
+      "      //   onPressed: () => model.increaseFoo(),);",
+      "    });",
+      "",
+      "    super.init();",
+      "  }",
+      "}",
+      "",
+      "//* Model extension",
+      "${1:Model} get${1:Model}(BuildContext context) => Pub.getModel<${1:Model}>();",
+      "",
+      "Subscriber<${1:Model}> sub${1:Model}(CreatorFn<${1:Model}> create,",
+      "    {Key key, Object aspects}) {",
+      "  return Subscriber<${1:Model}>(key: key, aspects: aspects, create: create);",
+      "}",
+      "",
+      "extension ${1:Model}ExtT<T> on T {",
+      "  Subscriber<${1:Model}> sub${1:Model}(CreatorFn<${1:Model}> create, {Key key}) {",
+      "    return Subscriber<${1:Model}>(key: key, aspects: this, create: create);",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "Generate a Model Boilerplate Code of Flutter Mediator"
+  }
+  // },
+}

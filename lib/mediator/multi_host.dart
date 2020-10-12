@@ -3,14 +3,15 @@ import 'package:flutter/widgets.dart';
 import '../mediator.dart';
 
 class MultiHost {
-  static Widget create1<T1 extends Publisher>(
+  static Widget create1<T1 extends Pub>(
     T1 t1, {
     @required Widget child,
   }) {
-    return Host(model: t1, child: child);
+    child = Host(model: t1, child: child);
+    return child;
   }
 
-  static Widget create2<T1 extends Publisher, T2 extends Publisher>(
+  static Widget create2<T1 extends Pub, T2 extends Pub>(
     T1 t1,
     T2 t2, {
     @required Widget child,
@@ -20,8 +21,7 @@ class MultiHost {
     return child;
   }
 
-  static Widget
-      create3<T1 extends Publisher, T2 extends Publisher, T3 extends Publisher>(
+  static Widget create3<T1 extends Pub, T2 extends Pub, T3 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3, {
@@ -33,8 +33,8 @@ class MultiHost {
     return child;
   }
 
-  static Widget create4<T1 extends Publisher, T2 extends Publisher,
-      T3 extends Publisher, T4 extends Publisher>(
+  static Widget
+      create4<T1 extends Pub, T2 extends Pub, T3 extends Pub, T4 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -48,8 +48,8 @@ class MultiHost {
     return child;
   }
 
-  static Widget create5<T1 extends Publisher, T2 extends Publisher,
-      T3 extends Publisher, T4 extends Publisher, T5 extends Publisher>(
+  static Widget create5<T1 extends Pub, T2 extends Pub, T3 extends Pub,
+      T4 extends Pub, T5 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -65,13 +65,8 @@ class MultiHost {
     return child;
   }
 
-  static Widget create6<
-      T1 extends Publisher,
-      T2 extends Publisher,
-      T3 extends Publisher,
-      T4 extends Publisher,
-      T5 extends Publisher,
-      T6 extends Publisher>(
+  static Widget create6<T1 extends Pub, T2 extends Pub, T3 extends Pub,
+      T4 extends Pub, T5 extends Pub, T6 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -89,14 +84,8 @@ class MultiHost {
     return child;
   }
 
-  static Widget create7<
-      T1 extends Publisher,
-      T2 extends Publisher,
-      T3 extends Publisher,
-      T4 extends Publisher,
-      T5 extends Publisher,
-      T6 extends Publisher,
-      T7 extends Publisher>(
+  static Widget create7<T1 extends Pub, T2 extends Pub, T3 extends Pub,
+      T4 extends Pub, T5 extends Pub, T6 extends Pub, T7 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -117,14 +106,14 @@ class MultiHost {
   }
 
   static Widget create8<
-      T1 extends Publisher,
-      T2 extends Publisher,
-      T3 extends Publisher,
-      T4 extends Publisher,
-      T5 extends Publisher,
-      T6 extends Publisher,
-      T7 extends Publisher,
-      T8 extends Publisher>(
+      T1 extends Pub,
+      T2 extends Pub,
+      T3 extends Pub,
+      T4 extends Pub,
+      T5 extends Pub,
+      T6 extends Pub,
+      T7 extends Pub,
+      T8 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -147,15 +136,15 @@ class MultiHost {
   }
 
   static Widget create9<
-      T1 extends Publisher,
-      T2 extends Publisher,
-      T3 extends Publisher,
-      T4 extends Publisher,
-      T5 extends Publisher,
-      T6 extends Publisher,
-      T7 extends Publisher,
-      T8 extends Publisher,
-      T9 extends Publisher>(
+      T1 extends Pub,
+      T2 extends Pub,
+      T3 extends Pub,
+      T4 extends Pub,
+      T5 extends Pub,
+      T6 extends Pub,
+      T7 extends Pub,
+      T8 extends Pub,
+      T9 extends Pub>(
     T1 t1,
     T2 t2,
     T3 t3,
@@ -179,12 +168,15 @@ class MultiHost {
     return child;
   }
 
-  // static Widget create(List<Publisher> list, {@required Widget child}) {
-  //   for (var i = list.length - 1; i >= 0; i--) {
-  //     // dart template infer model as type of Publisher instead of the original type
+  // static Widget create(List<Pub> pubs, {@required Widget child}) {
+  //   for (var i = pubs.length - 1; i >= 0; i--) {
+  //     // dart template infer pubs[i]:model as type of Pub instead of the original type
   //     // so the InheritedModel will miss getting the model back
-  //     child = Host(model: list[i], child: child);
+  //     child = Host(model: pubs[i], child: child);
   //   }
   //   return child;
   // }
 }
+
+// T cast<T>(x) => x is T ? x : null;
+// T cast<T>(dynamic x, {T fallback}) => x is T ? x : fallback;
