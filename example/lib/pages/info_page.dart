@@ -135,7 +135,7 @@ class _RadioGroupState extends State<RadioGroup> {
   ];
 
   Future<void> _handleRadioValueChange1(String value) async {
-    final model = Pub.getModel<Setting>();
+    final model = Pub.model<Setting>();
     await model.changeLocale(context, value);
     setState(() {
       // model.locale.value = value; // in model.changeLocale
@@ -144,7 +144,7 @@ class _RadioGroupState extends State<RadioGroup> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Pub.getModel<Setting>();
+    final model = Pub.model<Setting>();
     final _radioValue1 = model.locale.value;
 
     Widget panel(int index) {

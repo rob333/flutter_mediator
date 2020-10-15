@@ -62,7 +62,7 @@
   "Get the Model of Flutter Mediator": {
     "prefix": "getmodel",
     "body": [
-      "Pub.getModel<${1:Model}>()$0"
+      "Pub.model<${1:Model}>()$0"
     ],
     "description": "Get the Model of Flutter Mediator"
   },
@@ -137,7 +137,7 @@
       "}",
       "",
       "//* Model extension",
-      "${1:Model} get${1:Model}(BuildContext context) => Pub.getModel<${1:Model}>();",
+      "${1:Model} get${1:Model}(BuildContext context) => Pub.model<${1:Model}>();",
       "",
       "Subscriber<${1:Model}> sub${1:Model}(CreatorFn<${1:Model}> create,",
       "    {Key key, Object aspects}) {",

@@ -41,6 +41,13 @@ class Pub {
     assert(ifStateModel<Model>(stateModels[Model]));
     return stateModels[Model] as Model;
   }
+
+  //* static: Get the model, the same as getModel<Model>().
+  static Model model<Model extends Pub>() {
+    assert(ifStateModel<Model>(stateModels[Model]));
+    return stateModels[Model] as Model;
+  }
+
   //! end section
 
   //* publish aspect section:

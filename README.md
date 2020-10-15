@@ -108,7 +108,7 @@ class MyModel extends Pub {
 
 &emsp; **Then, later, get the model by**
 
-- `Pub.getModel`**_`<Model>`_**`()`
+- `Pub.model`**_`<Model>`_**`()`
 
 > Note that you don't need `context` to get the model, this provides you the flexibility to do things anywhere.
 
@@ -770,7 +770,7 @@ class _RadioGroupState extends State<RadioGroup> {
   ];
 
   Future<void> _handleRadioValueChange1(String value) async {
-    final model = Pub.getModel<Setting>(); // use `getmodel` shortcut to get the model
+    final model = Pub.model<Setting>(); // use `getmodel` shortcut to get the model
     await model.changeLocale(context, value); // change the locale
     setState(() {
       /// model.locale.value = value; // changed in model.changeLocale
@@ -779,7 +779,7 @@ class _RadioGroupState extends State<RadioGroup> {
 
   @override
   Widget build(BuildContext context) {
-    final model = Pub.getModel<Setting>(); // use `getmodel` shortcut to get the model
+    final model = Pub.model<Setting>(); // use `getmodel` shortcut to get the model
     final _radioValue1 = model.locale.value; // get the locale value back to maintain state
 
     Widget panel(int index) {
@@ -1131,7 +1131,7 @@ You can write model extensions to simplified the typing. For example,
 
 ```dart
 /// MyModel extension
-MyModel getMyModel(BuildContext context) => Pub.getModel<MyModel>();
+MyModel getMyModel(BuildContext context) => Pub.model<MyModel>();
 
 Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
     {Key key, Object aspects}) {
@@ -1148,7 +1148,7 @@ extension MyModelExtT<T> on T {
 
 ```dart
 /// ListModel extension
-ListModel getListModel(BuildContext context) => Pub.getModel<ListModel>();
+ListModel getListModel(BuildContext context) => Pub.model<ListModel>();
 
 Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
     {Key key, Object aspects}) {
@@ -1178,7 +1178,7 @@ To get the model, for example, getting `MyModel`,
 - original form
 
 ```dart
-final model = Pub.getModel<MyModel>();
+final model = Pub.model<MyModel>();
 ```
 
 - with user extension
@@ -1190,7 +1190,7 @@ final model = getMyModel();
 #### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L154).
 
 ```dart
-final model = Pub.getModel<MyModel>();
+final model = Pub.model<MyModel>();
 final aspects = model.frameAspects;
 ```
 

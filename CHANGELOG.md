@@ -1,6 +1,10 @@
+## 1.1.1+1
+
+- Add `Pub.model<Model>()`, the same as `Pub.getModel<Model>()`.
+
 ## 1.1.1
 
-- Add `MultiHost.create`
+- Add `MultiHost.create`.
 
 ## 1.1.0
 
