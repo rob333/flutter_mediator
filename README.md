@@ -65,7 +65,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^1.1.1"
+  flutter_mediator: "^1.1.2"
 ```
 
 Import flutter_mediator in files that will be used:
