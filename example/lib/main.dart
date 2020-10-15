@@ -21,6 +21,14 @@ void main() {
       Setting(),
       child: MyApp(),
     ),
+    // MultiHost.create( // Generic form
+    //   [
+    //     Host<MyModel>(model: MyModel(updateMs: 1000)),
+    //     Host<ListModel>(model: ListModel(updateMs: 500)),
+    //     Host<Setting>(model: Setting()),
+    //   ],
+    //   child: MyApp(),
+    // ),
   );
 }
 

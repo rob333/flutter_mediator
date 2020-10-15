@@ -6,22 +6,25 @@ import 'assert.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-@immutable
 class Host<TModel extends Pub> extends StatefulWidget {
   const Host({
     Key key,
     @required TModel model,
-    @required this.child,
+    /*@required*/ this.child,
   })  : assert(model != null),
-        assert(child != null),
+        // assert(child != null),
         _model = model,
         super(key: key);
 
   final TModel _model;
   final Widget child;
 
-  //* register method, which is [listen = true], return the [InheritedModelOfMediator<TModel>]
-  static InheritedModelOfMediator<TModel> register<TModel extends Pub>(
+  //* For MultiHost.create, to accmulate the child
+  static List<Widget> stateChildColl;
+
+  //* register method, which is [listen = true], and add aspects to the [regAspects]
+  //* return the [TModel]
+  static TModel register<TModel extends Pub>(
     BuildContext context, {
     Iterable<Object> aspects,
   }) {
@@ -30,7 +33,10 @@ class Host<TModel extends Pub> extends StatefulWidget {
       final inheritedModel =
           InheritedModel.inheritFrom<InheritedModelOfMediator<TModel>>(context);
       assert(ifInheritedModel<TModel>(inheritedModel));
-      return inheritedModel;
+
+      final state = inheritedModel._state;
+      // aspects is null, no need to `addRegAspects`
+      return state.widget._model;
     }
 
     InheritedModelOfMediator<TModel> inheritedModel;
@@ -40,8 +46,9 @@ class Host<TModel extends Pub> extends StatefulWidget {
               aspect: aspect);
       assert(ifInheritedModel<TModel>(inheritedModel));
     }
-    // inheritedModel.state.addRegAspects(aspects);
-    return inheritedModel;
+
+    final state = inheritedModel._state;
+    return state.addRegAspects(aspects);
   }
 
   //* Reference section:
@@ -79,7 +86,7 @@ class Host<TModel extends Pub> extends StatefulWidget {
               aspect: aspect);
       assert(ifInheritedModel<TModel>(inheritedModel));
     }
-    // inheritedModel.state.addRegAspects(aspects);
+    inheritedModel._state.addRegAspects(aspects);
     return inheritedModel;
   }
 
@@ -107,14 +114,23 @@ class Host<TModel extends Pub> extends StatefulWidget {
   //! end reference section
 
   @override
-  _HostState createState() => _HostState<TModel>();
+  _HostState createState() {
+    var widget = child;
+    if (child == null) {
+      assert(stateChildColl.isNotEmpty,
+          'Host.stateChildColl is empty, make sure to use MultiHost.create()');
+      widget = stateChildColl.removeLast();
+    }
+    return _HostState<TModel>(widget);
+  }
 }
 
 class _HostState<TModel extends Pub> extends State<Host<TModel>> {
+  _HostState(this.child);
+  final Widget child;
+
   final _regAspects = HashSet<Object>(); // all aspects that registered
   final _frameAspects = HashSet<Object>(); // aspects to be updated
-
-  HashSet<Object> get frameAspects => _frameAspects;
 
   //* Add [aspects] to the registered aspects of the model
   TModel addRegAspects(Iterable<Object> aspects) {
@@ -164,7 +180,8 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   Widget build(BuildContext context) {
     return InheritedModelOfMediator<TModel>(
       state: this,
-      child: widget.child,
+      frameAspect: _frameAspects,
+      child: child,
     );
   }
 }
@@ -175,14 +192,17 @@ class InheritedModelOfMediator<TModel extends Pub> extends InheritedModel {
   const InheritedModelOfMediator({
     Key key,
     @required _HostState<TModel> state,
+    @required HashSet<Object> frameAspect,
     @required Widget child,
   })  : _state = state,
+        _frameAspects = frameAspect,
         super(key: key, child: child);
 
   final _HostState<TModel> _state;
+  final HashSet<Object> _frameAspects;
 
-  _HostState<TModel> get state => _state;
-  // Pulbisher get model => _state.widget.model;
+  // _HostState<TModel> get state => _state;
+  // Pub get model => _state.widget.model;
 
   @override
   bool updateShouldNotify(InheritedModelOfMediator<TModel> oldWidget) {
@@ -192,6 +212,6 @@ class InheritedModelOfMediator<TModel extends Pub> extends InheritedModel {
   @override
   bool updateShouldNotifyDependent(
       InheritedModelOfMediator<TModel> oldWidget, Set<Object> dependencies) {
-    return dependencies.intersection(_state._frameAspects).isNotEmpty;
+    return dependencies.intersection(_frameAspects).isNotEmpty;
   }
 }

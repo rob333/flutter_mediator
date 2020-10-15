@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Add `MultiHost.create`
+
 ## 1.1.0
 
 - Add `rxSub`, rx automatic aspect, generates and maintains aspect for the rx variables automatically.

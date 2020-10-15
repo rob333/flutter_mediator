@@ -31,10 +31,8 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
 
       assert(ifRxAutoAspectEmpty(rxAutoAspectList));
 
-      // final inheritedModel =
       Host.register<Model>(context, aspects: rxAutoAspectList);
-      //   inheritedModel.state.addRegAspects(rxAutoAspectList);
-      /// addRegAspect automatically in the RxImpl getter
+      // addRegAspect automatically in the RxImpl getter
 
       RxImpl.clearRxAutoAspects();
       return widget;
@@ -48,20 +46,12 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
         widgetAspects = [aspects];
       }
 
-      final inheritedModel =
-          Host.register<Model>(context, aspects: widgetAspects);
-      assert(inheritedModel.state != null);
-      final state = inheritedModel.state;
-
-      /// add to the RegAspects of the host state
-      /// check (widgetAspects == null) inside addRegAspects
-      // if (widgetAspects != null) {
-      final model = state.addRegAspects(widgetAspects);
-      // }
+      // register widgetAspects to the host, and add to [regAspects]
+      final model = Host.register<Model>(context, aspects: widgetAspects);
 
       // enable automatic add static rx aspects to rx aspects - by getter
       RxImpl.enableCollectAspect(widgetAspects);
-      // any rx variable used inside the create function will automatically rebuild the widget when updated
+      // any rx variable used inside the create method will automatically rebuild the widget when updated
       final widget = create(context, model);
       // disable automatic add static rx aspects to rx aspects - by getter
       RxImpl.disableCollectAspect();
@@ -76,7 +66,7 @@ Subscriber<Model> rxSub<Model extends Pub>(CreatorFn<Model> create, {Key key}) {
   return Subscriber<Model>(key: key, create: create, rxAuto: true);
 }
 
-//* Extension for rx automatic aspect create function
+//* Extension for rx automatic aspect create method
 extension RxAutoAspectExt on CreatorFn {
   Subscriber<T> rxSub<T extends Pub>({Key key}) {
     return Subscriber<T>(key: key, create: this, rxAuto: true);

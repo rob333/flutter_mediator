@@ -168,15 +168,60 @@ class MultiHost {
     return child;
   }
 
+  static Widget create(
+    List<Host> hosts, {
+    @required Widget child,
+  }) {
+    assert(hosts != null && hosts.isNotEmpty);
+    assert(child != null);
+    assert(Host.stateChildColl == null);
+
+    Host.stateChildColl = [child];
+    for (var i = hosts.length - 1; i >= 1; i--) {
+      Host.stateChildColl.add(hosts[i]);
+    }
+
+    return hosts[0];
+
+    // for (var i = hosts.length - 1; i >= 0; i--) {
+    //   final host = hosts[i];
+    //   host.child = child;
+    //   child = host;
+    // }
+    // return child;
+  }
+
+  /// Template inference issue:
   // static Widget create(List<Pub> pubs, {@required Widget child}) {
   //   for (var i = pubs.length - 1; i >= 0; i--) {
   //     // dart template infer pubs[i]:model as type of Pub instead of the original type
-  //     // so the InheritedModel will miss getting the model back
+  //     // so the Host will miss getting the model back
   //     child = Host(model: pubs[i], child: child);
   //   }
   //   return child;
   // }
+
+  // /// not working:
+  // /// Workaround of template inference issue:
+  // static Widget create(List<HostFn> fns, {@required Widget child}) {
+  //   for (var i = fns.length - 1; i >= 0; i--) {
+  //     final model = fns[i]();
+  //     child = Host(model: model, child: child);
+  //   }
+  //   return child;
+  // }
+  //
+  //   MultiHost.create(
+  //   [
+  //     () => MyModel(updateMs: 1000),
+  //     () => ListModel(updateMs: 500),
+  //     () => Setting(),
+  //   ],
+  //   child: MyApp(),
+  // ),
 }
+
+// typedef HostFn<Model extends Pub> = Model Function();
 
 // T cast<T>(x) => x is T ? x : null;
 // T cast<T>(dynamic x, {T fallback}) => x is T ? x : fallback;

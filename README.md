@@ -32,16 +32,16 @@ alt="Flutter Widget of the Week: InheritedModel Explained" /></a></p>
 
 #### Subscribe and Publish
 
-A widget subscribes with aspects and will rebuild whenever a model controller publishs one of those aspects.
+A widget subscribes with aspects and will rebuild whenever a model controller publishs any of those aspects.
 
 #### Rx Variable
 
-A proxy object of the package, by design pattern, proxy provides a surrogate or placeholder for another object to control access to it.
+A proxy object, by design pattern, proxy provides a surrogate or placeholder for another object to control access to it.
 Variables in the model can turn into a proxy object by denoting **_`.rx`_**
 
 #### Widget Aspects
 
-Aspects denote what the widget is interested in. That widget will rebuild whenever one of those aspects is published.
+Aspects denote what the widget is interested in. That widget will rebuild whenever any of those aspects is published.
 
 #### Rx Related Widget
 
@@ -55,7 +55,7 @@ By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate
 
 <!-- same as View Map section-->
 
-View map consists of two create function maps, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
+View map consists of two maps of create methods, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
 
 <br />
 
@@ -65,7 +65,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^1.1.0"
+  flutter_mediator: "^1.1.1"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -130,6 +130,18 @@ void main() {
 }
 ```
 
+Or, use the generic form.
+
+```dart
+    MultiHost.create( // Generic form
+      [
+        Host<MyModel>(model: MyModel(updateMs: 1000)),
+        Host<ListModel>(model: ListModel(updateMs: 500)),
+      ],
+      child: MyApp(),
+    ),
+```
+
 ### 3. **_View: Subscribe widgets_**
 
 There are two ways to subscribe a widget:
@@ -168,7 +180,7 @@ rxSub<MyModel>((context, model) => Text('Int1 is ${model.int1}'))
 <!-- same as detail: Touch the rx variable -->
 
 - Case 3: When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
-  <br /> For example, when changing locale, the create method doesn't need to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+  <br /> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
 
 ```dart
 rxSub<MyModel>((context, model) {
@@ -266,7 +278,7 @@ Now you can type these shortcuts for code templates to easy using the package:
 
 <!-- same as key concept View Map -->
 
-View map consists of two create function maps, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
+View map consists of two maps of create methods, `Subscriber` and `Controller`, which build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
 
 First, let's see what's the difference by an original view and after using the view map.
 
@@ -353,7 +365,7 @@ Isn't it cleaner.
   }
 ```
 
-2. Use the `addsub` or `addcon` shortcut to add create functions of `Subscriber` or `Controller` in the `init()` method.
+2. Use the `addsub` or `addcon` shortcut to add create methods of `Subscriber` or `Controller` in the `init()` method.
    > `'hello'` and `'thanks'` are the keys to the map, later, you can use these keys to create corresponding widgets.
 
 ```dart
@@ -402,7 +414,7 @@ Isn't it cleaner.
 Plus with,
 
 - `.rx` - Turn model variables into rx variables, thus, you can use rx automatic aspect.
-- `rxVar.touch()` - Used when the create function doesn't need to display the value of that rx variable, then you `touch()` that rx variable to activate rx automatic aspect.
+- `rxVar.touch()` - Used when the create method doesn't have to display the value of that rx variable, then you `touch()` that rx variable to activate rx automatic aspect.
 - `getmodel` - Get the model. (Note that `context` is not needed to get the model.)
 
 <br /> Happy Coding!
@@ -411,7 +423,7 @@ Plus with,
 
 ## Use Case - explain how the package works
 
-> This use case explains how the package works, you can skip this if you don't need to. There is a [use case for i18n with Web View](#use-case---i18n-with-view-map), it's much more straight forward to use.
+> This use case explains how the package works, you can skip it. There is an [use case for i18n with View Map](#use-case---i18n-with-view-map), which is much more straight forward to use.
 
 First of all, implement the **`Model`** and place the **`Host`** at the top level of the widget tree,
 
@@ -554,7 +566,7 @@ Widget mainPage() {
 
 ## Use Case - i18n with View Map
 
-For example, to write a i18n app using flutter_i18n with View Map.
+For example, to write an i18n app using flutter_i18n with View Map.
 
 > These are all boilerplate code, you may just need to look at the lines with comments, that's where to put the code in.
 
@@ -585,7 +597,7 @@ flutter:
 
 3. Create a folder `models` then new a file `setting_model.dart` in the folder and use `mmodel` shortcut to generate a model boilerplate code with the class name `Setting`.
 
-4. Add a `i18n` extension to the `setting_model.dart`.
+4. Add an `i18n` extension to the `setting_model.dart`.
 
 ```dart
 //* i18n extension
@@ -596,7 +608,7 @@ extension StringI18n on String {
 }
 ```
 
-5. Add the `locale` variable and make it a rx variable along with the `changeLocale` function, then add create functions to the `Setting` model. (in the `init()` method)
+5. Add the `locale` variable and make it a rx variable along with the `changeLocale` function, then add create methods to the `Setting` model. (in the `init()` method)
    <br /> Add the `SettingEnum` to represent the map keys of the view map.
 
 ```dart
@@ -833,13 +845,13 @@ You can find the example in the [example](https://github.com/rob333/flutter_medi
 
 <br />
 
-**These steps can help you in most situations. The following details explain the package one step further, you can skip it if you don't need to.**
+**These steps can help you in most situations. The following details explain the package one step further, you can skip it.**
 
 <br />
 
 ## Detail
 
-<!-- These details explains the package one step further, you can skip this section if you don't need to use it. -->
+<!-- These details explains the package one step further, you can skip this section. -->
 
 1.  [**Single model**](#1-single-model) - host
 2.  [**Multiple models**](#2-multiple-models) - host
@@ -890,7 +902,6 @@ void main() {
 
 Register multiple models to the Host, and place it at the top level of the widget tree.
 <br />**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
-<br /> You can add more `MultiHost.createN` methods, see [multi_host.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/multi_host.dart) for example.
 
 ```dart
 /// main.dart
@@ -903,6 +914,18 @@ void main() {
     ),
   );
 }
+```
+
+Or, use the generic form.
+
+```dart
+    MultiHost.create( // Generic form
+      [
+        Host<MyModel>(model: MyModel(updateMs: 1000)),
+        Host<ListModel>(model: ListModel(updateMs: 500)),
+      ],
+      child: MyApp(),
+    ),
 ```
 
 &emsp; [back to detail](#detail)
@@ -1164,7 +1187,7 @@ final model = Pub.getModel<MyModel>();
 final model = getMyModel();
 ```
 
-#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L146).
+#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L154).
 
 ```dart
 final model = Pub.getModel<MyModel>();
@@ -1201,7 +1224,7 @@ rxSub<MyModel>((context, model) {
 ## 15. Touch the rx variable
 
 When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
-<br /> For example, when changing locale, the create method doesn't need to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+<br /> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
 
 ```dart
 rxSub<MyModel>((context, model) {
@@ -1296,7 +1319,7 @@ Subscriber<MyModel>(
 ## 18. Subscribe all aspects
 
 Provide no aspects parameter, or use null as aspect to subscribe to all aspects of the model.
-<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L146).
+<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L154).
 
 - simple form
 
@@ -1354,7 +1377,7 @@ enum ListEnum {
 ```
 
 Then everything is the same as `String` aspect, just to replace the `String` with `enum`.
-<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L104).
+<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L112).
 
 - simple form
 
@@ -1461,17 +1484,18 @@ Then whenever **_`str1`_** of class **_`<MyModel>`_** updates, the widget rebuil
 ## 21. Implement custom rx class
 
 If you need to write your own rx class, see [custom_rx_class.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/custom_rx_class.dart) for example.
-<br /> Or you can manipulate the underlying `value` directly.
-
-> By the extension method, package can turn anything into a rx variable.
+<br /> Or you can manipulate the underlying `value` directly. For example,
 
 ```dart
 /// some_model.dart
 final someClassRx = someClass.rx;
 void updateSomeClass() {
   someClassRx.value.counter++;
+  someClassRx.publishRxAspects();
 }
 ```
+
+> By the extension method, package can turn anything into a rx variable.
 
 &emsp; [back to detail](#detail)
 
