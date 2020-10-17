@@ -9,6 +9,7 @@ import 'package:flutter_mediator/mediator.dart';
 //* aspect enum
 enum ListEnum {
   ListUpdate,
+  ViewUpdate,
 }
 
 //* List item
@@ -73,6 +74,25 @@ class ListModel extends Pub {
     // locale is a rx variable, will rebuild related widget whenever updates.
   }
   //! end locale section
+
+  //* View Map:
+  void addSub(Object o, CreatorFn<ListModel> sub) => regSub<ListModel>(o, sub);
+  void addCon(Object o, CreatorFn<ListModel> con) => regCon<ListModel>(o, con);
+
+  @override
+  void init() {
+    addSub(ListEnum.ViewUpdate, (context, model) {
+      return Column(
+        children: [
+          const Text('ListModel:'),
+          Text('sales:${model.data.length}'),
+          Text('Total units:${model.getTotalUnits()}'),
+        ],
+      );
+    });
+
+    super.init();
+  }
 }
 
 //* item data

@@ -1,18 +1,18 @@
 import 'package:flutter_mediator/mediator/rx/rx.dart';
 
-class RxCustomClassData {
-  int data = 0;
+class SomeClass {
+  int counter = 0;
 }
 
-class RxCustomClass extends RxImpl {
-  RxCustomClass([RxCustomClassData initial]) : super(initial);
+class RxCustom extends RxImpl {
+  RxCustom([SomeClass initial]) : super(initial);
 
-  void updateClassData(int val) {
-    value.data += val;
+  void updateData(int val) {
+    value.counter += val;
     publishRxAspects();
   }
 }
 
-extension RxCustomClassExtension on RxCustomClassData {
-  RxCustomClass get rx => RxCustomClass(this);
+extension RxCustomExtension on SomeClass {
+  RxCustom get rx => RxCustom(this);
 }

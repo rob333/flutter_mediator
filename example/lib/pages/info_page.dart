@@ -75,16 +75,17 @@ class InfoPanel extends StatelessWidget {
         Pub.sub<MyModel>('tick1'),
         const SizedBox(height: 30),
 
-        // ListEnum.ListUpdate.subListModel((context, listModel) {
-        ListEnum.ListUpdate.subModel<ListModel>((context, listModel) {
-          return Column(
-            children: [
-              const Text('ListModel:'),
-              Text('sales:${listModel.data.length}'),
-              Text('Total units:${listModel.getTotalUnits()}'),
-            ],
-          );
-        }),
+        Pub.sub<ListModel>(ListEnum.ViewUpdate),
+        //// ListEnum.ListUpdate.subListModel((context, listModel) {
+        // ListEnum.ListUpdate.subModel<ListModel>((context, listModel) {
+        //   return Column(
+        //     children: [
+        //       const Text('ListModel:'),
+        //       Text('sales:${listModel.data.length}'),
+        //       Text('Total units:${listModel.getTotalUnits()}'),
+        //     ],
+        //   );
+        // }),
       ],
     );
   }

@@ -254,8 +254,9 @@ These are code snippets, for example, for visual studio code to easy using the p
 
 Now you can type these shortcuts for code templates to easy using the package:
 
-- `mmodel` - **Generate a Model Boilerplate Code of Flutter Mediator**
-- `getmodel` - Get the Model of Flutter Mediator
+- `mmodel` - **Generate a Model Boilerplate Code of Flutter Mediator**.
+- `getmodel` - Get the Model of Flutter Mediator.
+- `pubmodel` - Get the Model of Flutter Mediator, the same as `getmodel`.
 
 &emsp; View Map shortcuts: (See View Map)
 
@@ -416,6 +417,14 @@ Plus with,
 - `.rx` - Turn model variables into rx variables, thus, you can use rx automatic aspect.
 - `rxVar.touch()` - Used when the create method doesn't have to display the value of that rx variable, then you `touch()` that rx variable to activate rx automatic aspect.
 - `getmodel` - Get the model. (Note that `context` is not needed to get the model.)
+
+<br />
+
+### Summing up
+
+- Subscriber: Use at least one rx variable or `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
+
+- Controller: To publish the aspect, rx variables will do that automatically, or publish the aspect manually. To custom a rx class see [Detail: 21 implement custom rx class](#21-implement-custom-rx-class).
 
 <br /> Happy Coding!
 
@@ -1487,11 +1496,15 @@ If you need to write your own rx class, see [custom_rx_class.dart](https://githu
 <br /> Or you can manipulate the underlying `value` directly. For example,
 
 ```dart
-/// some_model.dart
-final someClassRx = someClass.rx;
+/// someclass.dart
+class SomeClass {
+  int counter = 0;
+}
+
+final rxClass = SomeClass().rx;
 void updateSomeClass() {
-  someClassRx.value.counter++;
-  someClassRx.publishRxAspects();
+  rxClass.value.counter++;
+  rxClass.publishRxAspects();
 }
 ```
 
@@ -1505,10 +1518,10 @@ void updateSomeClass() {
 
 <!-- same as Key contepts : widget aspects -->
 
-- Widget aspects - aspects denotes what the widget is interested in.
-- Frame aspects - aspects that will update the related widgets in the next UI frame.
-- Registered aspects - aspects of the model that has been registered.
-- RX aspects - aspects that the rx variable is attached. Once the rx variable updated, it will rebuild the related widgets.
+- Widget aspects - Aspects denotes what the widget is interested in.
+- Frame aspects - Aspects which will rebuild the related widgets in the next UI frame.
+- Registered aspects - Aspects of the model that has been registered.
+- RX aspects - Aspects that have been attached to the rx variable. The rx variable will rebuild the related widgets whenever updated.
 
 &emsp; [back to detail](#detail)
 

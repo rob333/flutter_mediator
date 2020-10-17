@@ -1,3 +1,7 @@
+## 1.1.2+1
+
+- Document improvement.
+
 ## 1.1.2
 
 - Add `Pub.model<Model>()`, the same as `Pub.getModel<Model>()`.
