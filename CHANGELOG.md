@@ -1,3 +1,7 @@
+## 1.1.2+2
+
+- Change `InheritedModelOfMediator` to `InheritedMediator` and extends from `InheritedWidget`.
+
 ## 1.1.2+1
 
 - Document improvement.
@@ -18,7 +22,7 @@
 
 - Add View Map.
 
-- Change `Publisher` class to `Pub`.
+- Rename `Publisher` class to `Pub`.
 
 - Remove `Host.getInheritedOfModel<Model>(context)`, use `Pub.getModel<Model>()` instead.
 

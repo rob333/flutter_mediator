@@ -16,10 +16,10 @@ bool shouldNull(Object obj, String errmsg) {
 
 //* Assert inheritedModel is not null. i.e. the InheritedModel works properly.
 bool ifInheritedModel<Model extends Pub>(
-    InheritedModelOfMediator<Model> inheritedModel) {
+    InheritedMediator<Model> inheritedModel) {
   if (inheritedModel == null)
     throw FlutterError(
-        'Could not find an ancestor of InheritedModelOfMediator<$Model>, check if <$Model> is correct.');
+        'Could not find an ancestor of InheritedMediator<$Model>, check if <$Model> is correct.');
   return true;
 }
 
