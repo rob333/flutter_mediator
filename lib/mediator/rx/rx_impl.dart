@@ -275,7 +275,7 @@ String numToString128(int value) {
     return '#0';
   }
 
-  String res = '#';
+  var res = '#';
 
   assert(value >= 0, 'numToString should provide positive value.');
   // if (value < 0) {
@@ -298,7 +298,7 @@ String numToString128(int value) {
     list.add(char);
   }
 
-  for (int i = list.length - 1; i >= 0; i--) {
+  for (var i = list.length - 1; i >= 0; i--) {
     res += list[i];
   }
 

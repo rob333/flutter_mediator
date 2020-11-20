@@ -131,8 +131,8 @@ class _RadioGroupState extends State<RadioGroup> {
     'Dutch',
     'Deutsch',
     'Italiano',
-    '日文',
-    '한글',
+    '日本語',
+    '한국어',
   ];
 
   Future<void> _handleRadioValueChange1(String value) async {

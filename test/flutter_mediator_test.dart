@@ -80,4 +80,41 @@ void main() {
       count++;
     }
   });
+
+  test('benchmark rx operation', () {
+    const n = 10000000;
+    // ignore: unused_local_variable
+    var cnt = 0;
+    var start = DateTime.now().microsecondsSinceEpoch;
+    for (var i = 0; i < n; i++) {
+      cnt++;
+    }
+    var end = DateTime.now().microsecondsSinceEpoch;
+    print('i++: ${end - start}');
+
+    // ignore: unused_local_variable
+    final rxi = 0.rx..pub = Pub();
+    start = DateTime.now().microsecondsSinceEpoch;
+    for (var i = 0; i < n; i++) {
+      rxi.value++;
+    }
+    end = DateTime.now().microsecondsSinceEpoch;
+    print('rxi.value++: ${end - start}');
+
+    // rxi.value = 0;
+    // start = DateTime.now().microsecondsSinceEpoch;
+    // for (var i = 0; i < n; i++) {
+    //   rxi++;
+    // }
+    // end = DateTime.now().microsecondsSinceEpoch;
+    // print('rxi++: ${end - start}');
+
+    // rxi.value = 0;
+    // start = DateTime.now().microsecondsSinceEpoch;
+    // for (var i = 0; i < n; i++) {
+    //   rxi += 1;
+    // }
+    // end = DateTime.now().microsecondsSinceEpoch;
+    // print('rxi+=: ${end - start}');
+  });
 }

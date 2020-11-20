@@ -584,7 +584,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.20.0
-  flutter_mediator: ^1.1.0
+  flutter_mediator:
 
 flutter:
   assets:

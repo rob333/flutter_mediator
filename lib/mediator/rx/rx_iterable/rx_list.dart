@@ -100,7 +100,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  void sort([int compare(E a, E b)]) {
+  void sort([int Function(E a, E b) compare]) {
     value.sort(compare);
     publishRxAspects();
   }

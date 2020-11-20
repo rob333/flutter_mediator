@@ -8,14 +8,14 @@ import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
 class Pub {
-  Pub()
-      : publish = dummyCallback,
-        assert(() {
-          if (stateModels[runtimeType] != null)
-            throw FlutterError(
-                'Duplicate model type registered to the `Host` of <$runtimeType>');
-          return true;
-        }()) {
+  Pub() : publish = dummyCallback {
+    assert(() {
+      if (stateModels[runtimeType] != null)
+        throw FlutterError(
+            'Duplicate model type registered to the `Host` of <$runtimeType>');
+      return true;
+    }());
+
     ///
     /// class initial steps
     /// 1. rx variables initial

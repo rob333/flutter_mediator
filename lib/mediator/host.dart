@@ -45,85 +45,9 @@ class Host<TModel extends Pub> extends StatefulWidget {
         aspect: aspects);
     assert(ifInheritedModel<TModel>(inheritedModel));
 
-    /// Legacy: Before change to InheritedMediatorElement
-    // for (final aspect in aspects) {
-    //   inheritedModel = InheritedMediator.inheritFrom<InheritedMediator<TModel>>(
-    //       context,
-    //       aspect: aspect);
-    //   assert(ifInheritedModel<TModel>(inheritedModel));
-    // }
-
     final state = inheritedModel._state;
     return state.addRegAspects(aspects);
   }
-
-  //* Reference section:
-  //* Register the model, with [listen], [aspects] parameter
-  static InheritedMediator<TModel> of<TModel extends Pub>(
-    BuildContext context, {
-    Iterable<Object> aspects,
-    bool listen = true,
-  }) {
-    assert(ifModelTypeCorrect(TModel, 'Host.of'));
-    assert(
-        listen || aspects == null, 'Provide aspects only if listen == true.');
-
-    //* listen == false
-    if (!listen) {
-      final inheritedModel =
-          context.findAncestorWidgetOfExactType<InheritedMediator<TModel>>();
-      assert(ifInheritedModel<TModel>(inheritedModel));
-      return inheritedModel;
-    }
-
-    //* listen == true, aspect == null or isEmpty, i.e. like inheritedWidget
-    if (aspects == null || aspects.isEmpty) {
-      final inheritedModel =
-          InheritedMediator.inheritFrom<InheritedMediator<TModel>>(context);
-      assert(ifInheritedModel<TModel>(inheritedModel));
-      return inheritedModel;
-    }
-
-    //* listen == true, aspect == isNotEmpty
-    InheritedMediator<TModel> inheritedModel;
-    inheritedModel = InheritedMediator.inheritFrom<InheritedMediator<TModel>>(
-        context,
-        aspect: aspects);
-    assert(ifInheritedModel<TModel>(inheritedModel));
-
-    /// Legacy: Before change to InheritedMediatorElement
-    // for (final aspect in aspects) {
-    //   inheritedModel = InheritedMediator.inheritFrom<InheritedMediator<TModel>>(
-    //       context,
-    //       aspect: aspect);
-    //   assert(ifInheritedModel<TModel>(inheritedModel));
-    // }
-    inheritedModel._state.addRegAspects(aspects);
-    return inheritedModel;
-  }
-
-  //* getInherited method, which is [listen = false], return the [InheritedMediator]
-  static InheritedMediator<TModel> getInherited<TModel extends Pub>(
-      BuildContext context) {
-    assert(ifModelTypeCorrect(TModel, 'Host.getInherited'));
-    final inheritedModel =
-        context.findAncestorWidgetOfExactType<InheritedMediator<TModel>>();
-    assert(ifInheritedModel<TModel>(inheritedModel));
-    return inheritedModel;
-  }
-
-  /// Deprecated, use `Publish.getModel<Model>()` instead
-  // //* getInheritedOfModel method, which is [listen = false], return the [TModel]
-  // static TModel getInheritedOfModel<TModel extends Pub>(
-  //     BuildContext context) {
-  //   assert(assertModelType(TModel, 'Host.getInheritedOfModel'));
-  //   final inheritedModel = context
-  //       .findAncestorWidgetOfExactType<InheritedMediator<TModel>>();
-  //   assert(assertInheritedModel<TModel>(inheritedModel));
-  //   return inheritedModel.state.widget.model;
-  // }
-
-  //! end reference section
 
   @override
   _HostState createState() {

@@ -1,3 +1,7 @@
+## 1.1.2+3
+
+- Fix static analysis fail.
+
 ## 1.1.2+2
 
 - Change `InheritedModelOfMediator` to `InheritedMediator` and extends from `InheritedWidget`.
