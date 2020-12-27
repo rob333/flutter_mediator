@@ -2,7 +2,7 @@
 
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
 
-Flutter mediator is a MVC state management package base on the InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
+Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
 
 By providing automatic generated aspects and management, flutter mediator makes you feel comfortable using the InheritedModel just like the InheritedWidget and rebuild widgets only when necessary.
 
@@ -65,7 +65,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^1.1.2+2"
+  flutter_mediator: "^2.0.0-nullsafety.0"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -575,6 +575,8 @@ Widget mainPage() {
 
 ## Use Case - i18n with View Map
 
+> Note: Due to a dependency does not support null safety, this use case now just to explain the usage of View Map only.
+
 For example, to write an i18n app using flutter_i18n with View Map.
 
 > These are all boilerplate code, you may just need to look at the lines with comments, that's where to put the code in.
@@ -583,8 +585,8 @@ For example, to write an i18n app using flutter_i18n with View Map.
 
 ```yaml
 dependencies:
-  flutter_i18n: ^0.20.0
-  flutter_mediator:
+  flutter_i18n: ^0.20.1
+  flutter_mediator: ^1.1.2
 
 flutter:
   assets:
@@ -774,8 +776,8 @@ class _RadioGroupState extends State<RadioGroup> {
     'Deutsch',
     'Italiano',
     '中文',
-    '日文',
-    '한글',
+    '日本語',
+    '한국어',
   ];
 
   Future<void> _handleRadioValueChange1(String value) async {
@@ -850,13 +852,10 @@ final names = [
 ## Example
 
 You can find the example in the [example](https://github.com/rob333/flutter_mediator/tree/main/example/lib) folder.
-<br /> Try it once, you will see it's simple and easy to use.
 
 <br />
 
 **These steps can help you in most situations. The following details explain the package one step further, you can skip it.**
-
-<br />
 
 ## Detail
 
@@ -1143,13 +1142,13 @@ You can write model extensions to simplified the typing. For example,
 MyModel getMyModel(BuildContext context) => Pub.model<MyModel>();
 
 Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
-    {Key key, Object aspects}) {
+    {Key? key, Object? aspects}) {
   return Subscriber<MyModel>(key: key, aspects: aspects, create: create);
 }
 
 extension MyModelExtT<T> on T {
   Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
-      {Key key}) {
+      {Key? key}) {
     return Subscriber<MyModel>(key: key, aspects: this, create: create);
   }
 }
@@ -1160,19 +1159,19 @@ extension MyModelExtT<T> on T {
 ListModel getListModel(BuildContext context) => Pub.model<ListModel>();
 
 Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
-    {Key key, Object aspects}) {
+    {Key? key, Object? aspects}) {
   return Subscriber<ListModel>(key: key, aspects: aspects, create: create);
 }
 
 extension ListModelExtT<T> on T {
   Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
-      {Key key}) {
+      {Key? key}) {
     return Subscriber<ListModel>(key: key, aspects: this, create: create);
   }
 }
 ```
 
-> _See also [mediator_extension.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/mediator_extension.dart) for package extension._
+> _See also [extension.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/extension.dart) for package extension._
 
 &emsp; [back to detail](#detail)
 

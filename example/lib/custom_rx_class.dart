@@ -5,7 +5,7 @@ class SomeClass {
 }
 
 class RxCustom extends RxImpl {
-  RxCustom([SomeClass initial]) : super(initial);
+  RxCustom(SomeClass initial) : super(initial);
 
   void updateData(int val) {
     value.counter += val;

@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
@@ -6,12 +7,13 @@ import '../models/list_model.dart';
 
 class RadioGroup extends StatefulWidget {
   const RadioGroup({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   _RadioGroupState createState() => _RadioGroupState();
 }
+
 
 class _RadioGroupState extends State<RadioGroup> {
   final locales = ['en', 'fr', 'nl', 'de', 'it', 'jp', 'kr'];
@@ -66,3 +68,4 @@ class _RadioGroupState extends State<RadioGroup> {
     );
   }
 }
+*/

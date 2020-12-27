@@ -5,7 +5,7 @@ import '../mediator.dart';
 //* Aspect extension
 extension ModelAspectExtT<T> on T {
   Subscriber<Model> subModel<Model extends Pub>(CreatorFn<Model> create,
-      {Key key}) {
+      {Key? key}) {
     return Subscriber<Model>(key: key, aspects: this, create: create);
   }
 }

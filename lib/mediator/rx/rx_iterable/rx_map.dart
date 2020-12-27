@@ -1,15 +1,15 @@
 import '../rx.dart';
 
 class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
-  RxMap([Map<K, V> initial]) : super(initial) {
+  RxMap(Map<K, V> initial) : super(initial) {
     _value = value;
   }
 
-  Map<K, V> _value;
+  late Map<K, V> _value;
 
   @override
-  V operator [](Object key) {
-    return value[key];
+  V operator [](Object? key) {
+    return value[key]!;
   }
 
   @override
@@ -40,10 +40,10 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   Map<K2, V2> cast<K2, V2>() => value.cast<K2, V2>();
 
   @override
-  bool containsKey(Object key) => value.containsKey(key);
+  bool containsKey(Object? key) => value.containsKey(key);
 
   @override
-  bool containsValue(Object value) => _value.containsValue(value);
+  bool containsValue(Object? value) => _value.containsValue(value);
 
   @override
   Iterable<MapEntry<K, V>> get entries => value.entries;
@@ -77,10 +77,10 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   }
 
   @override
-  V remove(Object key) {
+  V remove(Object? key) {
     final val = _value.remove(key);
     publishRxAspects();
-    return val;
+    return val!;
   }
 
   @override
@@ -96,7 +96,7 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   String toString() => _value.toString();
 
   @override
-  V update(K key, V Function(V) update, {V Function() ifAbsent}) {
+  V update(K key, V Function(V) update, {V Function()? ifAbsent}) {
     final val = _value.update(key, update, ifAbsent: ifAbsent);
     publishRxAspects();
     return val;

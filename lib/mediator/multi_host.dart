@@ -5,7 +5,7 @@ import '../mediator.dart';
 class MultiHost {
   static Widget create1<T1 extends Pub>(
     T1 t1, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t1, child: child);
     return child;
@@ -14,7 +14,7 @@ class MultiHost {
   static Widget create2<T1 extends Pub, T2 extends Pub>(
     T1 t1,
     T2 t2, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
@@ -25,7 +25,7 @@ class MultiHost {
     T1 t1,
     T2 t2,
     T3 t3, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
@@ -39,7 +39,7 @@ class MultiHost {
     T2 t2,
     T3 t3,
     T4 t4, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t4, child: child);
     child = Host(model: t3, child: child);
@@ -55,7 +55,7 @@ class MultiHost {
     T3 t3,
     T4 t4,
     T5 t5, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t5, child: child);
     child = Host(model: t4, child: child);
@@ -73,7 +73,7 @@ class MultiHost {
     T4 t4,
     T5 t5,
     T6 t6, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t6, child: child);
     child = Host(model: t5, child: child);
@@ -93,7 +93,7 @@ class MultiHost {
     T5 t5,
     T6 t6,
     T7 t7, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t7, child: child);
     child = Host(model: t6, child: child);
@@ -122,7 +122,7 @@ class MultiHost {
     T6 t6,
     T7 t7,
     T8 t8, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t8, child: child);
     child = Host(model: t7, child: child);
@@ -154,7 +154,7 @@ class MultiHost {
     T7 t7,
     T8 t8,
     T9 t9, {
-    @required Widget child,
+    required Widget child,
   }) {
     child = Host(model: t9, child: child);
     child = Host(model: t8, child: child);
@@ -170,15 +170,14 @@ class MultiHost {
 
   static Widget create(
     List<Host> hosts, {
-    @required Widget child,
+    required Widget child,
   }) {
-    assert(hosts != null && hosts.isNotEmpty);
-    assert(child != null);
+    assert(hosts.isNotEmpty);
     assert(Host.stateChildColl == null);
 
     Host.stateChildColl = [child];
     for (var i = hosts.length - 1; i >= 1; i--) {
-      Host.stateChildColl.add(hosts[i]);
+      Host.stateChildColl!.add(hosts[i]);
     }
 
     return hosts[0];

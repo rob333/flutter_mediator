@@ -32,14 +32,14 @@ extension WidgetModifier on Widget {
     );
   }
 
-  Widget raisedButton({VoidCallback onPressed}) {
+  Widget raisedButton({required VoidCallback? onPressed}) {
     return RaisedButton(
       onPressed: onPressed,
       child: this,
     );
   }
 
-  Widget sizeBox({double width, double height}) {
+  Widget sizeBox({double? width, double? height}) {
     return SizedBox(
       child: this,
       width: width,
@@ -54,8 +54,8 @@ extension WidgetModifier on Widget {
 
 extension ListWidgetModifier on List<Widget> {
   MultiChildRenderObjectWidget row({
-    MainAxisAlignment mainAxisAlignment,
-    CrossAxisAlignment crossAxisAlignment,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
   }) {
     return Row(
       children: this,
@@ -65,8 +65,8 @@ extension ListWidgetModifier on List<Widget> {
   }
 
   MultiChildRenderObjectWidget column({
-    MainAxisAlignment mainAxisAlignment,
-    CrossAxisAlignment crossAxisAlignment,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
   }) {
     return Column(
       children: this,
@@ -76,16 +76,14 @@ extension ListWidgetModifier on List<Widget> {
   }
 
   MultiChildRenderObjectWidget stack({
-    Alignment alignment,
-    StackFit fit,
-    Overflow overflow,
-    Clip clipBehavior,
+    AlignmentGeometry alignment = AlignmentDirectional.topStart,
+    StackFit fit = StackFit.loose,
+    Clip clipBehavior = Clip.hardEdge,
   }) {
     return Stack(
       children: this,
       alignment: alignment,
       fit: fit,
-      overflow: overflow,
       clipBehavior: clipBehavior,
     );
   }

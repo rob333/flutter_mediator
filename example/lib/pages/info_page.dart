@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
-import 'package:flutter_mediator_example/models/setting_model.dart';
+// import 'package:flutter_mediator_example/models/setting_model.dart';
 
 import '../models/list_model.dart';
 import '../models/my_model.dart';
@@ -27,8 +27,8 @@ Widget infoPage() {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            RadioGroup(),
-            LocalePanel(),
+            // RadioGroup(),
+            // LocalePanel(),
           ],
         ),
       ],
@@ -36,8 +36,9 @@ Widget infoPage() {
   );
 }
 
+/*
 class LocalePanel extends StatelessWidget {
-  const LocalePanel({Key key}) : super(key: key);
+  const LocalePanel({Key? key}) : super(key: key);
 
   Widget txt(BuildContext context, String name) {
     return SizedBox(
@@ -62,9 +63,10 @@ class LocalePanel extends StatelessWidget {
     );
   }
 }
+*/
 
 class InfoPanel extends StatelessWidget {
-  const InfoPanel({Key key}) : super(key: key);
+  const InfoPanel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +93,7 @@ class InfoPanel extends StatelessWidget {
   }
 }
 
+/*
 final names = [
   'Aarron',
   'Josh',
@@ -116,7 +119,7 @@ final names = [
 
 class RadioGroup extends StatefulWidget {
   const RadioGroup({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -135,13 +138,13 @@ class _RadioGroupState extends State<RadioGroup> {
     '한국어',
   ];
 
-  Future<void> _handleRadioValueChange1(String value) async {
-    final model = Pub.model<Setting>();
-    await model.changeLocale(context, value);
-    setState(() {
-      // model.locale.value = value; // in model.changeLocale
-    });
-  }
+  // Future<void> _handleRadioValueChange1(String value) async {
+  //   final model = Pub.model<Setting>();
+  //   await model.changeLocale(context, value);
+  //   setState(() {
+  //     // model.locale.value = value; // in model.changeLocale
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -176,3 +179,4 @@ class _RadioGroupState extends State<RadioGroup> {
     );
   }
 }
+*/

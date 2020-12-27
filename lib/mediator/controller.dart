@@ -4,9 +4,7 @@ import '../mediator.dart';
 
 @immutable
 class Controller<Model extends Pub> extends StatelessWidget {
-  const Controller({Key key, @required this.create})
-      : assert(create != null),
-        super(key: key);
+  const Controller({Key? key, required this.create}) : super(key: key);
 
   final CreatorFn<Model> create;
 

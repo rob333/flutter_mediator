@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_i18n/flutter_i18n.dart';
+// import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 import 'models/list_model.dart';
@@ -44,28 +44,28 @@ class MyApp extends StatelessWidget {
       home: BottomNavigationWidget(
         pages: navPages,
         bottomNavItems: bottomNavItems,
-        selectedColor: Colors.amber[800],
+        selectedColor: Colors.amber[800]!,
         backgroundColor: Colors.black54.withOpacity(0.5),
         selectedIndex: 0,
       ),
       // add flutter_i18n support
-      localizationsDelegates: [
-        FlutterI18nDelegate(
-          translationLoader: FileTranslationLoader(
-            // forcedLocale: ,
-            // useCountryCode: true,
-            // fallbackFile: 'en',
-            basePath: 'assets/flutter_i18n',
-            decodeStrategies: [JsonDecodeStrategy()],
-          ),
-          missingTranslationHandler: (key, locale) {
-            print(
-                '--- Missing Key: $key, languageCode: ${locale.languageCode}');
-          },
-        ),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
+      // localizationsDelegates: [
+      //   FlutterI18nDelegate(
+      //     translationLoader: FileTranslationLoader(
+      //       // forcedLocale: ,
+      //       // useCountryCode: true,
+      //       // fallbackFile: 'en',
+      //       basePath: 'assets/flutter_i18n',
+      //       decodeStrategies: [JsonDecodeStrategy()],
+      //     ),
+      //     missingTranslationHandler: (key, locale) {
+      //       print(
+      //           '--- Missing Key: $key, languageCode: ${locale.languageCode}');
+      //     },
+      //   ),
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      // ],
     );
   }
 }
@@ -411,7 +411,8 @@ class _ColorRegistry {
 }
 
 class _ColoredBox extends StatelessWidget {
-  const _ColoredBox({Key key, this.color, this.child}) : super(key: key);
+  const _ColoredBox({Key? key, required this.color, required this.child})
+      : super(key: key);
 
   final Color color;
   final Widget child;

@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+// import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* aspect enum
@@ -14,11 +14,11 @@ enum ListEnum {
 
 //* List item
 class ListItem {
-  ListItem([
+  ListItem(
     this.item,
     this.units,
     this.color,
-  ]);
+  );
 
   String item;
   int units;
@@ -27,14 +27,14 @@ class ListItem {
 
 //* model class
 class ListModel extends Pub {
-  ListModel({this.updateMs}) : assert(updateMs > 0) {
+  ListModel({required this.updateMs}) : assert(updateMs > 0) {
     resetTimer();
   }
 
   // `.rx` make the var automatically rebuild the widget when updated
   final /*List<ListItem>*/ data = <ListItem>[].rx;
   final int updateMs;
-  Timer updateTimer;
+  Timer? updateTimer;
 
   void updateListItem() {
     final units = Random().nextInt(MaxUnits) + 1;
@@ -62,18 +62,21 @@ class ListModel extends Pub {
   }
 
   void stopTimer() {
-    updateTimer?.cancel();
+    if (updateTimer != null) {
+      updateTimer?.cancel();
+      updateTimer = null;
+    }
   }
 
-  //* locale section
-  var locale = 'en'.rx;
-  Future<void> changeLocale(BuildContext context, String countryCode) async {
-    final loc = Locale(countryCode);
-    await FlutterI18n.refresh(context, loc);
-    locale.value = countryCode;
-    // locale is a rx variable, will rebuild related widget whenever updates.
-  }
-  //! end locale section
+  // //* locale section
+  // var locale = 'en'.rx;
+  // Future<void> changeLocale(BuildContext context, String countryCode) async {
+  //   final loc = Locale(countryCode);
+  //   await FlutterI18n.refresh(context, loc);
+  //   locale.value = countryCode;
+  //   // locale is a rx variable, will rebuild related widget whenever updates.
+  // }
+  // //! end locale section
 
   //* View Map:
   void addSub(Object o, CreatorFn<ListModel> sub) => regSub<ListModel>(o, sub);
@@ -156,13 +159,13 @@ const List<Color> itemColors = [
 ListModel getListModel(BuildContext context) => Pub.model<ListModel>();
 
 Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
-    {Key key, Object aspects}) {
+    {Key? key, Object? aspects}) {
   // return aspects.subModel<ListModel>(create, key: key);
   return Subscriber<ListModel>(key: key, aspects: aspects, create: create);
 }
 
 extension ListModelExtT<T> on T {
-  Subscriber<ListModel> subListModel(CreatorFn<ListModel> create, {Key key}) {
+  Subscriber<ListModel> subListModel(CreatorFn<ListModel> create, {Key? key}) {
     return Subscriber<ListModel>(key: key, aspects: this, create: create);
   }
 }

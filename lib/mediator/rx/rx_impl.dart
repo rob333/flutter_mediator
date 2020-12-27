@@ -5,7 +5,7 @@ import '../pub.dart';
 
 class RxImpl<T> {
   //* constructor
-  RxImpl([T initial]) : _value = initial {
+  RxImpl(T initial) : _value = initial {
     // variables and constructor calling sequence:
     // 1. Model inline variables ->
     // 2. Pub inline variables ->
@@ -15,7 +15,7 @@ class RxImpl<T> {
   }
 
   //* region member variables
-  Pub pub; // the pub attached to this rx variable
+  Pub? pub; // the pub attached to this rx variable
   final rxAspects = HashSet<Object>(); // aspects attached to this rx variable
   bool isNullBroadcast = false; // if this rx variable is broadcasting
 
@@ -35,19 +35,19 @@ class RxImpl<T> {
   }
 
   //* in case member variables initialized inside constructor, or member functions.
-  static Pub statePub;
+  static Pub? statePub;
   static void enableVarCollect(Pub pub) => statePub = pub;
   static void disableVarCollect() {
-    setPub(statePub); // set observer for every rx variable
+    setPub(statePub!); // set observer for every rx variable
     statePub = null;
   }
 
   //* static aspects and the flag of if enabled
-  static Iterable stateWidgetAspects;
+  static Iterable<Object>? stateWidgetAspects;
   static bool stateWidgetAspectsFlag = false;
 
   /// enable auto add static aspects to aspects of rx - by getter
-  static void enableCollectAspect(Iterable widgetAspects) {
+  static void enableCollectAspect(Iterable<Object>? widgetAspects) {
     stateWidgetAspects = widgetAspects;
     stateWidgetAspectsFlag = true;
   }
@@ -96,7 +96,7 @@ class RxImpl<T> {
       //
     } else if (stateWidgetAspectsFlag == true) {
       if (stateWidgetAspects != null) {
-        rxAspects.addAll(stateWidgetAspects);
+        rxAspects.addAll(stateWidgetAspects!);
       } else {
         isNullBroadcast = true;
       }
@@ -122,7 +122,8 @@ class RxImpl<T> {
       final tag = nextRxTag();
       _tag.add(tag);
       // adds tag to registered aspects of the model
-      pub.regAspects.add(tag);
+      assert(pub != null);
+      pub!.regAspects.add(tag);
       // adds tag to rx aspects of self
       rxAspects.add(tag);
     }
@@ -137,8 +138,8 @@ class RxImpl<T> {
   ///   null: broadcast to the model
   /// RxImpl: add [(aspects as RxImpl).rxAspects] to the rx aspects
   ///       : add `aspects` to the rx aspects
-  void addRxAspects([Object aspects]) {
-    if (aspects is Iterable) {
+  void addRxAspects([Object? aspects]) {
+    if (aspects is Iterable<Object>) {
       rxAspects.addAll(aspects);
     } else if (aspects == null) {
       isNullBroadcast = true;
@@ -155,8 +156,8 @@ class RxImpl<T> {
   ///   null: don't broadcast to the model
   /// RxImpl: remove [(aspects as RxImpl).rxAspects] from the rx aspects
   ///       : remove `aspects` from the rx aspects
-  void removeRxAspects([Object aspects]) {
-    if (aspects is Iterable) {
+  void removeRxAspects([Object? aspects]) {
+    if (aspects is Iterable<Object>) {
       rxAspects.removeAll(aspects);
     } else if (aspects == null) {
       isNullBroadcast = false;
@@ -196,18 +197,18 @@ class RxImpl<T> {
   void publishRxAspects() {
     assert(shouldExists(pub, 'Pub of RxImpl should not be null.'));
     if (isNullBroadcast) {
-      return pub.publish();
+      return pub!.publish();
     } else if (rxAspects.isNotEmpty) {
-      return pub.publish(rxAspects);
+      return pub!.publish(rxAspects);
     }
   }
 
   /// RxVar(newVal): set new value to the Rx underlying value.
   /// dart:call() works in the same way as operator()
-  T call([T v]) {
-    if (v != null) {
-      value = v;
-    }
+  T call(T v) {
+    // if (v != null) {
+    value = v;
+    // }
     return value;
   }
 
@@ -218,7 +219,7 @@ class RxImpl<T> {
 
 //* Rx class for `bool` Type.
 class RxBool extends RxImpl<bool> {
-  RxBool([bool initial]) : super(initial);
+  RxBool([bool initial = false]) : super(initial);
 
   bool operator &(bool other) => other && value;
 
@@ -232,7 +233,7 @@ class RxBool extends RxImpl<bool> {
 
 //* Rx class for `String` Type.
 class RxString extends RxImpl<String> {
-  RxString([String initial]) : super(initial);
+  RxString([String initial = '']) : super(initial);
 
   String operator +(String val) => _value + val;
   int codeUnitAt(int index) => _value.codeUnitAt(index);
@@ -240,7 +241,7 @@ class RxString extends RxImpl<String> {
 
 //* Rx<T> class
 class Rx<T> extends RxImpl<T> {
-  Rx([T initial]) : super(initial);
+  Rx(T initial) : super(initial);
 }
 
 //* extension helper

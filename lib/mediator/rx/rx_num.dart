@@ -3,7 +3,7 @@ import 'rx_impl.dart';
 
 /// Base Rx class for all num Rx's.
 class _RxNumBase<T extends num> extends RxImpl<T> {
-  _RxNumBase([T initial]) : super(initial);
+  _RxNumBase(T initial) : super(initial);
 
   /// Multiplication operator.
   num operator *(num other) => value * other;
@@ -244,7 +244,7 @@ class _RxNumBase<T extends num> extends RxImpl<T> {
   ///     123456.toStringAsExponential();  // 1.23456e+5
   ///     123456.toStringAsExponential(3); // 1.235e+5
   ///     123.toStringAsExponential(0);    // 1e+2
-  String toStringAsExponential([int fractionDigits]) =>
+  String toStringAsExponential(int fractionDigits) =>
       value.toStringAsExponential(fractionDigits);
 
   /// Converts `this` to a double and returns a string representation with
@@ -268,7 +268,7 @@ class _RxNumBase<T extends num> extends RxImpl<T> {
 }
 
 class RxNum extends _RxNumBase<num> {
-  RxNum([num initial]) : super(initial);
+  RxNum([num initial = 0]) : super(initial);
 
   /// Addition operator.
   /// dart doesn't have operator++
@@ -289,7 +289,7 @@ class RxNum extends _RxNumBase<num> {
 }
 
 class RxDouble extends _RxNumBase<double> {
-  RxDouble([double initial]) : super(initial);
+  RxDouble([double initial = 0]) : super(initial);
 
   /// Addition operator.
   /// dart doesn't have operator++
@@ -419,7 +419,7 @@ class RxDouble extends _RxNumBase<double> {
 }
 
 class RxInt extends _RxNumBase<int> {
-  RxInt([int initial]) : super(initial);
+  RxInt([int initial = 0]) : super(initial);
 
   /// Addition operator.
   /// dart doesn't have operator++

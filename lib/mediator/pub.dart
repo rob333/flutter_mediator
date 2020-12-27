@@ -52,18 +52,18 @@ class Pub {
 
   //* publish aspect section:
   /// Model may update variables before Host init state
-  static void dummyCallback([Object aspects]) {}
+  static void dummyCallback([Object? aspects]) {}
 
   /// The publish function, the setState of the host state.
   PublishFn publish;
 
   /// For reference of regAspects of the host state.
-  HashSet<Object> _regAspects;
-  HashSet<Object> get regAspects => _regAspects;
+  HashSet<Object>? _regAspects;
+  HashSet<Object> get regAspects => _regAspects!;
 
   /// For reference of frameAspects of the host state.
-  HashSet<Object> _frameAspects;
-  HashSet<Object> get frameAspects => _frameAspects;
+  HashSet<Object>? _frameAspects;
+  HashSet<Object> get frameAspects => _frameAspects!;
 
   /// Set callback and aspects information of the model.
   void setCallback(
@@ -89,7 +89,7 @@ class Pub {
   final subMap = HashMap<Object, Object>();
 
   //* static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
-  static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key key}) {
+  static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.sub'));
 
     final model = getModel<Model>();
@@ -120,7 +120,7 @@ class Pub {
   final conMap = HashMap<Object, Object>();
 
   //* static: Create a `Controller<Model>` widget from the `conMap` by the [mapKey] of the `<Model>`.
-  static Controller<Model> con<Model extends Pub>(Object mapKey, {Key key}) {
+  static Controller<Model> con<Model extends Pub>(Object mapKey, {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.con'));
 
     final model = getModel<Model>();

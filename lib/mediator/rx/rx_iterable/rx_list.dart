@@ -3,7 +3,7 @@ import 'dart:math';
 import '../rx.dart';
 
 class RxList<E> extends RxImpl<List<E>> implements List<E> {
-  RxList([List<E> initial]) : super(initial);
+  RxList(List<E> initial) : super(initial);
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -59,7 +59,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   int get length => value.length;
 
   @override
-  bool remove(Object item) {
+  bool remove(Object? item) {
     final hasRemoved = value.remove(item);
     if (hasRemoved) {
       publishRxAspects();
@@ -100,7 +100,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  void sort([int Function(E a, E b) compare]) {
+  void sort([int Function(E a, E b)? compare]) {
     value.sort(compare);
     publishRxAspects();
   }
@@ -127,7 +127,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  bool contains(Object element) {
+  bool contains(Object? element) {
     return value.contains(element);
   }
 
@@ -147,13 +147,13 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  void fillRange(int start, int end, [E fillValue]) {
+  void fillRange(int start, int end, [E? fillValue]) {
     value.fillRange(start, end, fillValue);
     publishRxAspects();
   }
 
   @override
-  E firstWhere(bool Function(E) test, {E Function() orElse}) {
+  E firstWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.firstWhere(test, orElse: orElse);
   }
 
@@ -193,17 +193,17 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  int lastIndexOf(E element, [int start]) {
+  int lastIndexOf(E element, [int? start]) {
     return value.lastIndexOf(element, start);
   }
 
   @override
-  int lastIndexWhere(bool Function(E) test, [int start]) {
+  int lastIndexWhere(bool Function(E) test, [int? start]) {
     return value.lastIndexWhere(test, start);
   }
 
   @override
-  E lastWhere(bool Function(E) test, {E Function() orElse}) {
+  E lastWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.lastWhere(test, orElse: orElse);
   }
 
@@ -251,7 +251,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  void shuffle([Random random]) {
+  void shuffle([Random? random]) {
     value.shuffle(random);
     publishRxAspects();
   }
@@ -260,7 +260,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   E get single => value.single;
 
   @override
-  E singleWhere(bool Function(E) test, {E Function() orElse}) {
+  E singleWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.singleWhere(test, orElse: orElse);
   }
 
@@ -275,7 +275,7 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  List<E> sublist(int start, [int end]) {
+  List<E> sublist(int start, [int? end]) {
     return value.sublist(start, end);
   }
 

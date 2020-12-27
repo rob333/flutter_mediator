@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
   const BottomNavigationWidget({
-    Key key,
-    this.bottomNavItems,
-    this.pages,
+    Key? key,
+    required this.bottomNavItems,
+    required this.pages,
     this.selectedColor,
     this.backgroundColor,
-    this.selectedIndex,
+    this.selectedIndex = 0,
     this.onItemPressed,
     this.duration = const Duration(milliseconds: 500),
     this.transitionBuilder,
@@ -15,12 +15,12 @@ class BottomNavigationWidget extends StatefulWidget {
 
   final List<BottomNavigationBarItem> bottomNavItems;
   final List<Widget> pages;
-  final Color selectedColor;
-  final Color backgroundColor;
+  final Color? selectedColor;
+  final Color? backgroundColor;
   final int selectedIndex;
-  final ValueChanged<int> onItemPressed;
+  final ValueChanged<int>? onItemPressed;
   final Duration duration;
-  final AnimatedSwitcherTransitionBuilder transitionBuilder;
+  final AnimatedSwitcherTransitionBuilder? transitionBuilder;
 
   @override
   _BottomNavigationWidgetState createState() => _BottomNavigationWidgetState();
@@ -65,7 +65,7 @@ void makeBottomNavBarIconDifferentType(
 }
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
-  int _currentBNBIndex;
+  late int _currentBNBIndex;
   final defaultTransition = (Widget child, Animation<double> animation) =>
       ScaleTransition(child: child, scale: animation);
   final icons = <Widget>[];
@@ -81,7 +81,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   void _onBNavItemClick(int index) {
     setState(() {
-      if (widget.onItemPressed != null) widget.onItemPressed(index);
+      if (widget.onItemPressed != null) widget.onItemPressed!(index);
       _currentBNBIndex = index;
     });
   }

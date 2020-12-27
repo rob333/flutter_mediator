@@ -3,20 +3,20 @@ import 'package:flutter/foundation.dart';
 import '../mediator.dart';
 
 //* Assert if obj exists, otherwise throw error message.
-bool shouldExists(Object obj, String errmsg) {
+bool shouldExists(Object? obj, String errmsg) {
   if (obj == null) throw FlutterError(errmsg);
   return true;
 }
 
 //* Assert if obj not exists, otherwise throw error message.
-bool shouldNull(Object obj, String errmsg) {
+bool shouldNull(Object? obj, String errmsg) {
   if (obj != null) throw FlutterError(errmsg);
   return true;
 }
 
 //* Assert inheritedModel is not null. i.e. the InheritedModel works properly.
 bool ifInheritedModel<Model extends Pub>(
-    InheritedMediator<Model> inheritedModel) {
+    InheritedMediator<Model>? inheritedModel) {
   if (inheritedModel == null)
     throw FlutterError(
         'Could not find an ancestor of InheritedMediator<$Model>, check if <$Model> is correct.');
@@ -39,7 +39,7 @@ bool ifRxAutoAspectEmpty(List<Object> rxAutoAspectList) {
 }
 
 //* Pub: Assert get model exists.
-bool ifStateModel<Model extends Pub>(Pub model) {
+bool ifStateModel<Model extends Pub>(Pub? model) {
   if (model == null) throw FlutterError('Pub.model<$Model> not exists');
   return true;
 }

@@ -1,12 +1,12 @@
 import '../rx.dart';
 
 class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
-  RxSet([Set<E> initial]) : super(initial) {
+  RxSet(Set<E> initial) : super(initial) {
     _set = value;
   }
 
   //! _set, why cannot use value?
-  Set<E> _set;
+  late Set<E> _set;
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -35,7 +35,7 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   int get length => value.length;
 
   @override
-  bool remove(Object item) {
+  bool remove(Object? item) {
     final hasRemoved = value.remove(item);
     if (hasRemoved) publishRxAspects();
     return hasRemoved;
@@ -70,7 +70,7 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   }
 
   @override
-  bool contains(Object element) {
+  bool contains(Object? element) {
     return value.contains(element);
   }
 
@@ -90,7 +90,7 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   }
 
   @override
-  E firstWhere(bool Function(E) test, {E Function() orElse}) {
+  E firstWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.firstWhere(test, orElse: orElse);
   }
 
@@ -115,7 +115,7 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   }
 
   @override
-  E lastWhere(bool Function(E) test, {E Function() orElse}) {
+  E lastWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.lastWhere(test, orElse: orElse);
   }
 
@@ -133,7 +133,7 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   E get single => value.single;
 
   @override
-  E singleWhere(bool Function(E) test, {E Function() orElse}) {
+  E singleWhere(bool Function(E) test, {E Function()? orElse}) {
     return value.singleWhere(test, orElse: orElse);
   }
 
@@ -178,33 +178,33 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   }
 
   @override
-  bool containsAll(Iterable<Object> other) {
+  bool containsAll(Iterable<Object?> other) {
     return value.containsAll(other);
   }
 
   @override
-  Set<E> difference(Set<Object> other) {
+  Set<E> difference(Set<Object?> other) {
     return value.difference(other);
   }
 
   @override
-  Set<E> intersection(Set<Object> other) {
+  Set<E> intersection(Set<Object?> other) {
     return value.intersection(other);
   }
 
   @override
-  E lookup(Object object) {
-    return value.lookup(object);
+  E lookup(Object? object) {
+    return value.lookup(object)!;
   }
 
   @override
-  void removeAll(Iterable<Object> elements) {
+  void removeAll(Iterable<Object?> elements) {
     value.removeAll(elements);
     publishRxAspects();
   }
 
   @override
-  void retainAll(Iterable<Object> elements) {
+  void retainAll(Iterable<Object?> elements) {
     value.retainAll(elements);
     publishRxAspects();
   }

@@ -5,7 +5,7 @@ import 'package:flutter_mediator/mediator.dart';
 
 //* model class
 class MyModel extends Pub {
-  MyModel({this.updateMs}) : assert(updateMs > 0) {
+  MyModel({required this.updateMs}) : assert(updateMs > 0) {
     resetTimer();
   }
 
@@ -20,7 +20,7 @@ class MyModel extends Pub {
   final str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
   var int1 = 0.rx;
 
-  Timer updateTimer;
+  Timer? updateTimer;
   var _tick1 = 0.rx;
   var _tick2 = 0.rx;
   int _tick3 = 0;
@@ -134,7 +134,10 @@ class MyModel extends Pub {
   }
 
   void stopTimer() {
-    updateTimer?.cancel();
+    if (updateTimer != null) {
+      updateTimer?.cancel();
+      updateTimer = null;
+    }
   }
 
   //* View Map:
@@ -164,13 +167,13 @@ class MyModel extends Pub {
 MyModel getMyModel(BuildContext context) => Pub.model<MyModel>();
 
 Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
-    {Key key, Object aspects}) {
+    {Key? key, Object? aspects}) {
   // return aspects.subModel<MyModel>(create, key: key);
   return Subscriber<MyModel>(key: key, aspects: aspects, create: create);
 }
 
 extension MyModelExtT<T> on T {
-  Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create, {Key key}) {
+  Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create, {Key? key}) {
     return Subscriber<MyModel>(key: key, aspects: this, create: create);
   }
 }
