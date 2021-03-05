@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_i18n/flutter_i18n.dart';
-// import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
-// import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/loaders/decoders/json_decode_strategy.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 import 'models/list_model.dart';
@@ -49,23 +49,23 @@ class MyApp extends StatelessWidget {
         selectedIndex: 0,
       ),
       // add flutter_i18n support
-      // localizationsDelegates: [
-      //   FlutterI18nDelegate(
-      //     translationLoader: FileTranslationLoader(
-      //       // forcedLocale: ,
-      //       // useCountryCode: true,
-      //       // fallbackFile: 'en',
-      //       basePath: 'assets/flutter_i18n',
-      //       decodeStrategies: [JsonDecodeStrategy()],
-      //     ),
-      //     missingTranslationHandler: (key, locale) {
-      //       print(
-      //           '--- Missing Key: $key, languageCode: ${locale.languageCode}');
-      //     },
-      //   ),
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      // ],
+      localizationsDelegates: [
+        FlutterI18nDelegate(
+          translationLoader: FileTranslationLoader(
+            // forcedLocale: ,
+            // useCountryCode: true,
+            // fallbackFile: 'en',
+            basePath: 'assets/flutter_i18n',
+            decodeStrategies: [JsonDecodeStrategy()],
+          ),
+          missingTranslationHandler: (key, locale) {
+            print(
+                '--- Missing Key: $key, languageCode: ${locale!.languageCode}');
+          },
+        ),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
     );
   }
 }
@@ -263,7 +263,7 @@ Widget chainReactSubscriber() {
 //* Controller example
 Widget fooController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update foo'),
       onPressed: () => model.foo++,
     ),
@@ -273,7 +273,7 @@ Widget fooController() {
 //* Controller example, using fat arrow expression
 Widget barController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update bar'),
       onPressed: () => model.bar++,
     ),
@@ -283,7 +283,7 @@ Widget barController() {
 //* Controller example, update two variables.
 Widget bothController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update both'),
       onPressed: () => model.increaseBoth(),
     ),
@@ -293,7 +293,7 @@ Widget bothController() {
 //* Controller example, update all variables.
 Widget allController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update all'),
       onPressed: () => model.increaseAll(),
     ),
@@ -302,7 +302,7 @@ Widget allController() {
 
 Widget str1Controller() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update Str1'),
       onPressed: () => model.updateStr1(),
     ),
@@ -311,7 +311,7 @@ Widget str1Controller() {
 
 Widget int1Controller() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update Int1'),
       onPressed: () => model.updateInt1(),
     ),
@@ -320,7 +320,7 @@ Widget int1Controller() {
 
 Widget futureController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Future Int1:1sec'),
       onPressed: () => model.futureInt1(),
     ),
@@ -329,7 +329,7 @@ Widget futureController() {
 
 Widget noController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update none'),
       onPressed: () => model.updateNone(),
     ),

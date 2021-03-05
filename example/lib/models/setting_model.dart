@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 enum SettingEnum {
@@ -12,33 +12,33 @@ class Setting extends Pub {
   var locale = 'en'.rx;
 
   //* controller function
-  // Future<void> changeLocale(BuildContext context, String countryCode) async {
-  //   final loc = Locale(countryCode);
-  //   await FlutterI18n.refresh(context, loc);
-  //   locale.value = countryCode;
-  //   // locale is a rx variable, will rebuild related widget when updated.
-  // }
+  Future<void> changeLocale(BuildContext context, String countryCode) async {
+    final loc = Locale(countryCode);
+    await FlutterI18n.refresh(context, loc);
+    locale.value = countryCode;
+    // `locale` is a rx variable which will rebuild related widgets when updating.
+  }
 
   //* View Map:
   void addSub(Object o, CreatorFn<Setting> sub) => regSub<Setting>(o, sub);
   void addCon(Object o, CreatorFn<Setting> con) => regCon<Setting>(o, con);
 
-  // @override
-  // void init() {
-  //   // addSub(SettingEnum.hello, (context, model) {
-  //   //   model.locale.touch(); // to activate rx automatic aspect
-  //   //   final hello = 'app.hello'.i18n(context);
-  //   //   return Text('$hello ');
-  //   // });
+  @override
+  void init() {
+    addSub(SettingEnum.hello, (context, model) {
+      model.locale.touch(); // to activate rx automatic aspect
+      final hello = 'app.hello'.i18n(context);
+      return Text('$hello ');
+    });
 
-  //   // addSub(SettingEnum.thanks, (context, model) {
-  //   //   model.locale.touch(); // to activate rx automatic aspect
-  //   //   final thanks = 'app.thanks'.i18n(context);
-  //   //   return Text('$thanks.');
-  //   // });
+    addSub(SettingEnum.thanks, (context, model) {
+      model.locale.touch(); // to activate rx automatic aspect
+      final thanks = 'app.thanks'.i18n(context);
+      return Text('$thanks.');
+    });
 
-  //   super.init();
-  // }
+    super.init();
+  }
 }
 
 //* Model extension
@@ -55,9 +55,9 @@ extension SettingExtT<T> on T {
   }
 }
 
-// //* i18n extension
-// extension StringI18n on String {
-//   String i18n(BuildContext context) {
-//     return FlutterI18n.translate(context, this);
-//   }
-// }
+//* i18n extension
+extension StringI18n on String {
+  String i18n(BuildContext context) {
+    return FlutterI18n.translate(context, this);
+  }
+}

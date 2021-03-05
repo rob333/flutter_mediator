@@ -11,8 +11,7 @@ class MyModel extends Pub {
 
   final int updateMs;
 
-  /// `.rx` turn the variable into a proxy object,
-  /// make the var automatically rebuild the widget when updated
+  /// `.rx` make the var automatically rebuild related widgets when updating.
   var _foo = 1.rx;
   var _bar = 2.rx;
   var _star = 3.rx;
@@ -31,16 +30,16 @@ class MyModel extends Pub {
 
   set foo(int value) {
     _foo(value); // update rx variable by call() style
-    /// is the same as
+    /// The same as:
     // _foo = value;
-    /// is the same as
+    /// The same as:
     // _foo.value = value;
 
-    // publish('foo'); // `foo` is a rx variable, will publish automatically.
+    // publish('foo'); // `foo` is a rx variable which will rebuild related widgets when updating.
   }
 
   set bar(int value) {
-    // update rx by setting the underlying value
+    // Update the rx variable by setting the underlying value.
     _bar.value = value;
   }
 
@@ -48,7 +47,7 @@ class MyModel extends Pub {
     _foo += 1;
     _bar += 1;
 
-    publish(['foo', 'bar']); // manually publish multiple aspects
+    publish(['foo', 'bar']); // Manually publish multiple aspects.
   }
 
   void increaseAll() {
@@ -57,7 +56,7 @@ class MyModel extends Pub {
     _star += 1;
     updateStr1();
     int1++;
-    publish(); // broadcasting, publish all aspects of the model
+    publish(); // Broadcasting, publish all aspects of the model.
   }
 
   static final chz = 'z'.codeUnitAt(0);
@@ -70,21 +69,21 @@ class MyModel extends Pub {
     }
 
     str1(String.fromCharCode(ch)); //
-    /// is the same as
+    /// The same as:
     // str1.value = String.fromCharCode(ch);
   }
 
   void updateInt1() {
-    int1 += 1; // automatically update the rx related widget when updated
-    /// is the same as
+    int1 += 1; // Automatically rebuild related widgets when updating.
+    /// The same as:
     // int1.value += 1;
   }
 
   void ifUpdateInt1({bool update = true}) {
     if (update == true) {
-      int1 += 1; // updates int1, will rebuild the rx related widget
+      int1 += 1; // Updates `int1` which will rebuild related widgets.
     } else {
-      int1.touch(); // `touch()` to activate rx automatic aspect, will also rebuild the rx related widget.
+      int1.touch(); // `touch()` to activate rx automatic aspect which will also rebuild related widgets.
     }
   }
 
@@ -103,12 +102,12 @@ class MyModel extends Pub {
 
   set tick1(int value) {
     _tick1.value = value;
-    // publish('tick1'); // _tick1 is a rx variable, will publish automatically
+    // publish('tick1'); // `_tick1` is a rx variable which will rebuild related widgets when updating.
   }
 
   set tick2(int value) {
     _tick2.value = value;
-    // publish('tick2'); // _tick2 is a rx variable, will publish automatically
+    // publish('tick2'); // `_tick2` is a rx variable which will rebuild related widgets when updating.
   }
 
   set tick3(int value) {
@@ -121,10 +120,10 @@ class MyModel extends Pub {
     updateTimer = Timer.periodic(Duration(milliseconds: updateMs), (timer) {
       // _tick1.value++;
       _tick1++;
-      // publish('tick1'); // _tick1 is a rx variable, will publish automatically
+      // publish('tick1'); // `_tick1` is a rx variable which will rebuild related widgets when updating.
       if (_tick1.value % 2 == 0) {
         _tick2++;
-        // publish('tick2'); // _tick2 is a rx variable, will publish automatically
+        // publish('tick2'); // `_tick2` is a rx variable which will rebuild related widgets when updating.
         if (_tick2 % 2 == 0) {
           _tick3++;
           publish('tick3');

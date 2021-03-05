@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* aspect enum
@@ -31,7 +30,7 @@ class ListModel extends Pub {
     resetTimer();
   }
 
-  // `.rx` make the var automatically rebuild the widget when updated
+  // `.rx` make the var automatically rebuild related widgets when updating.
   final /*List<ListItem>*/ data = <ListItem>[].rx;
   final int updateMs;
   Timer? updateTimer;
@@ -43,7 +42,7 @@ class ListModel extends Pub {
     final color = itemColors[Random().nextInt(itemColors.length)];
     if (data.length >= MaxItems) data.clear();
 
-    data.add(ListItem(itemName, units, color)); // automatically update widgets
+    data.add(ListItem(itemName, units, color)); // automatically rebuild widgets
   }
 
   int getTotalUnits() {
@@ -67,16 +66,6 @@ class ListModel extends Pub {
       updateTimer = null;
     }
   }
-
-  // //* locale section
-  // var locale = 'en'.rx;
-  // Future<void> changeLocale(BuildContext context, String countryCode) async {
-  //   final loc = Locale(countryCode);
-  //   await FlutterI18n.refresh(context, loc);
-  //   locale.value = countryCode;
-  //   // locale is a rx variable, will rebuild related widget whenever updates.
-  // }
-  // //! end locale section
 
   //* View Map:
   void addSub(Object o, CreatorFn<ListModel> sub) => regSub<ListModel>(o, sub);

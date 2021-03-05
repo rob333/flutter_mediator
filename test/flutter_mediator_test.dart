@@ -81,40 +81,59 @@ void main() {
     }
   });
 
-  test('benchmark rx operation', () {
+  test('benchmark rx++ operation', () {
     const n = 10000000;
+    const msec = 5 * 1000;
     // ignore: unused_local_variable
     var cnt = 0;
-    var start = DateTime.now().microsecondsSinceEpoch;
-    for (var i = 0; i < n; i++) {
-      cnt++;
-    }
-    var end = DateTime.now().microsecondsSinceEpoch;
-    print('i++: ${end - start}');
-
     // ignore: unused_local_variable
-    final rxi = 0.rx..pub = Pub();
-    start = DateTime.now().microsecondsSinceEpoch;
-    for (var i = 0; i < n; i++) {
-      rxi.value++;
+    var rxi = 0.rx..pub = Pub();
+
+    var i = 0;
+    var mark = 0;
+    var start = DateTime.now().microsecondsSinceEpoch;
+    for (i = 0; i < n; i++) {
+      cnt++;
+      mark = DateTime.now().microsecondsSinceEpoch - start;
+      if (mark >= msec) {
+        break;
+      }
     }
-    end = DateTime.now().microsecondsSinceEpoch;
-    print('rxi.value++: ${end - start}');
+    print('i++: ${1.0 * i / mark} ops/msec, $i ops of $mark msec');
 
-    // rxi.value = 0;
-    // start = DateTime.now().microsecondsSinceEpoch;
-    // for (var i = 0; i < n; i++) {
-    //   rxi++;
-    // }
-    // end = DateTime.now().microsecondsSinceEpoch;
-    // print('rxi++: ${end - start}');
+    i = 0;
+    start = DateTime.now().microsecondsSinceEpoch;
+    for (i = 0; i < n; i++) {
+      rxi.value++;
+      mark = DateTime.now().microsecondsSinceEpoch - start;
+      if (mark >= msec) {
+        break;
+      }
+    }
+    print('rxi.value++: ${1.0 * i / mark} ops/msec, $i ops of $mark msec');
 
-    // rxi.value = 0;
-    // start = DateTime.now().microsecondsSinceEpoch;
-    // for (var i = 0; i < n; i++) {
-    //   rxi += 1;
-    // }
-    // end = DateTime.now().microsecondsSinceEpoch;
-    // print('rxi+=: ${end - start}');
+    rxi.value = 0;
+    i = 0;
+    start = DateTime.now().microsecondsSinceEpoch;
+    for (i = 0; i < n; i++) {
+      rxi++;
+      mark = DateTime.now().microsecondsSinceEpoch - start;
+      if (mark >= msec) {
+        break;
+      }
+    }
+    print('rxi++: ${1.0 * i / mark} ops/msec, $i ops of $mark msec');
+
+    rxi.value = 0;
+    i = 0;
+    start = DateTime.now().microsecondsSinceEpoch;
+    for (i = 0; i < n; i++) {
+      rxi += 1;
+      mark = DateTime.now().microsecondsSinceEpoch - start;
+      if (mark >= msec) {
+        break;
+      }
+    }
+    print('rxi+=: ${1.0 * i / mark} ops/msec, $i ops of $mark msec');
   });
 }

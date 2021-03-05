@@ -32,8 +32,8 @@ extension WidgetModifier on Widget {
     );
   }
 
-  Widget raisedButton({required VoidCallback? onPressed}) {
-    return RaisedButton(
+  Widget elevatedButton({required VoidCallback? onPressed}) {
+    return ElevatedButton(
       onPressed: onPressed,
       child: this,
     );

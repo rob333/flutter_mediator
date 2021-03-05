@@ -50,7 +50,7 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
 
       // enable automatic add static rx aspects to rx aspects - by getter
       RxImpl.enableCollectAspect(widgetAspects);
-      // any rx variable used inside the create method will automatically rebuild the widget when updated
+      // any rx variable used inside the create method will automatically rebuild related widgets when updating
       final widget = create(context, model);
       // disable automatic add static rx aspects to rx aspects - by getter
       RxImpl.disableCollectAspect();

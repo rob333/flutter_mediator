@@ -45,7 +45,7 @@ Aspects denote what the widget is interested in. That widget will rebuild whenev
 
 #### Rx Related Widget
 
-When subscribing a widget, any rx variables used inside the create method will rebuild the widget automatically when updated.
+When subscribing a widget, any rx variables used inside the create method will automatically rebuild the widget when updating.
 
 #### Rx Automatic Aspect
 
@@ -65,7 +65,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.0.0-nullsafety.0"
+  flutter_mediator: "^2.0.0"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -86,7 +86,7 @@ For help getting started with Flutter, view the online [documentation](https://f
 
 &emsp; 1-1. Implement the model by extending from **_`Pub`_**
 <br />
-&emsp; 1-2. Use **_`.rx`_** to turn model variables into rx variables, which will automatically rebuild the rx related widget when updated.
+&emsp; 1-2. Use **_`.rx`_** to turn the model variable into a rx variable which will automatically rebuild related widgets when updating.
 <br />
 &emsp; 1-3. Implement the controller method of that variable.
 
@@ -95,12 +95,11 @@ For help getting started with Flutter, view the online [documentation](https://f
 ```dart
 /// my_model.dart
 class MyModel extends Pub {
-  /// `.rx` make the var automatically rebuild the rx related widget when updated
+  /// `.rx` make the var automatically rebuild related widgets when updating.
   var int1 = 0.rx;
 
   void updateInt1() {
-    /// since int1 is a rx variable,
-    /// it will automatically rebuild the aspect-realted-widget when updated
+    /// `int1` is a rx variable which will automatically rebuild realted widgets when updating.
     int1 +=  1;
   }
 }
@@ -160,7 +159,7 @@ There are two ways to subscribe a widget:
   - Broadcast to all aspects of the model: (Subscribe with `null` aspect to broadcast)
     <br /> **_`null`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
 
-Place that `Subscriber` in the widget tree then any rx variables used inside the create method will automatically rebuild the related widget when updated. _(triggered by getter and setter)_
+Place that `Subscriber` in the widget tree then any rx variables used inside the create method will automatically rebuild related widgets when updating. _(triggered by getter and setter)_
 <br />
 
 For example, subscribes a widget with model class **_`<MyModel>`_**
@@ -193,11 +192,11 @@ rxSub<MyModel>((context, model) {
 ### 4. **_Controller:_**
 
 Place the controller in the widget tree.
-<br /> For example, to get the model class **_`<MyModel>`_** and execute its controller method within a `RaisedButton`.
+<br /> For example, to get the model class **_`<MyModel>`_** and execute its controller method within a `ElevatedButton`.
 
 ```dart
 Controller<MyModel>(
-  create: (context, model) => RaisedButton(
+  create: (context, model) => ElevatedButton(
     child: const Text('Update Int1'),
     onPressed: () => model.updateInt1(), // or simplely, `model.int1++`
   ),
@@ -209,7 +208,7 @@ Or implement a `controller function` of `MyModel.updateInt1()`, then place it in
 ```dart
 Widget int1Controller() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('Update Int1'),
       onPressed: () => model.updateInt1(), // or simplely, `model.int1++`
     ),
@@ -358,7 +357,7 @@ Isn't it cleaner.
     // });
 
     // addCon('', (context, model) {
-    //   return RaisedButton(child: const Text('Update foo'),
+    //   return ElevatedButton(child: const Text('Update foo'),
     //     onPressed: () => model.increaseFoo(),);
     // });
 
@@ -446,19 +445,19 @@ class MyModel extends Pub {
   /// controller function for case 1
   void ifUpdateInt1({bool update = true}) {
     if (update == true) {
-      int1 += 1; // int1 is a rx variable, will rebuild the related widget when updated.
+      int1 += 1; // `int1` is a rx variable which will rebuild related widgets when updating.
     } else {
-      int1.touch(); // `touch()` to activate rx automatic aspect, will also rebuild the related widget.
+      int1.touch(); // `touch()` to activate rx automatic aspect which will also rebuild related widgets.
     }
   }
 
   /// controller function for case 2
-  void increaseStar() => star++; // star is a rx variable, will rebuild the related widget when updated.
+  void increaseStar() => star++; // `star` is a rx variable which will rebuild related widgets when updating.
 
   /// controller function for case 3
   void increaseManual(Object aspect) {
     m++;
-    publish(aspect); // m is an ordinary variable, needs to publish the aspect manually.
+    publish(aspect); // `m` is an ordinary variable which needs to publish the aspect manually.
   }
 }
 ```
@@ -490,7 +489,7 @@ Widget rxAAInt1Subscriber() {
 /// Controller function
 Widget rxAAInt1Controller() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('ifInt1'),
       onPressed: () => model.ifUpdateInt1(),
     ),
@@ -522,7 +521,7 @@ Widget starSubscriber() {
 /// Controller function
 Widget starController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('update star'),
       onPressed: () => increaseStar(), // or simplely model.star++,
     ),
@@ -554,7 +553,7 @@ Widget manualSubscriber() {
 /// Controller function
 Widget manualController() {
   return Controller<MyModel>(
-    create: (context, model) => RaisedButton(
+    create: (context, model) => ElevatedButton(
       child: const Text('update manual'),
       onPressed: () => increaseManual('manual'),
     ),
@@ -575,8 +574,6 @@ Widget mainPage() {
 
 ## Use Case - i18n with View Map
 
-> Note: Due to a dependency does not support null safety, this use case now just to explain the usage of View Map only.
-
 For example, to write an i18n app using flutter_i18n with View Map.
 
 > These are all boilerplate code, you may just need to look at the lines with comments, that's where to put the code in.
@@ -585,8 +582,8 @@ For example, to write an i18n app using flutter_i18n with View Map.
 
 ```yaml
 dependencies:
-  flutter_i18n: ^0.20.1
-  flutter_mediator: ^1.1.2
+  flutter_i18n: ^0.22.2
+  flutter_mediator: ^2.0.0
 
 flutter:
   assets:
@@ -638,7 +635,7 @@ class Setting extends Pub {
     final loc = Locale(countryCode);
     await FlutterI18n.refresh(context, loc);
     locale.value = countryCode;
-    // locale is a rx variable, will rebuild related widget when updated.
+    // `locale` is a rx variable which will rebuild related widgets when updating.
   }
 
   //* View Map:
@@ -695,7 +692,7 @@ class MyApp extends StatelessWidget {
             decodeStrategies: [JsonDecodeStrategy()],
           ),
           missingTranslationHandler: (key, locale) {
-            print('--- Missing Key: $key, languageCode: ${locale.languageCode}');
+            print('--- Missing Key: $key, languageCode: ${locale!.languageCode}');
           },
         ),
         GlobalMaterialLocalizations.delegate,
@@ -736,7 +733,7 @@ Widget infoPage() {
 class LocalePanel extends StatelessWidget {
   const LocalePanel({Key key}) : super(key: key);
 
-  Widget txt(BuildContext context, String name) {
+  Widget txt(String name) {
     return SizedBox(
       width: 250,
       child: Row(
@@ -753,7 +750,7 @@ class LocalePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: [for (final name in names) txt(context, name)],
+      children: [for (final name in names) txt(name)],
     );
   }
 }
@@ -780,9 +777,9 @@ class _RadioGroupState extends State<RadioGroup> {
     '한국어',
   ];
 
-  Future<void> _handleRadioValueChange1(String value) async {
+  Future<void> _handleRadioValueChange1(String? value) async {
     final model = Pub.model<Setting>(); // use `getmodel` shortcut to get the model
-    await model.changeLocale(context, value); // change the locale
+    await model.changeLocale(context, value!); // change the locale
     setState(() {
       /// model.locale.value = value; // changed in model.changeLocale
     });
@@ -871,7 +868,7 @@ You can find the example in the [example](https://github.com/rob333/flutter_medi
 8.  [**Broadcast to the model**](#8-broadcast-to-the-model) - Pub
 9.  [**Publish aspects of a rx variable**](#9-publish-aspects-of-a-rx-variable) - Pub
 10. [**Future publish**](#10-future-publish) - Pub
-11. [**Rebuild only once per frame** for the same aspect](#11-rebuild-only-once-per-frame) - Pub
+11. [**Rebuild only once a frame** for the same aspect](#11-rebuild-only-once-a-frame) - Pub
 12. [**Writing model extension**](#12-writing-model-extension) - Pub
 13. [**Get the model**](#13-get-the-model) - Controller and Subscriber
 14. [**Subscribe with rx automatic aspect** - rx automatic aspect](#14-subscribe-with-rx-automatic-aspect) - Subscriber
@@ -942,19 +939,19 @@ Or, use the generic form.
 
 ## 3. Automatically rebuild the widget whenever the rx variable updates
 
-Denoting **_`.rx`_** turns a variable of the model into a rx variable, a proxy object, which will automatically rebuild the related widget when updated. For Example,
+Denoting **_`.rx`_** turns the variable of the model into a rx variable, a proxy object, which will automatically rebuild related widgets when updating. For Example,
 
 #### rx int:
 
 ```dart
 /// my_model.dart
 class MyModel extends Pub {
-/// `.rx` turn the var into a rx variable(i.e. a proxy object)
-/// and rebuild the related widget when updated.
+/// `.rx` turns the var into a rx variable(i.e. a proxy object)
+/// which will rebuild related widgets when updating.
 var int1 = 0.rx;
 
 void  updateInt1() {
-  int1 += 1; // automatically update the rx related widget
+  int1 += 1; // Automatically rebuild related widgets.
 }
 ```
 
@@ -964,13 +961,13 @@ void  updateInt1() {
 /// list_model.dart
 class ListModel extends Pub {
   /// `.rx` turn the var into a rx variable(i.e. a proxy object)
-  /// and rebuild the related widget when updated
+  /// which will rebuild related widgets when updating.
   final data =  <ListItem>[].rx;
 
   void updateListItem() {
     // get new item data...
     final newItem = ListItem(itemName, units, color);
-    data.add(newItem); // automatically update the rx related widget
+    data.add(newItem); // Automatically rebuild related widgets.
   }
 ```
 
@@ -1014,9 +1011,9 @@ Dart provides a `call(T)` to override, you can use `rxVar(value)` to update the 
 var _foo = 1.rx;
 set foo(int value) {
   _foo(value); // update the rx variable by call() style
-  /// is the same as
+  /// The same as:
   // _foo = value;
-  /// is the same as
+  /// The same as:
   // _foo.value = value;
 }
 ```
@@ -1103,7 +1100,7 @@ Use rx variables within an async method.
 int int1 = 0.rx;
 Future<void> futureInt1() async {
   await Future.delayed(const Duration(seconds: 1));
-  int1 += 1; // int1 is a rx variable, it'll automatically update the rx related widget when updated
+  int1 += 1; // `int1` is a rx variable which will automatically rebuild related widgets when updating.
 }
 ```
 
@@ -1111,19 +1108,19 @@ Future<void> futureInt1() async {
 
 <br />
 
-## 11. Rebuild only once per frame
+## 11. Rebuild only once a frame
 
-InheritedModel uses `Set` to accumulate aspects thus the same aspect only causes the related widget to rebuild once per frame for the same aspect.
-<br /> The following code only causes the rx related widget to rebuild once.
+By using `Set` to accumulate aspects, the same aspect only causes the related widget to rebuild only once.
+<br /> The following code only causes the related widget to rebuild once.
 
 ```dart
 /// my_model.dart
 int int1 = 0.rx;
 void incermentInt1() async {
-  int1 += 1; // int1 is a rx variable, it'll automatically update the rx related widget when updated
-  publish('int1'); // manually publish 'int1'
-  publish('int1'); // manually publish 'int1', again
-  // only cause the aspected-related-widget to rebuild once per frame
+  int1 += 1; // `int1` is a rx variable which will automatically rebuild related widgets when updating.
+  publish('int1'); // Manually publish 'int1'.
+  publish('int1'); // Manually publish 'int1', again.
+  // Only cause the related widgets to rebuild only once.
 }
 ```
 

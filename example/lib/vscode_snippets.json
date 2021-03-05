@@ -4,7 +4,7 @@
     "body": [
       "Widget $1Controller() {",
       "  return Controller<${2:Model}>(",
-      "    create: (context, model) => RaisedButton(",
+      "    create: (context, model) => ElevatedButton(",
       "      child: const Text('$3'),",
       "      onPressed: () => model.${4:modelVar},",
       "    ),",
@@ -136,7 +136,7 @@
       "    });",
       "",
       "    addCon('', (context, model) {",
-      "      // return RaisedButton(child: const Text('Update foo'),",
+      "      // return ElevatedButton(child: const Text('Update foo'),",
       "      //   onPressed: () => model.increaseFoo(),);",
       "    });",
       "",
