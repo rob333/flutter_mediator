@@ -18,6 +18,16 @@ class Host<TModel extends Pub> extends StatefulWidget {
   final TModel _model;
   final Widget? child;
 
+  //* Map of the models section:
+  /// Dependency injection of models, map of models
+  static final stateModels = HashMap<Type, Pub>();
+
+  //* static: Get the model.
+  static Model model<Model extends Pub>() {
+    assert(ifStateModel<Model>(stateModels[Model]));
+    return stateModels[Model] as Model;
+  }
+
   //* For MultiHost.create, to accmulate the child
   static List<Widget>? stateChildColl;
 

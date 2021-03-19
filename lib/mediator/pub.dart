@@ -1,18 +1,18 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_mediator/mediator/controller.dart';
 
 import 'assert.dart';
+import 'controller.dart';
+import 'host.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
 class Pub {
   Pub() : publish = dummyCallback {
     assert(() {
-      if (stateModels[runtimeType] != null)
-        throw FlutterError(
-            'Duplicate model type registered to the `Host` of <$runtimeType>');
+      if (Host.stateModels[runtimeType] != null)
+        throw FlutterError('Duplicate model type of <$runtimeType>');
       return true;
     }());
 
@@ -24,7 +24,7 @@ class Pub {
     RxImpl.setPub(this);
     print('RxImpl set pub to: $this');
 
-    stateModels[runtimeType] = this;
+    Host.stateModels[runtimeType] = this;
     init();
   }
 
@@ -32,20 +32,18 @@ class Pub {
   @protected
   void init() {}
 
-  //* Map of the models section:
-  /// Dependency injection of models, map of models
-  static final stateModels = HashMap<Type, Pub>();
-
   //* static: Get the model.
   static Model getModel<Model extends Pub>() {
-    assert(ifStateModel<Model>(stateModels[Model]));
-    return stateModels[Model] as Model;
+    assert(ifStateModel<Model>(Host.stateModels[Model]));
+    print('Deprecated Pub.getModel<Model>(): Please use Host.model<>();');
+    return Host.stateModels[Model] as Model;
   }
 
   //* static: Get the model, the same as getModel<Model>().
   static Model model<Model extends Pub>() {
-    assert(ifStateModel<Model>(stateModels[Model]));
-    return stateModels[Model] as Model;
+    assert(ifStateModel<Model>(Host.stateModels[Model]));
+    print('Deprecated Pub.model<Model>(): Please use Host.model<>();');
+    return Host.stateModels[Model] as Model;
   }
 
   //! end section

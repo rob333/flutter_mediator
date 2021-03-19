@@ -40,7 +40,7 @@ bool ifRxAutoAspectEmpty(List<Object> rxAutoAspectList) {
 
 //* Pub: Assert get model exists.
 bool ifStateModel<Model extends Pub>(Pub? model) {
-  if (model == null) throw FlutterError('Pub.model<$Model> not exists');
+  if (model == null) throw FlutterError('Host.model<$Model> not exists');
   return true;
 }
 

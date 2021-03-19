@@ -145,7 +145,7 @@ const List<Color> itemColors = [
 // ];
 
 //* ListModel extension
-ListModel getListModel(BuildContext context) => Pub.model<ListModel>();
+ListModel getListModel(BuildContext context) => Host.model<ListModel>();
 
 Subscriber<ListModel> subListModel(CreatorFn<ListModel> create,
     {Key? key, Object? aspects}) {

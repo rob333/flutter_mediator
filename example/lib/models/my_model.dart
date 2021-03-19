@@ -163,7 +163,7 @@ class MyModel extends Pub {
 }
 
 //* MyModel extension
-MyModel getMyModel(BuildContext context) => Pub.model<MyModel>();
+MyModel getMyModel(BuildContext context) => Host.model<MyModel>();
 
 Subscriber<MyModel> subMyModel(CreatorFn<MyModel> create,
     {Key? key, Object? aspects}) {

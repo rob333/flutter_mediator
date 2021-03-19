@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Add `Host.model<Model>()`, and deprecate `Pub.model<Model>()`, `Pub.getModel<Model>()`
+
 ## 2.0.0
 
 - Null safety support.

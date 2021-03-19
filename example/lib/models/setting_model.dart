@@ -42,7 +42,7 @@ class Setting extends Pub {
 }
 
 //* Model extension
-Setting getSetting(BuildContext context) => Pub.model<Setting>();
+Setting getSetting(BuildContext context) => Host.model<Setting>();
 
 Subscriber<Setting> subSetting(CreatorFn<Setting> create,
     {Key? key, Object? aspects}) {

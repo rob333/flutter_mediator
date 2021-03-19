@@ -10,7 +10,7 @@ class Controller<Model extends Pub> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = Pub.model<Model>();
+    final model = Host.model<Model>();
     return create(context, model);
   }
 }

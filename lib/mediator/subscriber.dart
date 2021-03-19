@@ -24,7 +24,7 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
       /// rx automatic aspect
       /// automatic generates aspects for the widget
       RxImpl.enableRxAutoAspect();
-      final model = Pub.model<Model>();
+      final model = Host.model<Model>();
       final widget = create(context, model);
       final rxAutoAspectList = RxImpl.getAndDisableRxAutoAspect();
 
