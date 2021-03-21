@@ -1,6 +1,6 @@
 name: flutter_mediator
 description: Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
-version: 2.0.1
+version: 2.1.0
 homepage: https://github.com/rob333/flutter_mediator
 
 environment:

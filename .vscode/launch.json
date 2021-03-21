@@ -21,6 +21,19 @@
       //   "--analyze-size"
       // ],
       "type": "dart"
+    },
+    {
+      "name": "example_global_mode",
+      "cwd": "example_global_mode",
+      "request": "launch",
+      "program": "lib/main.dart",
+      // "args": ["--profile"],
+      // "args": [
+      //   "--profile",
+      //   "--release",
+      //   "--analyze-size"
+      // ],
+      "type": "dart"
     }
   ]
 }

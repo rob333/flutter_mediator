@@ -8,6 +8,9 @@ class MultiHost {
     required Widget child,
   }) {
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -18,6 +21,9 @@ class MultiHost {
   }) {
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -30,6 +36,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -45,6 +54,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -62,6 +74,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -81,6 +96,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -102,6 +120,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -132,6 +153,9 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
@@ -165,29 +189,34 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
+    // if (Global.globalPub != null) {
+    child = Host(model: Global.globalPub /*!*/, child: child);
+    // }
     return child;
   }
 
-  static Widget create(
-    List<Host> hosts, {
+  static Widget create({
+    List<Host>? hosts,
     required Widget child,
   }) {
-    assert(hosts.isNotEmpty);
+    // assert(hosts.isNotEmpty); // v2.1.0 add Global.globalPub
+    // ignore: unnecessary_null_comparison
+    assert(Global.globalPub != null || (hosts != null && hosts.isNotEmpty));
     assert(Host.stateChildColl == null);
 
     Host.stateChildColl = [child];
+    // if (Global.globalPub != null) {
+    final globalPubHost = Host(model: Global.globalPub);
+    if (hosts == null || hosts.isEmpty) {
+      return globalPubHost;
+    }
+    Host.stateChildColl!.add(globalPubHost);
+    // }
+
     for (var i = hosts.length - 1; i >= 1; i--) {
       Host.stateChildColl!.add(hosts[i]);
     }
-
     return hosts[0];
-
-    // for (var i = hosts.length - 1; i >= 0; i--) {
-    //   final host = hosts[i];
-    //   host.child = child;
-    //   child = host;
-    // }
-    // return child;
   }
 
   /// Template inference issue:

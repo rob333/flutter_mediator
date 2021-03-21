@@ -13,6 +13,9 @@ import 'widgets/widget_extension.dart';
 
 const double Width = 150;
 
+var globalInt = globalWatch(1);
+var globalList = globalWatch(<int>[]);
+
 void main() {
   runApp(
     MultiHost.create3(
@@ -22,7 +25,7 @@ void main() {
       child: MyApp(),
     ),
     // MultiHost.create( // Generic form
-    //   [
+    //   hosts: [
     //     Host<MyModel>(model: MyModel(updateMs: 1000)),
     //     Host<ListModel>(model: ListModel(updateMs: 500)),
     //     Host<Setting>(model: Setting()),
@@ -87,6 +90,8 @@ Widget buttonPage() {
           str1Subscriber(),
           int1Subscriber(),
           chainReactSubscriber(),
+          globalIntSubscriber(),
+          globalListSubscriber(),
         ],
       ),
       Column(
@@ -99,6 +104,7 @@ Widget buttonPage() {
           str1Controller(),
           int1Controller(),
           futureController(),
+          globalIntController(),
           noController(),
           tick1(),
           tick2(),
@@ -234,6 +240,23 @@ Widget int1Subscriber() {
   }.rxSub<MyModel>();
 }
 
+//* Subscriber with the Global variable
+
+Widget globalIntSubscriber() {
+  return globalConsume(
+    () => Text('Global Int: ${globalInt.value}'),
+  );
+}
+
+Widget globalListSubscriber() {
+  return globalConsume(
+    () => Text('Global List len: ${globalList.value.length}'),
+  );
+  // return globalList.consume(
+  //   () => Text('Global List len: ${globalList.value.length}'),
+  // );
+}
+
 //* Future function for chainReactSubscriber
 int httpResCounter = 0;
 Future<int> _futureHttpTask() async {
@@ -294,7 +317,7 @@ Widget bothController() {
 Widget allController() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
-      child: const Text('Update all'),
+      child: const Text('Update all of MyModel'),
       onPressed: () => model.increaseAll(),
     ),
   );
@@ -327,6 +350,19 @@ Widget futureController() {
   );
 }
 
+Widget globalIntController() {
+  return ElevatedButton(
+      child: const Text('Update Global Int'),
+      onPressed: () {
+        globalInt.value++;
+        // A. use `.ob` to get the underlying value and notify to update.
+        globalList.ob.add(globalInt.value);
+        // B. get the value then notify it.
+        // globalList.value.add(globalInt.value);
+        // globalList.notify();
+      });
+}
+
 Widget noController() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
@@ -352,7 +388,7 @@ Widget tick1() {
         child: Text('tick1 is ${model.tick1}'),
       );
     },
-  ).padding(const EdgeInsets.all(5.0)).sizeBox(width: Width, height: 60);
+  ).padding(const EdgeInsets.all(5.0)).sizeBox(width: Width, height: 50);
 }
 
 //* Subscribe tick2 with timer update
@@ -368,7 +404,7 @@ Widget tick2() {
         },
       )
       .padding(const EdgeInsets.all(5.0))
-      .sizeBox(width: Width, height: 60);
+      .sizeBox(width: Width, height: 50);
 }
 
 //* Subscribe tick3 with timer update
@@ -384,7 +420,7 @@ Widget tick3() {
         },
       )
       .padding(const EdgeInsets.all(5.0))
-      .sizeBox(width: Width, height: 60);
+      .sizeBox(width: Width, height: 50);
 }
 
 class _ColorRegistry {

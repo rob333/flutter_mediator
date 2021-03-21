@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import '../assert.dart';
 import '../pub.dart';
 
@@ -16,7 +14,7 @@ class RxImpl<T> {
 
   //* region member variables
   Pub? pub; // the pub attached to this rx variable
-  final rxAspects = HashSet<Object>(); // aspects attached to this rx variable
+  final rxAspects = <Object>{}; // aspects attached to this rx variable
   bool isNullBroadcast = false; // if this rx variable is broadcasting
 
   T _value; // the underlying value with template type T
@@ -115,6 +113,16 @@ class RxImpl<T> {
     }
   }
 
+  //* Get the underlying value and notify to update.
+  /// Suitable for class type _value, like List, Map, Set, classes
+  /// To inform the value to update.
+  /// Like the value type is a List, you can do `var.ob.add(1)` to inform the update.
+  /// Or, you can manually notify the update by `var.value.add(1); var.notify();`.
+  T get ob {
+    publishRxAspects();
+    return _value;
+  }
+
   /// Touch to activate rx automatic aspect management.
   void touch() {
     // if _tag is empty, this is the first time. (lazy _tag initialize)
@@ -202,6 +210,9 @@ class RxImpl<T> {
       return pub!.publish(rxAspects);
     }
   }
+
+  /// Alias of `publishRxAspects()`
+  void notify() => publishRxAspects();
 
   /// RxVar(newVal): set new value to the Rx underlying value.
   /// dart:call() works in the same way as operator()

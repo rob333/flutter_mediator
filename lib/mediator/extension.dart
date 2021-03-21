@@ -11,13 +11,6 @@ extension ModelAspectExtT<T> on T {
 }
 
 //* Context extension
-/// Deprecated
-// extension BuildContextExt on BuildContext {
-//   Model getModel<Model extends Pub>() {
-//     return Host.getInheritedOfModel<Model>(this);
-//   }
-// }
-
 /*
 extension ListModelExtT<T> on List<T> {
   Subscriber<Model> subModel<Model extends Pub>(

@@ -20,9 +20,16 @@ class Pub {
     /// class initial steps
     /// 1. rx variables initial
     /// 2. model extends from Pub and initial
-    /// 3. set the Pub of rx variables with this
+    /// 3. set the Pub of rx variables with this pub(model)
     RxImpl.setPub(this);
-    print('RxImpl set pub to: $this');
+
+    // runtimeType == 'Pub' is the Global.globalPub
+    assert(() {
+      if (runtimeType.toString() != 'Pub') {
+        print('RxImpl set pub to: $this');
+      }
+      return true;
+    }());
 
     Host.stateModels[runtimeType] = this;
     init();
@@ -90,7 +97,7 @@ class Pub {
   static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.sub'));
 
-    final model = getModel<Model>();
+    final model = Host.model<Model>();
     final sub = model._getSub<Model>(mapKey);
     return rxSub<Model>(sub, key: key);
   }
