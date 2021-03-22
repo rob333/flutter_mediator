@@ -8,6 +8,7 @@ import 'host.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
+//* A base class for declaring Models
 class Pub {
   Pub() : publish = dummyCallback {
     assert(() {

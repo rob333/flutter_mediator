@@ -4,20 +4,255 @@
 
 Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make them simpler, easier, and intuitive to use.
 
-By providing automatic generated aspects and management, flutter mediator makes you feel comfortable using the InheritedModel just like the InheritedWidget and rebuild widgets only when necessary.
+By providing automatic aspects, flutter mediator makes the state easy to manage and rebuild widgets only when necessary.
 
 <p align="center"><img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/main.gif"></p>
 
-## Features
+<br>
 
-- **_Easy and simple_** - Automatically make things work only by a few steps. Dependency injection, IoC, Proxy to make the state management much easier.
-- **_Efficiency and Performance_** - Use InheritedModel as the underlying layer, rebuild widgets only when necessary.
-- **_Lightweight_** - Small package size.
-- **_Flexible_** - Provide both automatic and manual publish.
-- **_Intuitive_** - Three main classes: **_`Pub`, `Subscriber`, `Host`_**
-  <br /> &emsp; **_`Pub`_** - to publish aspects
-  <br /> &emsp; **_`Subscriber`_** - to subscribe aspects
-  <br /> &emsp; **_`Host`_** - to dispatch aspects
+## Setting up
+
+Add the following dependency to pubspec.yaml of your flutter project:
+
+```yaml
+dependencies:
+  flutter_mediator: "^2.1.0"
+```
+
+Import flutter_mediator in files that will be used:
+
+```dart
+import 'package:flutter_mediator/mediator.dart';
+```
+
+For help getting started with Flutter, view the online [documentation](https://flutter.dev/docs).
+
+<br />
+
+# Global Mode
+
+As of v2.1.0, added a `Global Mode` to support a super easy way to use.
+
+## Steps:
+
+1. Declare the watched variable with `globalWatch`.
+
+2. Create the host with `MultiHost.create` at the top of the widget tree.
+
+3. Create the widget with `globalConsume` or `watchedVar.consume`,
+   i.e. register the watched variable to the host to rebuild the widget when updating.
+
+4. Make an update to the watched variable, by `watchedVar.value` or `watchedVar.ob.updateMethod(...)`.
+
+## Case 1: Int
+
+[example_global_mode/lib/main.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart)
+
+Step 1:
+
+```dart
+//* Step1: Declare the watched variable with `globalWatch`.
+var touchCount = globalWatch(0);
+```
+
+Step 2:
+
+```dart
+void main() {
+  runApp(
+//* Step2: Create the host with `MultiHost.create` at the top of the widget tree.
+    MultiHost.create(
+      child: MyApp(),
+    ),
+  );
+}
+```
+
+Step 3:
+
+```dart
+Scaffold(
+  appBar: AppBar(title: const Text('Global Mode:Int Demo')),
+  body: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const Text('You have pushed the button this many times:'),
+      //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
+      //* i.e. register the watched variable to the host to rebuild the widget when updating.
+      globalConsume(
+        () => Text(
+          '${touchCount.value}',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+      ),
+   // ...
+```
+
+Step 4:
+
+```dart
+FloatingActionButton(
+  //* Stet4: Make an update to the watched variable.
+  onPressed: () => touchCount.value++,
+  tooltip: 'Increment',
+  child: const Icon(Icons.add),
+  heroTag: null,
+),
+```
+
+<br>
+
+## Case 2: List
+
+[example_global_mode/lib/pages/list_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart)
+
+Step 1:
+
+```dart
+//* Step1: Declare the watched variable with `globalWatch`.
+var data = globalWatch(<ListItem>[]);
+```
+
+Step 3:
+
+```dart
+return Scaffold(
+  appBar: AppBar(title: const Text('Global Mode:List Demo')),
+  //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
+  //* i.e. register the watched variable to the host to rebuild the widget when updating.
+  body: globalConsume(
+    () => GridView.builder(
+      itemCount: data.value.length,
+
+    // ...
+```
+
+Step 4:
+
+```dart
+void updateListItem() {
+  // ...
+
+  //* Step4: Make an update to the watched variable.
+  //* watchedVar.op = watchedVar.notify() and then return the value
+  data.ob.add(ListItem(itemName, units, color));
+}
+```
+
+<br>
+
+## Case 3: Locale setting
+
+[example_global_mode/lib/pages/locale_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart)
+
+Step 1:
+
+```dart
+//* Step1: Declare the watched variable with `globalWatch`.
+var locale = globalWatch('en');
+```
+
+Step 3:
+
+```dart
+return SizedBox(
+  child: Row(
+    children: [
+      //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
+      //* i.e. register the watched variable to the host to rebuild the widget when updating.
+      //* `watchedVar.consume()` is a helper function to `touch()` itself first then `globalConsume`.
+      locale.consume(() {
+        return Text('${'app.hello'.i18n(context)} ');
+      }),
+      Text('$name, '),
+
+      // ...
+    ],
+  ),
+);
+```
+
+Step 4:
+
+```dart
+Future<void> changeLocale(BuildContext context, String countryCode) async {
+  final loc = Locale(countryCode);
+  await FlutterI18n.refresh(context, loc);
+  //* Step4: Make an update to the watched variable.
+  locale.value = countryCode;
+}
+```
+
+<br>
+
+## Case 4: Scrolling effect
+
+[example_global_mode/lib/pages/scroll_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/scroll_page.dart)
+
+Step 1:
+
+```dart
+//* Step1: Declare the watched variable with `globalWatch`.
+var opacityValue = globalWatch(0.0);
+```
+
+Step 3:
+
+```dart
+class CustomAppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
+    //* i.e. register the watched variable to the host to rebuild the widget when updating.
+    return globalConsume(
+      () => Container(
+        color: Colors.black.withOpacity(opacityValue.value),
+        // ...
+      ),
+    );
+  }
+}
+```
+
+Step 4:
+
+```dart
+class _ScrollPageState extends State<ScrollPage> {
+  // ...
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      //* Step4: Make an update to the watched variable.
+      opacityValue.value =
+          (_scrollController.offset / 350).clamp(0, 1).toDouble();
+    });
+    super.initState();
+  }
+```
+
+<br>
+
+## Recap
+
+- At step 1, `globalWatch(variable)` turns the variable into a watched variable.
+
+- At step 2, `MultiHost` works with both `Model Mode` and `Global Mode`.
+
+- At step 3, use `globalConsume(() => widget)` to register the widget to the host to rebuild when updating if the value of the watched variable is used in the widget, or use `watchedVar.consume(() => widget)` to `touch()` the watched variable itself then register the widget to the host.
+
+- At step 4, update to the `watchedVar.value` will notify to rebuild, or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify to rebuild.
+
+<br>
+<br>
+
+# Model Mode
+
+### Three main classes: **_`Pub`, `Subscriber`, `Host`_**
+
+- **_`Pub`_** - to publish aspects
+- **_`Subscriber`_** - to subscribe aspects
+- **_`Host`_** - to dispatch aspects
 
 ### Flutter Widget of the Week: InheritedModel explained
 
@@ -56,25 +291,6 @@ By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate
 <!-- same as View Map section-->
 
 View map consists of two maps of create methods, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
-
-<br />
-
-## Setting up
-
-Add the following dependency to pubspec.yaml of your flutter project:
-
-```yaml
-dependencies:
-  flutter_mediator: "^2.0.1"
-```
-
-Import flutter_mediator in files that will be used:
-
-```dart
-import 'package:flutter_mediator/mediator.dart';
-```
-
-For help getting started with Flutter, view the online [documentation](https://flutter.dev/docs).
 
 <br />
 
@@ -121,8 +337,8 @@ Register the models to the **_`Host`_**, and place it at the top level of the wi
 void main() {
   runApp(
     MultiHost.create2(
-      MyModel(updateMs:  1000), // model extends from Pub
-      ListModel(updateMs:  500),// model extends from Pub
+      MyModel(updateMs: 1000), // model extends from Pub
+      ListModel(updateMs: 500),// model extends from Pub
       child: MyApp(),
     ),
   );
@@ -133,7 +349,7 @@ Or, use the generic form.
 
 ```dart
     MultiHost.create( // Generic form
-      [
+      hosts: [
         Host<MyModel>(model: MyModel(updateMs: 1000)),
         Host<ListModel>(model: ListModel(updateMs: 500)),
       ],
@@ -583,7 +799,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.0.1
+  flutter_mediator: ^2.1.0
 
 flutter:
   assets:
@@ -915,7 +1131,7 @@ void main() {
     MultiHost.create2(
       MyModel(updateMs: 1000),  // model extends from Pub
       ListModel(updateMs: 500), // model extends from Pub
-      child:  MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -925,7 +1141,7 @@ Or, use the generic form.
 
 ```dart
     MultiHost.create( // Generic form
-      [
+      hosts: [
         Host<MyModel>(model: MyModel(updateMs: 1000)),
         Host<ListModel>(model: ListModel(updateMs: 500)),
       ],
@@ -984,7 +1200,10 @@ rx variable of type `int`, `double`, `num`, `string`, `bool`, `list`, `map`, `se
 
 ## 4. Access the underlying value of rx variables
 
-Sometimes, you can not do an operation with the rx variable, then you need to do that with the underlying value by denoting **`.value`**, for example,
+- **`rxVar.value`** : Return the underlying value.
+- **`rxVar.ob`** : Do a `rxVar.notify()` first to notify to rebuild then return the underlying value. Typically used with classes that aren't supported by the package.
+
+For example,
 
 ```dart
 /// my_model.dart
@@ -996,6 +1215,13 @@ void updateInt1() {
   // str1 = 'B'; // can not do this
   str1.value = 'B'; // need to do that with the underlying value
 }
+
+final customClass = CustomClass();
+var data = customClass.rx; // turn customClass into a rx variable (i.e. a proxy object)
+void updateData() {
+  data.ob.add(5);
+}
+
 ```
 
 &emsp; [back to detail](#detail)
@@ -1192,7 +1418,7 @@ final model = Host.model<MyModel>();
 final model = getMyModel();
 ```
 
-#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L154).
+#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160).
 
 ```dart
 final model = Host.model<MyModel>();
@@ -1324,7 +1550,7 @@ Subscriber<MyModel>(
 ## 18. Subscribe all aspects
 
 Provide no aspects parameter, or use null as aspect to subscribe to all aspects of the model.
-<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L154).
+<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160).
 
 - simple form
 
@@ -1382,7 +1608,7 @@ enum ListEnum {
 ```
 
 Then everything is the same as `String` aspect, just to replace the `String` with `enum`.
-<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L112).
+<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L118).
 
 - simple form
 

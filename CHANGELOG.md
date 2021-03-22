@@ -3,17 +3,17 @@
 - Add `Global` class for monitoring global variables as `Global Mode`.
 
   - Add `globalWatch(variable)` to watch the variable.
-  - Add `globalConsume(() => Text('${variable.value}'))` to register the variable to the host.
+  - Add `globalConsume(() => Text('${watchedVar.value}'))` to register the watched variable to the host.
 
 - Add `rxImpl.notify()`, alias of `rxImpl.publishRxAspects()`.
 
 - Add `rxImpl.ob` (a getter), to get the underlying value and notify the update.
 
-- Add `rxImpl.consume(Widget Function() fn, {Key? key})`, a helper function to `touch()` self first then do `globalConsume`.
+- Add `rxImpl.consume(Widget Function() fn, {Key? key})`, a helper function to `touch()` itself then `globalConsume`.
 
 - Change the first parameter of `MultiHost.create` to named parameter as `MultiHost.create({List<Host>? hosts, required Widget child})`.
 
-- Add another example to demonstrate how to use the `Global Mode` under the `example_global_mode` folder
+- Add an example to demonstrate the usage of the `Global Mode` in the `example_global_mode` folder
 
 ## 2.0.1
 

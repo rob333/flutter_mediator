@@ -6,6 +6,8 @@ import 'assert.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
+//* Class `Host` handles the widget's registration.
+@immutable
 class Host<TModel extends Pub> extends StatefulWidget {
   const Host({
     Key? key,

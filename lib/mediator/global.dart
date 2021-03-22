@@ -4,8 +4,8 @@ import 'pub.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
+//* Class for monitoring global variables as `Global Mode`.
 // ignore: avoid_classes_with_only_static_members
-/// Class for monitoring global variables as `Global Mode`.
 class Global {
   static Pub globalPub = Pub();
 
@@ -23,28 +23,12 @@ class Global {
   }
 }
 
-//* A helper function to monitor the variable and return a proxy object: Rx<T>
+//* A helper function to monitor the variable and return a watched variable,
+//* i.e. a proxy object of type `Rx<T>`
 Rx<T> globalWatch<T>(T v) => Global.watch<T>(v);
 
-//* A helper function to consume the variable of the proxy object.
-//* i.e. Register the variable to the host, rebuild the widget when updates.
-Subscriber<Pub> globalConsume(Widget Function() fn, {Key? key}) {
-  return rxSub<Pub>((context, model) => fn(), key: key);
-}
-
-extension RxImplConsumeExt on RxImpl {
-  //* A helper function to `touch()` itself first then `globalConsume`.
-  //! Depends on `globalConsume`
-  Widget consume(Widget Function() fn, {Key? key}) {
-    // final wrapFn = () {
-    //   touch();
-    //   return fn();
-    // };
-    // return globalConsume(wrapFn, key: key);
-    final Widget Function(BuildContext c, Pub m) wrapFn = (c, m) {
-      touch();
-      return fn();
-    };
-    return rxSub<Pub>(wrapFn, key: key);
-  }
+//* A helper function to create a widget for the watched variable,
+//* i.e. register the watched variable to the host to rebuild the widget when updating.
+SubscriberLite globalConsume(Widget Function() create, {Key? key}) {
+  return SubscriberLite<Pub>(key: key, create: create);
 }

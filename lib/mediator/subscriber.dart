@@ -5,6 +5,7 @@ import 'host.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
+//* A widget class for the watched variables, to register them to the host.
 @immutable
 class Subscriber<Model extends Pub> extends StatelessWidget {
   const Subscriber({
@@ -56,6 +57,32 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
       RxImpl.disableCollectAspect();
       return widget;
     }
+  }
+}
+
+//* A lite version of the Subscribe class, used specially for the Global Mode.
+@immutable
+class SubscriberLite<Model extends Pub> extends StatelessWidget {
+  const SubscriberLite({
+    Key? key,
+    required this.create,
+  }) : super(key: key);
+
+  final Widget Function() create;
+
+  @override
+  Widget build(BuildContext context) {
+    RxImpl.enableRxAutoAspect();
+    final widget = create();
+    final rxAutoAspectList = RxImpl.getAndDisableRxAutoAspect();
+
+    assert(ifRxAutoAspectEmpty(rxAutoAspectList));
+
+    Host.register<Model>(context, aspects: rxAutoAspectList);
+    // addRegAspect automatically in the RxImpl getter
+
+    RxImpl.clearRxAutoAspects();
+    return widget;
   }
 }
 

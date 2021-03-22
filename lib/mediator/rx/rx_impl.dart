@@ -1,6 +1,10 @@
+import 'package:flutter/widgets.dart';
+
 import '../assert.dart';
+import '../global.dart';
 import '../pub.dart';
 
+//* A proxy object class, for variables to turn into a watched one.
 class RxImpl<T> {
   //* constructor
   RxImpl(T initial) : _value = initial {
@@ -140,6 +144,15 @@ class RxImpl<T> {
     stateRxAutoAspects.addAll(_tag);
   }
 
+  //* A helper function to `touch()` itself first then `globalConsume`.
+  Widget consume(Widget Function() create, {Key? key}) {
+    final wrapFn = () {
+      touch();
+      return create();
+    };
+    return globalConsume(wrapFn, key: key);
+  }
+
   /// add [aspects] to the rx aspects.
   /// param aspects:
   ///   Iterable: add [aspects] to the rx aspects
@@ -255,22 +268,26 @@ class Rx<T> extends RxImpl<T> {
   Rx(T initial) : super(initial);
 }
 
-//* extension helper
+//* Helper Extension:
+//* Helper for string type to Rx object.
 extension RxStringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get rx => RxString(this);
 }
 
+//* Helper for bool type to Rx object.
 extension RxBoolExtension on bool {
   /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get rx => RxBool(this);
 }
 
+//* Helper for all others type to Rx object.
 extension RxExtension<T> on T {
   /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get rx => Rx<T>(this);
 }
 
+//* Encode a number into a string
 String numToString128(int value) {
   /// ascii code:
   /// 32: space /// 33: !  (first character except space)
