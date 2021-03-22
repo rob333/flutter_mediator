@@ -2,14 +2,20 @@
 
 - Add `Global` class for monitoring global variables as `Global Mode`.
 
-  - Add `globalWatch(variable)` to watch the variable.
-  - Add `globalConsume(() => Text('${watchedVar.value}'))` to register the watched variable to the host.
+  - Add `globalWatch(variable)` to return a watched variable.
+  - Add `globalConsume(() => Text('${watchedVar.value}'))` to create a widget that register the watched variable to the host.
 
-- Add `rxImpl.notify()`, alias of `rxImpl.publishRxAspects()`.
+  - Add `globalGet<T>({Object? tag})` to retrieve the watched variable from another file.
+    - With `globalWatch(variable)`, the watched variable will be retrieved by the `Type` of the variable, i.e. retrieve by `globalGet<Type>()`.
+    - With `globalWatch(variable, tag: object)`, the watched variable will be retrieved by the tag, i.e. retrieve by `globalGet(tag: object)`.
 
-- Add `rxImpl.ob` (a getter), to get the underlying value and notify the update.
+- RxImpl class:
 
-- Add `rxImpl.consume(Widget Function() fn, {Key? key})`, a helper function to `touch()` itself then `globalConsume`.
+  - Add `rxImpl.notify()`, alias of `rxImpl.publishRxAspects()`, to notify the host to rebuild.
+
+  - Add `rxImpl.ob` (a getter), to `notify()` the host to rebuild and then return the underlying object.
+
+  - Add `rxImpl.consume(Widget Function() fn, {Key? key})`, a helper function to `touch()` itself first and then `globalConsume`.
 
 - Change the first parameter of `MultiHost.create` to named parameter as `MultiHost.create({List<Host>? hosts, required Widget child})`.
 

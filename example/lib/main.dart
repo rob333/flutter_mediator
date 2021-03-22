@@ -13,8 +13,8 @@ import 'widgets/widget_extension.dart';
 
 const double Width = 150;
 
-var globalInt = globalWatch(1);
-var globalList = globalWatch(<int>[]);
+final globalInt = globalWatch(1);
+final globalList = globalWatch(<int>[]);
 
 void main() {
   runApp(
@@ -355,7 +355,7 @@ Widget globalIntController() {
       child: const Text('Update Global Int'),
       onPressed: () {
         globalInt.value++;
-        // A. use `.ob` to get the underlying value and notify to update.
+        // A. use `.ob` to notify the host to rebuild and then return the underlying object.
         globalList.ob.add(globalInt.value);
         // B. get the value then notify it.
         // globalList.value.add(globalInt.value);

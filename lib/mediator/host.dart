@@ -167,7 +167,7 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   /// of the [dependencies].
   @protected
   bool updateShouldNotifyDependent(
-      InheritedMediator<TModel> oldWidget, Set<Object> dependencies) {
+      InheritedMediator<TModel> oldWidget, HashSet<Object> dependencies) {
     return dependencies.intersection(_frameAspects).isNotEmpty;
   }
 

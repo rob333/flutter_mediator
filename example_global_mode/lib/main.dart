@@ -11,7 +11,7 @@ import 'widgets/bottom_navigation_controller.dart';
 import 'widgets/widget_extension.dart';
 
 //* Step1: Declare the watched variable with `globalWatch`.
-var touchCount = globalWatch(0);
+final touchCount = globalWatch(0, tag: 'tagCount');
 
 void main() {
   runApp(
@@ -102,8 +102,8 @@ class IntPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text('You have pushed the button this many times:'),
-          //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
-          //* i.e. register the watched variable to the host to rebuild the widget when updating.
+          //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
+          //* to register the watched variable to the host to rebuild it when updating.
           globalConsume(
             () => Text(
               '${touchCount.value}',

@@ -7,7 +7,7 @@ import 'package:flutter_mediator/mediator.dart';
 import '../widgets/widget_extension.dart';
 
 //* Step1: Declare the watched variable with `globalWatch`.
-var data = globalWatch(<ListItem>[]);
+final data = globalWatch(<ListItem>[]);
 
 class ListPage extends StatelessWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -16,8 +16,8 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Global Mode:List Demo')),
-      //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
-      //* i.e. register the watched variable to the host to rebuild the widget when updating.
+      //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
+      //* to register the watched variable to the host to rebuild it when updating.
       body: globalConsume(
         () => GridView.builder(
           itemCount: data.value.length,
@@ -96,6 +96,6 @@ void updateListItem() {
   if (data.value.length >= MaxItems) data.value.clear();
 
   //* Step4: Make an update to the watched variable.
-  //* watchedVar.op = watchedVar.notify() and then return the value
+  //* watchedVar.op = watchedVar.notify() and then return the underlying object
   data.ob.add(ListItem(itemName, units, color));
 }

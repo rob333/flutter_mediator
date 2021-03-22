@@ -117,11 +117,11 @@ class RxImpl<T> {
     }
   }
 
-  //* Get the underlying value and notify to update.
+  //* Notify the host to rebuild and then return the underlying object.
   /// Suitable for class type _value, like List, Map, Set, classes
   /// To inform the value to update.
-  /// Like the value type is a List, you can do `var.ob.add(1)` to inform the update.
-  /// Or, you can manually notify the update by `var.value.add(1); var.notify();`.
+  /// Like if the value type is a List, you can do `var.ob.add(1)` to notify the host to rebuild.
+  /// Or, you can manually notify the host to rebuild by `var.value.add(1); var.notify();`.
   T get ob {
     publishRxAspects();
     return _value;
@@ -144,7 +144,7 @@ class RxImpl<T> {
     stateRxAutoAspects.addAll(_tag);
   }
 
-  //* A helper function to `touch()` itself first then `globalConsume`.
+  //* A helper function to `touch()` itself first and then `globalConsume`.
   Widget consume(Widget Function() create, {Key? key}) {
     final wrapFn = () {
       touch();

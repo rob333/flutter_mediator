@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* Step1: Declare the watched variable with `globalWatch`.
-var opacityValue = globalWatch(0.0);
+final opacityValue = globalWatch(0.0);
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({required this.header, Key? key}) : super(key: key);
@@ -13,8 +13,8 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
-    //* i.e. register the watched variable to the host to rebuild the widget when updating.
+    //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
+    //* to register the watched variable to the host to rebuild it when updating.
     return globalConsume(
       () => Container(
         padding: const EdgeInsets.symmetric(

@@ -4,13 +4,16 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* Step1: Declare the watched variable with `globalWatch`.
-var locale = globalWatch('en');
+final locale = globalWatch('en');
 
 class LocalePage extends StatelessWidget {
   const LocalePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //* Get the watched variable by tag:'tagCount' from `../main.dart`
+    final firstPageInt = globalGet(tag: 'tagCount');
+
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -19,6 +22,14 @@ class LocalePage extends StatelessWidget {
           Text(
             'Global Mode: Locale demo',
             style: Theme.of(context).textTheme.headline5,
+          ),
+          const SizedBox(height: 25),
+          //* `globalConsume` the watched variable from `../main.dart`
+          globalConsume(
+            () => Text(
+              'You have pressed the button at the first page ${firstPageInt.value} times',
+              style: const TextStyle(fontSize: 16),
+            ),
           ),
           const SizedBox(height: 35),
           Row(
@@ -43,16 +54,16 @@ class LocalePanel extends StatelessWidget {
       width: 250,
       child: Row(
         children: [
-          //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
-          //* i.e. register the watched variable to the host to rebuild the widget when updating.
-          //* `watchedVar.consume()` is a helper function to `touch()` itself first then `globalConsume`.
+          //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
+          //* to register the watched variable to the host to rebuild it when updating.
+          //* `watchedVar.consume()` is a helper function to `touch()` itself first and then `globalConsume`.
           locale.consume(() {
             return Text('${'app.hello'.i18n(context)} ');
           }),
           Text('$name, '),
-          //* Step3: Create the widget with `globalConsume` or `watchedVar.consume`,
-          //* i.e. register the watched variable to the host to rebuild the widget when updating.
-          //* `watchedVar.consume()` is a helper function to `touch()` itself first then `globalConsume`.
+          //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
+          //* to register the watched variable to the host to rebuild it when updating.
+          //* `watchedVar.consume()` is a helper function to `touch()` itself first and then `globalConsume`.
           locale.consume(() {
             return Text('${'app.thanks'.i18n(context)}.');
           }),
