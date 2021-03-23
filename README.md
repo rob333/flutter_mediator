@@ -2,9 +2,20 @@
 
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
 
-Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make it simpler and easier to use, and rebuild widgets only when necessary.
+Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
-<p align="center"><img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/main.gif"></p>
+<p align="center" class="box">
+<table border="0">
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/main.gif">
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/global_mode.gif">
+    </td>
+  </tr>
+</table>
+</p>
 
 <br>
 
@@ -43,7 +54,7 @@ As of v2.1.0, added a `Global Mode` to support a super easy way to use the state
 
 ### Case 1: Int
 
-[example_global_mode/lib/main.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart)
+[example_global_mode/lib/main.dart][]
 
 Step 1:
 
@@ -57,7 +68,7 @@ Step 2:
 ```dart
 void main() {
   runApp(
-//* Step2: Create the host with `MultiHost.create` at the top of the widget tree.
+    //* Step2: Create the host with `MultiHost.create` at the top of the widget tree.
     MultiHost.create(
       child: MyApp(),
     ),
@@ -101,7 +112,7 @@ FloatingActionButton(
 
 ### Case 2: List
 
-[example_global_mode/lib/pages/list_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart)
+[example_global_mode/lib/pages/list_page.dart][]
 
 Step 1:
 
@@ -140,7 +151,7 @@ void updateListItem() {
 
 ### Case 3: Locale setting
 
-[example_global_mode/lib/pages/locale_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart)
+[example_global_mode/lib/pages/locale_page.dart][]
 
 Step 1:
 
@@ -184,7 +195,7 @@ Future<void> changeLocale(BuildContext context, String countryCode) async {
 
 ### Case 4: Scrolling effect
 
-[example_global_mode/lib/pages/scroll_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/scroll_page.dart)
+[example_global_mode/lib/pages/scroll_page.dart][]
 
 Step 1:
 
@@ -255,7 +266,7 @@ class _ScrollPageState extends State<ScrollPage> {
 ### Case 1: by `Type`
 
 `lib/main.dart`
-[example_global_mode/lib/main.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart)
+[example_global_mode/lib/main.dart][]
 
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.
@@ -263,7 +274,7 @@ final touchCount = globalWatch(0);
 ```
 
 `lib/pages/locale_page.dart`
-[example_global_mode/lib/pages/locale_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart)
+[example_global_mode/lib/pages/locale_page.dart][]
 
 ```dart
 class LocalePage extends StatelessWidget {
@@ -288,7 +299,7 @@ class LocalePage extends StatelessWidget {
 ### Case 2: by `tag`
 
 `lib/main.dart`
-[example_global_mode/lib/main.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart)
+[example_global_mode/lib/main.dart][]
 
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.
@@ -296,7 +307,7 @@ final touchCount = globalWatch(0, tag: 'tagCount');
 ```
 
 `lib/pages/locale_page.dart`
-[example_global_mode/lib/pages/locale_page.dart](https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart)
+[example_global_mode/lib/pages/locale_page.dart][]
 
 ```dart
 class LocalePage extends StatelessWidget {
@@ -324,8 +335,15 @@ class LocalePage extends StatelessWidget {
 
 - **When using `Type` to retrieve the watched variable, only the first one of the `Type` is returned.**
 
+> Or put the global variable into a file and then import it.
+
 <br>
 <br>
+
+[example_global_mode/lib/main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart
+[example_global_mode/lib/pages/list_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart
+[example_global_mode/lib/pages/locale_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart
+[example_global_mode/lib/pages/scroll_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/scroll_page.dart
 
 # Model Mode
 
@@ -1196,7 +1214,7 @@ void main() {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1230,7 +1248,7 @@ Or, use the generic form.
     ),
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1273,7 +1291,7 @@ rx variable of type `int`, `double`, `num`, `string`, `bool`, `list`, `map`, `se
 [RxList class](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_iterable/rx_list.dart#L5),
 [RxList.add](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_iterable/rx_list.dart#L35)
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1305,7 +1323,7 @@ void updateData() {
 
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1325,7 +1343,7 @@ set foo(int value) {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1342,7 +1360,7 @@ void manuallyPublishDemo(int value) {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1361,7 +1379,7 @@ void increaseBoth() {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1377,7 +1395,7 @@ void increaseAll() {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1394,7 +1412,7 @@ void publishInt1Related() {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1411,7 +1429,7 @@ Future<void> futureInt1() async {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1431,7 +1449,7 @@ void incermentInt1() async {
 }
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1477,7 +1495,7 @@ extension ListModelExtT<T> on T {
 
 > _See also [extension.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/extension.dart) for package extension._
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1499,14 +1517,14 @@ final model = Host.model<MyModel>();
 final model = getMyModel();
 ```
 
-#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160).
+#### **Get current triggered frame aspects of the model**. See also [allSubscriber@main.dart][].
 
 ```dart
 final model = Host.model<MyModel>();
 final aspects = model.frameAspects;
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1527,7 +1545,7 @@ rxSub<MyModel>((context, model) {
 }),
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1546,7 +1564,7 @@ rxSub<MyModel>((context, model) {
 })
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1577,7 +1595,7 @@ Subscriber<MyModel>(
 'int1'.subMyModel((context, model) => Text('Int1 is ${model.int1}')),
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1624,14 +1642,14 @@ Subscriber<MyModel>(
 ),
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
 ## 18. Subscribe all aspects
 
 Provide no aspects parameter, or use null as aspect to subscribe to all aspects of the model.
-<br /> See also [allSubscriber@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160).
+<br /> See also [allSubscriber@main.dart][].
 
 - simple form
 
@@ -1672,7 +1690,7 @@ null.subMyModel( // null aspects means broadcasting to the model
 
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1689,7 +1707,7 @@ enum ListEnum {
 ```
 
 Then everything is the same as `String` aspect, just to replace the `String` with `enum`.
-<br /> See also [cardPage@main.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L118).
+<br /> See also [cardPage@main.dart][].
 
 - simple form
 
@@ -1717,7 +1735,7 @@ ListEnum.ListUpdate.subMyModel((context, model) {
 }),
 ```
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1789,7 +1807,7 @@ Then whenever **_`str1`_** of class **_`<MyModel>`_** updates, the widget rebuil
 
   - `rxVar.clearRxAspects()`
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1813,7 +1831,7 @@ void updateSomeClass() {
 
 > By the extension method, package can turn anything into a rx variable.
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail][]
 
 <br />
 
@@ -1826,7 +1844,7 @@ void updateSomeClass() {
 - Registered aspects - Aspects of the model that has been registered.
 - RX aspects - Aspects that have been attached to the rx variable. The rx variable will rebuild the related widgets whenever updated.
 
-&emsp; [back to detail](#detail)
+&emsp; [back to detail]
 
 <br />
 
@@ -1841,3 +1859,7 @@ Please see the [Changelog](https://github.com/rob333/flutter_mediator/blob/main/
 ## License
 
 Flutter mediator is distributed by [MIT license](https://github.com/rob333/flutter_mediator/blob/main/LICENSE).
+
+[allsubscriber@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160
+[cardpage@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L118
+[back to detail]: #detail
