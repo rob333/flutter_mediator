@@ -14,7 +14,8 @@ import 'widgets/widget_extension.dart';
 
 void main() {
   runApp(
-    //* Step2: Create the host with `MultiHost.create` at the top of the widget tree.
+    //* Step2: Create the host with `MultiHost.create`
+    //* at the top of the widget tree.
     MultiHost.create(
       child: MyApp(),
     ),

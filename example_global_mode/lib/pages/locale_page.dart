@@ -12,7 +12,7 @@ class LocalePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //* Get the watched variable by tag:'tagCount' from `../main.dart`
-    final firstPageInt = globalGet(tag: 'tagCount');
+    final mainInt = globalGet(tag: 'tagCount');
 
     return Container(
       child: Column(
@@ -27,7 +27,7 @@ class LocalePage extends StatelessWidget {
           //* `globalConsume` the watched variable from `../main.dart`
           globalConsume(
             () => Text(
-              'You have pressed the button at the first page ${firstPageInt.value} times',
+              'You have pressed the button at the first page ${mainInt.value} times',
               style: const TextStyle(fontSize: 16),
             ),
           ),
@@ -62,14 +62,16 @@ class LocalePanel extends StatelessWidget {
         children: [
           //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
           //* to register the watched variable to the host to rebuild it when updating.
-          //* `watchedVar.consume()` is a helper function to `touch()` itself first and then `globalConsume`.
+          //* `watchedVar.consume()` is a helper function to
+          //* `touch()` itself first and then `globalConsume`.
           locale.consume(() {
             return Text('${'app.hello'.i18n(context)} ');
           }),
           Text('$name, '),
           //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
           //* to register the watched variable to the host to rebuild it when updating.
-          //* `watchedVar.consume()` is a helper function to `touch()` itself first and then `globalConsume`.
+          //* `watchedVar.consume()` is a helper function to
+          //* `touch()` itself first and then `globalConsume`.
           locale.consume(() {
             return Text('${'app.thanks'.i18n(context)}.');
           }),

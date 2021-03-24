@@ -1,3 +1,7 @@
+## 2.1.1+1
+
+- Fix static analysis fail.
+
 ## 2.1.1
 
 - Update the example_global_mode, to put the watched variables into a file and then import it.

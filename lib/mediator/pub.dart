@@ -129,7 +129,7 @@ class Pub {
   static Controller<Model> con<Model extends Pub>(Object mapKey, {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.con'));
 
-    final model = getModel<Model>();
+    final model = Host.model<Model>();
     final con = model._getCon<Model>(mapKey);
     return Controller<Model>(
       create: con,

@@ -70,7 +70,8 @@ Step 2:
 ```dart
 void main() {
   runApp(
-    //* Step2: Create the host with `MultiHost.create` at the top of the widget tree.
+    //* Step2: Create the host with `MultiHost.create`
+    //* at the top of the widget tree.
     MultiHost.create(
       child: MyApp(),
     ),
@@ -172,7 +173,8 @@ return SizedBox(
     children: [
       //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
       //* to register the watched variable to the host to rebuild it when updating.
-      //* `watchedVar.consume()` is a helper function to `touch()` itself first and then `globalConsume`.
+      //* `watchedVar.consume()` is a helper function to
+      //* `touch()` itself first and then `globalConsume`.
       locale.consume(() {
         return Text('${'app.hello'.i18n(context)} ');
       }),
@@ -286,7 +288,7 @@ class LocalePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //* Get the watched variable by it's [Type] from `../main.dart`
-    final firstPageInt = globalGet<int>();
+    final mainInt = globalGet<int>();
 
     return Container(
       // ...
@@ -294,7 +296,7 @@ class LocalePage extends StatelessWidget {
           //* `globalConsume` the watched variable from `../main.dart`
           globalConsume(
             () => Text(
-              'You have pressed the button at the first page ${firstPageInt.value} times',
+              'You have pressed the button at the first page ${mainInt.value} times',
             ),
       // ...
 ```
@@ -319,7 +321,7 @@ class LocalePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //* Get the watched variable by [tag] from `../main.dart`
-    final firstPageInt = globalGet('tagCount');
+    final mainInt = globalGet('tagCount');
 
     return Container(
       // ...
@@ -327,7 +329,7 @@ class LocalePage extends StatelessWidget {
           //* `globalConsume` the watched variable from `../main.dart`
           globalConsume(
             () => Text(
-              'You have pressed the button at the first page ${firstPageInt.value} times',
+              'You have pressed the button at the first page ${mainInt.value} times',
             ),
       // ...
 ```
