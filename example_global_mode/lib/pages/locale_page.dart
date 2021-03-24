@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_mediator/mediator.dart';
 
-//* Step1: Declare the watched variable with `globalWatch`.
-final locale = globalWatch('en');
+//* Step1: import the var.dart
+import '../var.dart';
 
 class LocalePage extends StatelessWidget {
   const LocalePage({Key? key}) : super(key: key);
@@ -28,6 +28,12 @@ class LocalePage extends StatelessWidget {
           globalConsume(
             () => Text(
               'You have pressed the button at the first page ${firstPageInt.value} times',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ),
+          globalConsume(
+            () => Text(
+              'Data lengt at the second page ${data.value.length} times',
               style: const TextStyle(fontSize: 16),
             ),
           ),

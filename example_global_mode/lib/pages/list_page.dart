@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
+//* Step1: import the var.dart
+import '../var.dart';
 import '../widgets/widget_extension.dart';
-
-//* Step1: Declare the watched variable with `globalWatch`.
-final data = globalWatch(<ListItem>[]);
 
 class ListPage extends StatelessWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -52,18 +51,6 @@ class ListPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class ListItem {
-  const ListItem(
-    this.item,
-    this.units,
-    this.color,
-  );
-
-  final String item;
-  final int units;
-  final Color color;
 }
 
 //* item data

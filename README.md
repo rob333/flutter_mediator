@@ -25,7 +25,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.1.0"
+  flutter_mediator: "^2.1.1"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -40,11 +40,12 @@ For help getting started with Flutter, view the online [documentation](https://f
 
 # Global Mode
 
-As of v2.1.0, added a `Global Mode` to support a super easy way to use the state management.
+As of v2.1.0 provides a `Global Mode` to support a super easy way to use the state management.
 
 ## Steps:
 
 1. Declare the watched variable with `globalWatch`.
+   <br>**Suggest to put the watched variables into a file [var.dart][example_global_mode/lib/var.dart] and then import it.**
 
 2. Create the host with `MultiHost.create` at the top of the widget tree.
 
@@ -56,10 +57,11 @@ As of v2.1.0, added a `Global Mode` to support a super easy way to use the state
 
 [example_global_mode/lib/main.dart][]
 
-Step 1:
+Step 1: [var.dart][example_global_mode/lib/var.dart]
 
 ```dart
-//* Step1: Declare the watched variable with `globalWatch`.
+//* Step1: Declare the watched variable with `globalWatch` in the var.dart.
+//* And then import it in the file.
 final touchCount = globalWatch(0);
 ```
 
@@ -114,10 +116,11 @@ FloatingActionButton(
 
 [example_global_mode/lib/pages/list_page.dart][]
 
-Step 1:
+Step 1: [var.dart][example_global_mode/lib/var.dart]
 
 ```dart
-//* Step1: Declare the watched variable with `globalWatch`.
+//* Step1: Declare the watched variable with `globalWatch` in the var.dart.
+//* And then import it in the file.
 final data = globalWatch(<ListItem>[]);
 ```
 
@@ -153,10 +156,11 @@ void updateListItem() {
 
 [example_global_mode/lib/pages/locale_page.dart][]
 
-Step 1:
+Step 1: [var.dart][example_global_mode/lib/var.dart]
 
 ```dart
-//* Step1: Declare the watched variable with `globalWatch`.
+//* Step1: Declare the watched variable with `globalWatch` in the var.dart.
+//* And then import it in the file.
 final locale = globalWatch('en');
 ```
 
@@ -197,10 +201,11 @@ Future<void> changeLocale(BuildContext context, String countryCode) async {
 
 [example_global_mode/lib/pages/scroll_page.dart][]
 
-Step 1:
+Step 1: [var.dart][example_global_mode/lib/var.dart]
 
 ```dart
-//* Step1: Declare the watched variable with `globalWatch`.
+//* Step1: Declare the watched variable with `globalWatch` in the var.dart.
+//* And then import it in the file.
 final opacityValue = globalWatch(0.0);
 ```
 
@@ -243,13 +248,13 @@ class _ScrollPageState extends State<ScrollPage> {
 
 ## Recap
 
-- At step 1, `globalWatch(variable)` turns the variable into a watched variable.
+- At step 1, `globalWatch(variable)` creates a watched variable from the variable.
 
 - At step 2, `MultiHost` works with both `Global Mode` and `Model Mode`.
 
-- At step 3, create a widget and register to the host to rebuild it when updating, use `globalConsume(() => widget)` if the value of the watched variable is used inside the widget; or use `watchedVar.consume(() => widget)` to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
+- At step 3, create a widget and register it to the host to rebuild it when updating, use `globalConsume(() => widget)` if the value of the watched variable is used inside the widget; or use `watchedVar.consume(() => widget)` to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
 
-- At step 4, update to the `watchedVar.value` will notify the host to rebuild, or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
+- At step 4, update to the `watchedVar.value` will notify the host to rebuild; or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
 
 <br>
 
@@ -335,12 +340,13 @@ class LocalePage extends StatelessWidget {
 
 - **When using `Type` to retrieve the watched variable, only the first one of the `Type` is returned.**
 
-> Or put the global variable into a file and then import it.
+> Or put the global variables into a file and then import it.
 
 <br>
 <br>
 
 [example_global_mode/lib/main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart
+[example_global_mode/lib/var.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/var.dart
 [example_global_mode/lib/pages/list_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart
 [example_global_mode/lib/pages/locale_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/locale_page.dart
 [example_global_mode/lib/pages/scroll_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/scroll_page.dart
@@ -898,7 +904,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.1.0
+  flutter_mediator: ^2.1.1
 
 flutter:
   assets:

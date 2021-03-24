@@ -24,7 +24,7 @@ class Pub {
     /// 3. set the Pub of rx variables with this pub(model)
     RxImpl.setPub(this);
 
-    // runtimeType == 'Pub' is the Global.globalPub
+    // runtimeType == 'Pub' is the globalPub
     assert(() {
       if (runtimeType.toString() != 'Pub') {
         print('RxImpl set pub to: $this');

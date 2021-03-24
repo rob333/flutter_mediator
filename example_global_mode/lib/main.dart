@@ -7,11 +7,10 @@ import 'package:flutter_mediator/mediator.dart';
 import 'pages/list_page.dart';
 import 'pages/locale_page.dart';
 import 'pages/scroll_page.dart';
+//* Step1: import the var.dart
+import 'var.dart';
 import 'widgets/bottom_navigation_controller.dart';
 import 'widgets/widget_extension.dart';
-
-//* Step1: Declare the watched variable with `globalWatch`.
-final touchCount = globalWatch(0, tag: 'tagCount');
 
 void main() {
   runApp(

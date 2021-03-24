@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
-//* Step1: Declare the watched variable with `globalWatch`.
-final opacityValue = globalWatch(0.0);
+//* Step1: import the var.dart
+import '../var.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({required this.header, Key? key}) : super(key: key);

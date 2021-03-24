@@ -8,8 +8,8 @@ class MultiHost {
     required Widget child,
   }) {
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -21,8 +21,8 @@ class MultiHost {
   }) {
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -36,8 +36,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -54,8 +54,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -74,8 +74,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -96,8 +96,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -120,8 +120,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -153,8 +153,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -189,8 +189,8 @@ class MultiHost {
     child = Host(model: t3, child: child);
     child = Host(model: t2, child: child);
     child = Host(model: t1, child: child);
-    // if (Global.globalPub != null) {
-    child = Host(model: Global.globalPub /*!*/, child: child);
+    // if (globalPub != null) {
+    child = Host(model: globalPub /*!*/, child: child);
     // }
     return child;
   }
@@ -199,14 +199,14 @@ class MultiHost {
     List<Host>? hosts,
     required Widget child,
   }) {
-    // assert(hosts.isNotEmpty); // v2.1.0 add Global.globalPub
+    // assert(hosts.isNotEmpty); // v2.1.0 add globalPub
     // ignore: unnecessary_null_comparison
-    assert(Global.globalPub != null || (hosts != null && hosts.isNotEmpty));
+    assert(globalPub != null || (hosts != null && hosts.isNotEmpty));
     assert(Host.stateChildColl == null);
 
     Host.stateChildColl = [child];
-    // if (Global.globalPub != null) {
-    final globalPubHost = Host(model: Global.globalPub);
+    // if (globalPub != null) {
+    final globalPubHost = Host(model: globalPub);
     if (hosts == null || hosts.isEmpty) {
       return globalPubHost;
     }
