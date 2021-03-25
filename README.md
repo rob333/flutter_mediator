@@ -332,11 +332,11 @@ class LocalePage extends StatelessWidget {
 
 ### **Note**
 
-- **Make sure the global variable is initialized, only after the page is loaded.**
+- **Make sure the watched variable is initialized, only after the page is loaded.**
 
 - **When using `Type` to retrieve the watched variable, only the first one of the `Type` is returned.**
 
-> Or put the global variables into a file and then import it.
+> Or put the watched variables into a file and then import it.
 
 <br>
 <br>
@@ -351,9 +351,9 @@ class LocalePage extends StatelessWidget {
 
 ### Three main classes: **_`Pub`, `Subscriber`, `Host`_**
 
-- **_`Pub`_** : to publish aspects
-- **_`Subscriber`_** : to subscribe aspects
-- **_`Host`_** : to dispatch aspects
+- **_`Pub`_** : The base class of implementing a model, to **publish aspects**.
+- **_`Subscriber`_** : The widget class that register to the host to **subscribe aspects**, being notified to rebuild when updating.
+- **_`Host`_** : The inheritedModel widget, to place at the top of the widget tree, to **dispatch aspects**.
 
 ### Flutter Widget of the Week: InheritedModel explained
 

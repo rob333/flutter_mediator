@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* Step1: import the var.dart
-import '../var.dart';
+import '../var.dart' show opacityValue;
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({required this.header, Key? key}) : super(key: key);

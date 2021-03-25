@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
 //* Step1: import the var.dart
-import '../var.dart';
+import '../var.dart' show data, ListItem;
 import '../widgets/widget_extension.dart';
 
 class ListPage extends StatelessWidget {
