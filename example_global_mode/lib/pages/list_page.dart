@@ -83,6 +83,6 @@ void updateListItem() {
   if (data.value.length >= MaxItems) data.value.clear();
 
   //* Step4: Make an update to the watched variable.
-  //* watchedVar.op = watchedVar.notify() and then return the underlying object
+  //* watchedVar.ob = watchedVar.notify() and then return the underlying object
   data.ob.add(ListItem(itemName, units, color));
 }

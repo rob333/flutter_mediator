@@ -214,8 +214,7 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   /// change in the model widget corresponds to an [aspect] value.
   ///
   /// The dependencies created by this method target all [InheritedModel] ancestors
-  /// of type T up to and including the first one for which [isSupportedAspect]
-  /// returns true.
+  /// of type T up to and including the first one.
   ///
   /// If [aspect] is null this method is the same as
   /// `context.dependOnInheritedWidgetOfExactType<T>()`.
@@ -226,7 +225,7 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
     if (aspect == null) return context.dependOnInheritedWidgetOfExactType<T>();
 
     // Create a dependency on all of the type T ancestor models up until
-    // a model is found for which isSupportedAspect(aspect) is true.
+    // a model is found.
     final models = <InheritedElement>[];
     _findModels<T>(context, aspect, models);
     if (models.isEmpty) {

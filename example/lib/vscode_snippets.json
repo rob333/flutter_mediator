@@ -98,7 +98,7 @@
   "Create a Controller Widget from the View Map of the Model": {
     "prefix": "pubcon",
     "body": [
-      "Pub.con<${1:model}>('${2:key}'),$0"
+      "Pub.controller<${1:model}>('${2:key}'),$0"
     ],
     "description": "Create a Widget from the View Map of the Model"
   },

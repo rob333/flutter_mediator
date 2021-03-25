@@ -1,3 +1,7 @@
+## 2.1.1+2
+
+- Fix dartdoc fail.
+
 ## 2.1.1+1
 
 - Fix static analysis fail.

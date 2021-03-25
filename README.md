@@ -146,7 +146,7 @@ void updateListItem() {
   // ...
 
   //* Step4: Make an update to the watched variable.
-  //* watchedVar.op = watchedVar.notify() and then return the underlying object
+  //* watchedVar.ob = watchedVar.notify() and then return the underlying object
   data.ob.add(ListItem(itemName, units, color));
 }
 ```
@@ -272,9 +272,6 @@ class _ScrollPageState extends State<ScrollPage> {
 
 ### Case 1: by `Type`
 
-`lib/main.dart`
-[example_global_mode/lib/main.dart][]
-
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.
 final touchCount = globalWatch(0);
@@ -304,9 +301,6 @@ class LocalePage extends StatelessWidget {
 <br>
 
 ### Case 2: by `tag`
-
-`lib/main.dart`
-[example_global_mode/lib/main.dart][]
 
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.

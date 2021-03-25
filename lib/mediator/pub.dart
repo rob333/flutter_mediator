@@ -92,7 +92,7 @@ class Pub {
 
   //* subMap section:
   /// Map of subscriber create methods of the model.
-  final subMap = HashMap<Object, Object>();
+  final _subMap = HashMap<Object, Object>();
 
   //* static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
   static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key? key}) {
@@ -106,28 +106,29 @@ class Pub {
   /// Add a create method to the subMap with the key:[o].
   void regSub<Model extends Pub>(Object o, CreatorFn<Model> sub) {
     assert(ifModelTypeCorrect(Model, 'regSub'));
-    assert(shouldNull(subMap[o], 'regSub: Duplicate key, subMap[$o]'));
+    assert(shouldNull(_subMap[o], 'regSub: Duplicate key, subMap[$o]'));
 
-    subMap[o] = sub;
+    _subMap[o] = sub;
   }
 
   /// Get the create method by the key:[o].
   CreatorFn<Model> _getSub<Model extends Pub>(Object o) {
     assert(ifModelTypeCorrect(Model, 'getSub'));
-    assert(shouldExists(subMap[o], 'getSub: subMap[$o] not exist'));
-    assert(subMap[o] is CreatorFn<Model>);
+    assert(shouldExists(_subMap[o], 'getSub: subMap[$o] not exist'));
+    assert(_subMap[o] is CreatorFn<Model>);
 
-    return subMap[o] as CreatorFn<Model>;
+    return _subMap[o] as CreatorFn<Model>;
   }
   //! end subMap section
 
   //* conMap section:
   /// Map of controller create methods of the model.
-  final conMap = HashMap<Object, Object>();
+  final _conMap = HashMap<Object, Object>();
 
   //* static: Create a `Controller<Model>` widget from the `conMap` by the [mapKey] of the `<Model>`.
-  static Controller<Model> con<Model extends Pub>(Object mapKey, {Key? key}) {
-    assert(ifModelTypeCorrect(Model, 'Pub.con'));
+  static Controller<Model> controller<Model extends Pub>(Object mapKey,
+      {Key? key}) {
+    assert(ifModelTypeCorrect(Model, 'Pub.controller'));
 
     final model = Host.model<Model>();
     final con = model._getCon<Model>(mapKey);
@@ -140,18 +141,18 @@ class Pub {
   /// Add a create method to the conMap with the key:[o].
   void regCon<Model extends Pub>(Object o, CreatorFn<Model> con) {
     assert(ifModelTypeCorrect(Model, 'regCon'));
-    assert(shouldNull(conMap[o], 'regCon: Duplicate key, conMap[$o]'));
+    assert(shouldNull(_conMap[o], 'regCon: Duplicate key, conMap[$o]'));
 
-    conMap[o] = con;
+    _conMap[o] = con;
   }
 
   /// Get the create method by the key:[o].
   CreatorFn<Model> _getCon<Model extends Pub>(Object o) {
     assert(ifModelTypeCorrect(Model, 'getCon'));
-    assert(shouldExists(conMap[o], 'getCon: conMap[$o] not exist'));
-    assert(conMap[o] is CreatorFn<Model>);
+    assert(shouldExists(_conMap[o], 'getCon: conMap[$o] not exist'));
+    assert(_conMap[o] is CreatorFn<Model>);
 
-    return conMap[o] as CreatorFn<Model>;
+    return _conMap[o] as CreatorFn<Model>;
   }
   //! end subMap section
 
