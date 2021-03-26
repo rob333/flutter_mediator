@@ -16,14 +16,7 @@ final _globalWatchedVar = HashMap<Object, Object>();
 //* To monitor the variable and return a watched variable,
 //* i.e. a proxy object of the Type of `Rx<T>`
 Rx<T> globalWatch<T>(T v, {Object? tag}) {
-  final rx = Rx<T>(v);
-
-  RxImpl.setPub(_globalPub);
-  //* What Rximpl.setPub does:
-  // for each rx added will be in the RxImpl.staticRxContainer, iterate with
-  // rx.pub = globalPub;
-  //* then clean the RxImpl.staticRxContainer
-  // RxImpl.staticRxContainer.clear();
+  final rx = Rx.withPub(v, _globalPub);
 
   //* Check if the variable [Type] or the [tag] already exists
   if (tag == null) {

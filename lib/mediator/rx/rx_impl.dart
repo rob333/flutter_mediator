@@ -6,7 +6,8 @@ import '../pub.dart';
 
 //* A proxy object class, for variables to turn into a watched one.
 class RxImpl<T> {
-  //* constructor
+  //* default constructor: add self to the static rx container
+  /// and sholud use [setPub] to set the [Pub] when the model of [Pub] initialized.
   RxImpl(T initial) : _value = initial {
     // variables and constructor calling sequence:
     // 1. Model inline variables ->
@@ -16,10 +17,13 @@ class RxImpl<T> {
     staticRxContainer.add(this);
   }
 
+  //* constructor: with dedicated [Pub] parameter
+  RxImpl.withPub(T initial, this.pub) : _value = initial;
+
   //* region member variables
   Pub? pub; // the pub attached to this rx variable
   final rxAspects = <Object>{}; // aspects attached to this rx variable
-  bool isNullBroadcast = false; // if this rx variable is broadcasting
+  bool _isNullBroadcast = false; // if this rx variable is broadcasting
 
   T _value; // the underlying value with template type T
   final _tag = <String>{};
@@ -100,7 +104,7 @@ class RxImpl<T> {
       if (stateWidgetAspects != null) {
         rxAspects.addAll(stateWidgetAspects!);
       } else {
-        isNullBroadcast = true;
+        _isNullBroadcast = true;
       }
     }
 
@@ -163,7 +167,7 @@ class RxImpl<T> {
     if (aspects is Iterable<Object>) {
       rxAspects.addAll(aspects);
     } else if (aspects == null) {
-      isNullBroadcast = true;
+      _isNullBroadcast = true;
     } else if (aspects is RxImpl) {
       rxAspects.addAll(aspects.rxAspects);
     } else {
@@ -181,7 +185,7 @@ class RxImpl<T> {
     if (aspects is Iterable<Object>) {
       rxAspects.removeAll(aspects);
     } else if (aspects == null) {
-      isNullBroadcast = false;
+      _isNullBroadcast = false;
     } else if (aspects is RxImpl) {
       rxAspects.removeAll(aspects.rxAspects);
     } else {
@@ -217,7 +221,7 @@ class RxImpl<T> {
   /// publish rx aspects to host
   void publishRxAspects() {
     assert(shouldExists(pub, 'Pub of RxImpl should not be null.'));
-    if (isNullBroadcast) {
+    if (_isNullBroadcast) {
       return pub!.publish();
     } else if (rxAspects.isNotEmpty) {
       return pub!.publish(rxAspects);
@@ -265,7 +269,11 @@ class RxString extends RxImpl<String> {
 
 //* Rx<T> class
 class Rx<T> extends RxImpl<T> {
+  /// Returns a `Rx` with `initial` as initial value.
   Rx(T initial) : super(initial);
+
+  /// Returns a `Rx` with [Pub] `pub` as the model.
+  Rx.withPub(T initial, Pub pub) : super.withPub(initial, pub);
 }
 
 //* Helper Extension:

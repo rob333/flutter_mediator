@@ -1,3 +1,7 @@
+## 2.1.1+3
+
+- Minor improvement.
+
 ## 2.1.1+2
 
 - Fix dartdoc fail.

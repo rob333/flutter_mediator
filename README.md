@@ -4,7 +4,7 @@
 
 Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
-<p align="center" class="box">
+<p align="center">
 <table border="0">
   <tr>
     <td>
@@ -270,7 +270,7 @@ class _ScrollPageState extends State<ScrollPage> {
 
 <br>
 
-### Case 1: by `Type`
+### Case 1: By `Type`
 
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.
@@ -300,7 +300,7 @@ class LocalePage extends StatelessWidget {
 
 <br>
 
-### Case 2: by `tag`
+### Case 2: By `tag`
 
 ```dart
 //* Step1: Declare the watched variable with `globalWatch`.
@@ -355,6 +355,18 @@ class LocalePage extends StatelessWidget {
 - **_`Subscriber`_** : The widget class that register to the host to **subscribe aspects**, being notified to rebuild when updating.
 - **_`Host`_** : The inheritedModel widget, to place at the top of the widget tree, to **dispatch aspects**.
 
+### Flow chart
+
+<p align="center">
+<div align="left">Initialization:</div>
+  <img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/Initialization.png">
+</p>
+<p align="center">
+<div align="left">Updating:</div>
+  <img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/Updating.png">
+</p>
+<br>
+
 ### Flutter Widget of the Week: InheritedModel explained
 
 InheritedModel provides an aspect parameter to its descendants to indicate which fields they care about to determine whether that widget needs to rebuild. InheritedModel can help you rebuild its descendants only when necessary.
@@ -371,6 +383,8 @@ alt="Flutter Widget of the Week: InheritedModel Explained" /></a></p>
 A widget subscribes with aspects and will rebuild whenever a model controller publishs any of those aspects.
 
 #### **Rx Variable**
+
+The watched variable in the Global Mode.
 
 A proxy object, by design pattern, proxy provides a surrogate or placeholder for another object to control access to it.
 Variables in the model can turn into a proxy object by denoting **_`.rx`_**
