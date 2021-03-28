@@ -343,9 +343,9 @@ class LocalePage extends StatelessWidget {
 ## Global Broadcast
 
 - `globalBroadcast()`, to broadcast to all the globalConsume widgets.
-- `globalConsumeAll(Widget Function() create, {Key? key})`, to create a widget which will be rebuild whenever any watched variables changes are made.
-- `globalFrameAspects`, a getter, to return the current updating aspects.
-- `globalAllAspects`, a getter, to return all the aspects that has been registered in the Global Mode.
+- `globalConsumeAll(Widget Function() create, {Key? key})`, to create a widget which will be rebuilt whenever any watched variables changes are made.
+- `globalFrameAspects`, a getter, to return the updated aspects of the Global Mode.
+- `globalAllAspects`, a getter, to return all the aspects that has been registered to the Global Mode.
 
 <br>
 <br>

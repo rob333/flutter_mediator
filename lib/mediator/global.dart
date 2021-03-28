@@ -75,18 +75,18 @@ SubscriberLite globalConsume(Widget Function() create, {Key? key}) {
   return SubscriberLite<Pub>(key: key, create: create);
 }
 
-/// Broadcast to all aspects of the global pub.
+/// Broadcast to all the globalConsume widgets.
 void globalBroadcast() => _globalPub.publish();
 
-/// Create a widget that will be rebuild whenever any Global Watched Variable
+/// Create a widget that will be rebuilt whenever any watched variables
 /// changes are made.
 Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
   final wrapFn = (BuildContext _, Pub __) => create();
   return Subscriber<Pub>(key: key, create: wrapFn);
 }
 
-/// Return the current updating aspects.
+/// Return the updated aspects of the `Global Mode`.
 HashSet<Object> get globalFrameAspects => _globalPub.frameAspects;
 
-/// Return all the aspects that has been registered in the `Global Mode`.
+/// Return all the aspects that has been registered to the `Global Mode`.
 HashSet<Object> get globalAllAspects => _globalPub.regAspects;

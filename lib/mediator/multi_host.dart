@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../mediator.dart';
 
+/// [MultiHost] helps to create multiple hosts at once.
 class MultiHost {
   static Widget create1<T1 extends Pub>(
     T1 t1, {
