@@ -25,7 +25,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.1.1"
+  flutter_mediator: "^2.1.2"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -337,6 +337,15 @@ class LocalePage extends StatelessWidget {
 - **When using `Type` to retrieve the watched variable, only the first one of the `Type` is returned.**
 
 > Or put the watched variables into a file and then import it.
+
+<br>
+
+## Global Broadcast
+
+- `globalBroadcast()`, to broadcast to all the globalConsume widgets.
+- `globalConsumeAll(Widget Function() create, {Key? key})`, to create a widget which will be rebuild whenever any watched variables changes are made.
+- `globalFrameAspects`, a getter, to return the current updating aspects.
+- `globalAllAspects`, a getter, to return all the aspects that has been registered in the Global Mode.
 
 <br>
 <br>
@@ -914,7 +923,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.1.1
+  flutter_mediator: ^2.1.2
 
 flutter:
   assets:

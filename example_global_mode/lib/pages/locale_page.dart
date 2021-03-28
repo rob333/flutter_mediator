@@ -37,6 +37,15 @@ class LocalePage extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             ),
           ),
+          globalConsumeAll(() {
+            final txt = globalFrameAspects.isEmpty
+                ? ''
+                : 'Updated: $globalFrameAspects';
+            return Text(
+              txt,
+              style: const TextStyle(fontSize: 16),
+            );
+          }),
           const SizedBox(height: 35),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,

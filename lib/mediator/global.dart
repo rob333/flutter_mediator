@@ -6,15 +6,15 @@ import 'pub.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
-//* The global model for monitoring global variables in the `Global Mode`.
+/// The global model for containing global variables of the `Global Mode`.
 final Pub _globalPub = Pub();
 Pub get globalPub => _globalPub;
 
-//* To memory the watched variables, then retrieve by `globalGet`.
+/// Memory the watched variables, retrieved by [globalGet].
 final _globalWatchedVar = HashMap<Object, Object>();
 
-//* To monitor the variable and return a watched variable,
-//* i.e. a proxy object of the Type of `Rx<T>`
+/// Create a watched variable from the variable [v],
+/// a proxy object of the Type of [Rx<T>]
 Rx<T> globalWatch<T>(T v, {Object? tag}) {
   final rx = Rx.withPub(v, _globalPub);
 
@@ -49,7 +49,7 @@ Rx<T> globalWatch<T>(T v, {Object? tag}) {
   return rx;
 }
 
-//* To retrieve the watched variable by tag or Type `T`
+/// Retrieve the watched variable by [tag] or `Type` of [T]
 Rx globalGet<T>({Object? tag}) {
   if (tag == null) {
     assert(() {
@@ -69,8 +69,24 @@ Rx globalGet<T>({Object? tag}) {
   return _globalWatchedVar[tag] as Rx;
 }
 
-//* A helper function to create a widget for the watched variable,
-//* to register the watched variable to the host to rebuild it when updating.
+/// A helper function to create a widget for the watched variable,
+/// and register it to the host to rebuild the widget when updating.
 SubscriberLite globalConsume(Widget Function() create, {Key? key}) {
   return SubscriberLite<Pub>(key: key, create: create);
 }
+
+/// Broadcast to all aspects of the global pub.
+void globalBroadcast() => _globalPub.publish();
+
+/// Create a widget that will be rebuild whenever any Global Watched Variable
+/// changes are made.
+Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
+  final wrapFn = (BuildContext _, Pub __) => create();
+  return Subscriber<Pub>(key: key, create: wrapFn);
+}
+
+/// Return the current updating aspects.
+HashSet<Object> get globalFrameAspects => _globalPub.frameAspects;
+
+/// Return all the aspects that has been registered in the `Global Mode`.
+HashSet<Object> get globalAllAspects => _globalPub.regAspects;
