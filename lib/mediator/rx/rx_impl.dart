@@ -4,9 +4,9 @@ import '../assert.dart';
 import '../global.dart';
 import '../pub.dart';
 
-//* A proxy object class, for variables to turn into a watched one.
+/// A proxy object class, for variables to turn into a watched one.
 class RxImpl<T> {
-  //* default constructor: add self to the static rx container
+  /// default constructor: add self to the static rx container
   /// and sholud use [setPub] to set the [Pub] when the model of [Pub] initialized.
   RxImpl(T initial) : _value = initial {
     // variables and constructor calling sequence:
@@ -17,7 +17,7 @@ class RxImpl<T> {
     staticRxContainer.add(this);
   }
 
-  //* constructor: with dedicated [Pub] parameter
+  /// constructor: with dedicated [Pub] parameter
   RxImpl.withPub(T initial, this.pub) : _value = initial;
 
   //* region member variables
@@ -40,7 +40,7 @@ class RxImpl<T> {
     staticRxContainer.clear();
   }
 
-  //* in case member variables initialized inside constructor, or member functions.
+  /// in case member variables initialized inside constructor, or member functions.
   static Pub? statePub;
   static void enableVarCollect(Pub pub) => statePub = pub;
   static void disableVarCollect() {
@@ -48,7 +48,7 @@ class RxImpl<T> {
     statePub = null;
   }
 
-  //* static aspects and the flag of if enabled
+  /// static aspects and the flag of if enabled
   static Iterable<Object>? stateWidgetAspects;
   static bool stateWidgetAspectsFlag = false;
 
@@ -87,14 +87,14 @@ class RxImpl<T> {
     return stateRxAutoAspects;
   }
 
-  // disable RxAutoAspectFlag And clear RxAutoAspects
+  /// disable RxAutoAspectFlag And clear RxAutoAspects
   static void disableAndClearRxAutoAspect() {
     stateRxAutoAspectFlag = false;
     stateRxAutoAspects.clear();
   }
   //! endregion
 
-  //* getter value
+  /// getter: Return the value of the underlying object.
   T get value {
     // if rx automatic aspect is enabled. (precede over state rx aspect)
     if (stateRxAutoAspectFlag == true) {
@@ -111,7 +111,7 @@ class RxImpl<T> {
     return _value;
   }
 
-  //* setter value
+  /// setter: Set the value of the underlying object.
   set value(T value) {
     if (_value != value) {
       _value = value;
@@ -121,7 +121,7 @@ class RxImpl<T> {
     }
   }
 
-  //* Notify the host to rebuild and then return the underlying object.
+  /// Notify the host to rebuild and then return the underlying object.
   /// Suitable for class type _value, like List, Map, Set, classes
   /// To inform the value to update.
   /// Like if the value type is a List, you can do `var.ob.add(1)` to notify the host to rebuild.
@@ -148,7 +148,7 @@ class RxImpl<T> {
     stateRxAutoAspects.addAll(_tag);
   }
 
-  //* A helper function to `touch()` itself first and then `globalConsume`.
+  /// A helper function to `touch()` itself first and then `globalConsume`.
   Widget consume(Widget Function() create, {Key? key}) {
     final wrapFn = () {
       touch();
@@ -245,7 +245,7 @@ class RxImpl<T> {
   String toString() => value.toString();
 }
 
-//* Rx class for `bool` Type.
+/// Rx class for `bool` Type.
 class RxBool extends RxImpl<bool> {
   RxBool([bool initial = false]) : super(initial);
 
@@ -259,7 +259,7 @@ class RxBool extends RxImpl<bool> {
   String toString() => _value.toString();
 }
 
-//* Rx class for `String` Type.
+/// Rx class for `String` Type.
 class RxString extends RxImpl<String> {
   RxString([String initial = '']) : super(initial);
 
@@ -267,7 +267,7 @@ class RxString extends RxImpl<String> {
   int codeUnitAt(int index) => _value.codeUnitAt(index);
 }
 
-//* Rx<T> class
+/// Rx<T> class
 class Rx<T> extends RxImpl<T> {
   /// Returns a `Rx` with `initial` as initial value.
   Rx(T initial) : super(initial);
@@ -276,26 +276,26 @@ class Rx<T> extends RxImpl<T> {
   Rx.withPub(T initial, Pub pub) : super.withPub(initial, pub);
 }
 
-//* Helper Extension:
-//* Helper for string type to Rx object.
+/// Helper Extension:
+/// Helper for string type to Rx object.
 extension RxStringExtension on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get rx => RxString(this);
 }
 
-//* Helper for bool type to Rx object.
+/// Helper for bool type to Rx object.
 extension RxBoolExtension on bool {
   /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get rx => RxBool(this);
 }
 
-//* Helper for all others type to Rx object.
+/// Helper for all others type to Rx object.
 extension RxExtension<T> on T {
   /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get rx => Rx<T>(this);
 }
 
-//* Encode a number into a string
+/// Encode a number into a string
 String numToString128(int value) {
   /// ascii code:
   /// 32: space /// 33: !  (first character except space)

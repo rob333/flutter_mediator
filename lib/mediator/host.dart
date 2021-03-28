@@ -6,7 +6,8 @@ import 'assert.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-//* Class `Host` handles the widget's registration.
+/// Class `Host` handles the registration of widget aspects.
+/// And dispatch aspects when updating.
 @immutable
 class Host<TModel extends Pub> extends StatefulWidget {
   const Host({
@@ -20,21 +21,21 @@ class Host<TModel extends Pub> extends StatefulWidget {
   final TModel _model;
   final Widget? child;
 
-  //* Map of the models section:
+  /// Map of the models section:
   /// Dependency injection of models, map of models
   static final stateModels = HashMap<Type, Pub>();
 
-  //* static: Get the model.
+  /// static: Get the model.
   static Model model<Model extends Pub>() {
     assert(ifStateModel<Model>(stateModels[Model]));
     return stateModels[Model] as Model;
   }
 
-  //* For MultiHost.create, to accmulate the child
+  /// For MultiHost.create, to accmulate the child
   static List<Widget>? stateChildColl;
 
-  //* register method, which is [listen = true], and add aspects to the [regAspects]
-  //* return the [TModel]
+  /// Register method, which is [listen = true], and add aspects to the [regAspects]
+  /// return the [TModel]
   static TModel register<TModel extends Pub>(
     BuildContext context, {
     Iterable<Object>? aspects,
@@ -78,7 +79,7 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   final _regAspects = HashSet<Object>(); // all aspects been registered
   final _frameAspects = HashSet<Object>(); // aspects to be updated
 
-  //* Add [aspects] to the registered aspects of the model
+  /// Add [aspects] to the registered aspects of the model
   TModel addRegAspects(Iterable<Object>? aspects) {
     if (aspects != null) {
       _regAspects.addAll(aspects);
@@ -86,7 +87,7 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
     return widget._model;
   }
 
-  //* When the aspects published, this state needs to setState to update the view.
+  /// When the aspects published, needs to setState to update the widget view.
   void _frameAspectListener([Object? aspects]) {
     setState(() {
       /// Add aspect into [_frameAspects]

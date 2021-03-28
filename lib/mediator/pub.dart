@@ -8,7 +8,7 @@ import 'host.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
 
-//* A base class for declaring Models
+/// A base class for Models
 class Pub {
   Pub() : publish = dummyCallback {
     assert(() {
@@ -17,7 +17,6 @@ class Pub {
       return true;
     }());
 
-    ///
     /// class initial steps
     /// 1. rx variables initial
     /// 2. model extends from Pub and initial
@@ -40,27 +39,24 @@ class Pub {
   @protected
   void init() {}
 
-  //* static: Get the model.
+  /// static: Get the model.
   static Model getModel<Model extends Pub>() {
     assert(ifStateModel<Model>(Host.stateModels[Model]));
     print('Deprecated Pub.getModel<Model>(): Please use Host.model<>();');
     return Host.stateModels[Model] as Model;
   }
 
-  //* static: Get the model, the same as getModel<Model>().
+  /// static: Get the model, the same as getModel<Model>().
   static Model model<Model extends Pub>() {
     assert(ifStateModel<Model>(Host.stateModels[Model]));
     print('Deprecated Pub.model<Model>(): Please use Host.model<>();');
     return Host.stateModels[Model] as Model;
   }
 
-  //! end section
-
-  //* publish aspect section:
-  /// Model may update variables before Host init state
+  /// Used before `Host` init state for models.
   static void dummyCallback([Object? aspects]) {}
 
-  /// The publish function, the setState of the host state.
+  /// The publish function, the setState function of the host state.
   PublishFn publish;
 
   /// For reference of regAspects of the host state.
@@ -82,19 +78,18 @@ class Pub {
     _frameAspects = frameAspects;
   }
 
-  /// Clear the callback and aspects information.
+  /// Clear the callback and aspects information of the model.
   void restoreCallback() {
     publish = dummyCallback;
     _regAspects = null;
     _frameAspects = null;
   }
-  //! end section
 
   //* subMap section:
   /// Map of subscriber create methods of the model.
   final _subMap = HashMap<Object, Object>();
 
-  //* static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
+  /// static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
   static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.sub'));
 
@@ -125,7 +120,7 @@ class Pub {
   /// Map of controller create methods of the model.
   final _conMap = HashMap<Object, Object>();
 
-  //* static: Create a `Controller<Model>` widget from the `conMap` by the [mapKey] of the `<Model>`.
+  /// static: Create a `Controller<Model>` widget from the `conMap` by the [mapKey] of the `<Model>`.
   static Controller<Model> controller<Model extends Pub>(Object mapKey,
       {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.controller'));

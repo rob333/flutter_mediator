@@ -5,7 +5,7 @@ import 'host.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-//* A widget class for the watched variables, to register them to the host.
+/// A widget class for the watched variables, to register them to the host.
 @immutable
 class Subscriber<Model extends Pub> extends StatelessWidget {
   const Subscriber({
@@ -60,7 +60,8 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
   }
 }
 
-//* A lite version of the Subscribe class, used specially for the Global Mode.
+/// A lite version of the Subscribe class,
+/// used specially for the Global Mode.
 @immutable
 class SubscriberLite<Model extends Pub> extends StatelessWidget {
   const SubscriberLite({
@@ -86,14 +87,14 @@ class SubscriberLite<Model extends Pub> extends StatelessWidget {
   }
 }
 
-//* Function of the Subscriber for rx automatic aspect
+/// Function of the Subscriber for rx automatic aspect
 Subscriber<Model> rxSub<Model extends Pub>(CreatorFn<Model> create,
     {Key? key}) {
   assert(shouldExists(create, 'rxSub: Create method should not be null.'));
   return Subscriber<Model>(key: key, create: create, rxAuto: true);
 }
 
-//* Extension for rx automatic aspect create method
+/// Extension for rx automatic aspect from create method
 extension RxAutoAspectExt on CreatorFn {
   Subscriber<T> rxSub<T extends Pub>({Key? key}) {
     return Subscriber<T>(key: key, create: this, rxAuto: true);
