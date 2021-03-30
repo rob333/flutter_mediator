@@ -4,6 +4,7 @@ import '../mediator.dart';
 
 /// [MultiHost] helps to create multiple hosts at once.
 class MultiHost {
+  /// [create1] helps to create 1 host at once.
   static Widget create1<T1 extends Pub>(
     T1 t1, {
     required Widget child,
@@ -15,6 +16,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create2] helps to create 2 hosts at once.
   static Widget create2<T1 extends Pub, T2 extends Pub>(
     T1 t1,
     T2 t2, {
@@ -28,6 +30,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create3] helps to create 3 hosts at once.
   static Widget create3<T1 extends Pub, T2 extends Pub, T3 extends Pub>(
     T1 t1,
     T2 t2,
@@ -43,6 +46,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create4] helps to create 4 hosts at once.
   static Widget
       create4<T1 extends Pub, T2 extends Pub, T3 extends Pub, T4 extends Pub>(
     T1 t1,
@@ -61,6 +65,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create5] helps to create 5 hosts at once.
   static Widget create5<T1 extends Pub, T2 extends Pub, T3 extends Pub,
       T4 extends Pub, T5 extends Pub>(
     T1 t1,
@@ -81,6 +86,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create6] helps to create 6 hosts at once.
   static Widget create6<T1 extends Pub, T2 extends Pub, T3 extends Pub,
       T4 extends Pub, T5 extends Pub, T6 extends Pub>(
     T1 t1,
@@ -103,6 +109,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create7] helps to create 7 hosts at once.
   static Widget create7<T1 extends Pub, T2 extends Pub, T3 extends Pub,
       T4 extends Pub, T5 extends Pub, T6 extends Pub, T7 extends Pub>(
     T1 t1,
@@ -127,6 +134,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create8] helps to create 8 hosts at once.
   static Widget create8<
       T1 extends Pub,
       T2 extends Pub,
@@ -160,6 +168,7 @@ class MultiHost {
     return child;
   }
 
+  /// [create9] helps to create 9 hosts at once.
   static Widget create9<
       T1 extends Pub,
       T2 extends Pub,
@@ -196,6 +205,8 @@ class MultiHost {
     return child;
   }
 
+  /// [create] : Generic form of the create function,
+  /// to create any number of hosts at once.
   static Widget create({
     List<Host>? hosts,
     required Widget child,

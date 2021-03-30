@@ -8,6 +8,8 @@ import 'subscriber.dart';
 
 /// The global model for containing global variables of the `Global Mode`.
 final Pub _globalPub = Pub();
+
+/// A getter, to return the global pub of the `Global Mode`.
 Pub get globalPub => _globalPub;
 
 /// Memory the watched variables, retrieved by [globalGet].
@@ -16,7 +18,7 @@ final _globalWatchedVar = HashMap<Object, Object>();
 /// Create a watched variable from the variable [v],
 /// a proxy object of the Type of [Rx<T>]
 Rx<T> globalWatch<T>(T v, {Object? tag}) {
-  final rx = Rx.withPub(v, _globalPub);
+  final rx = Rx.fullInitialize(v, _globalPub);
 
   //* Check if the variable [Type] or the [tag] already exists
   if (tag == null) {

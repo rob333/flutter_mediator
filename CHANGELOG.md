@@ -1,3 +1,7 @@
+## 2.1.2+1
+
+- Minor improvements.
+
 ## 2.1.2
 
 - Add Global Broadcast capabilities:

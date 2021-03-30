@@ -6,28 +6,40 @@ import '../pub.dart';
 
 /// A proxy object class, for variables to turn into a watched one.
 class RxImpl<T> {
-  /// default constructor: add self to the static rx container
-  /// and sholud use [setPub] to set the [Pub] when the model of [Pub] initialized.
-  RxImpl(T initial) : _value = initial {
-    // variables and constructor calling sequence:
-    // 1. Model inline variables ->
-    // 2. Pub inline variables ->
-    // 3. Pub constructor ->
-    // 4. Model constructor
+  /// Constructor: add self to the static rx container
+  /// and sholud use [setPub] to set the [Pub] when the model initialized.
+  RxImpl(this._value) {
+    // RxImpl(T initial) : _value = initial {
+    ///
+    /// variables and constructor calling sequence:
+    /// 1. Model inline variables ->
+    /// 2. Pub inline variables ->
+    /// 3. Pub constructor ->
+    /// 4. Model constructor
     staticRxContainer.add(this);
   }
 
-  /// constructor: with dedicated [Pub] parameter
-  RxImpl.withPub(T initial, this.pub) : _value = initial;
+  /// Constructor: With dedicated [Pub] parameter
+  RxImpl.withPub(this._value, this._pub);
+  // RxImpl.withPub(T initial, this.pub) : _value = initial;
+
+  /// Constructor: With dedicated [Pub] and [tag] parameter
+  /// if [tag] is null, then get an unique system tag for it.
+  RxImpl.fullInitialize(this._value, this._pub, {String? tag}) {
+    if (tag == null) {
+      _checkRxTag();
+    } else {
+      _tag.add(tag);
+    }
+  }
 
   //* region member variables
-  Pub? pub; // the pub attached to this rx variable
+  Pub? _pub; // the [Pub] attached to this rx variable
   final rxAspects = <Object>{}; // aspects attached to this rx variable
   bool _isNullBroadcast = false; // if this rx variable is broadcasting
 
   T _value; // the underlying value with template type T
   final _tag = <String>{};
-  //! endregion
 
   //* region static section
   static final List<RxImpl> staticRxContainer = [];
@@ -35,7 +47,7 @@ class RxImpl<T> {
   /// set observer for each rx variable
   static void setPub(Pub pub) {
     for (final element in staticRxContainer) {
-      element.pub = pub;
+      element._pub = pub;
     }
     staticRxContainer.clear();
   }
@@ -115,9 +127,10 @@ class RxImpl<T> {
   set value(T value) {
     if (_value != value) {
       _value = value;
-      if (pub != null) {
-        publishRxAspects();
-      }
+      assert(_pub != null);
+      // if (pub != null) {
+      publishRxAspects();
+      // }
     }
   }
 
@@ -133,19 +146,24 @@ class RxImpl<T> {
 
   /// Touch to activate rx automatic aspect management.
   void touch() {
+    _checkRxTag();
+    // add the _tag to rx automatic aspect list,
+    // for later getRxAutoAspects() to register to host
+    stateRxAutoAspects.addAll(_tag);
+  }
+
+  /// Get next system `tag` for this Rx objectg if the `_tag` is empty.
+  void _checkRxTag() {
     // if _tag is empty, this is the first time. (lazy _tag initialize)
     if (_tag.isEmpty) {
       final tag = nextRxTag();
       _tag.add(tag);
       // adds tag to registered aspects of the model
-      assert(pub != null);
-      pub!.regAspects.add(tag);
+      assert(_pub != null);
+      _pub!.regAspects.add(tag);
       // adds tag to rx aspects of self
       rxAspects.add(tag);
     }
-    // add the _tag to rx automatic aspect list,
-    // for later getRxAutoAspects() to register to host
-    stateRxAutoAspects.addAll(_tag);
   }
 
   /// A helper function to `touch()` itself first and then `globalConsume`.
@@ -214,17 +232,17 @@ class RxImpl<T> {
   /// copy info from another rx variable
   void copyInfo(RxImpl<T> other) {
     _tag.addAll(other._tag);
-    pub = other.pub;
+    _pub = other._pub;
     rxAspects.addAll(other.rxAspects);
   }
 
   /// publish rx aspects to host
   void publishRxAspects() {
-    assert(shouldExists(pub, 'Pub of RxImpl should not be null.'));
+    assert(shouldExists(_pub, 'Pub of RxImpl should not be null.'));
     if (_isNullBroadcast) {
-      return pub!.publish();
+      return _pub!.publish();
     } else if (rxAspects.isNotEmpty) {
-      return pub!.publish(rxAspects);
+      return _pub!.publish(rxAspects);
     }
   }
 
@@ -269,11 +287,16 @@ class RxString extends RxImpl<String> {
 
 /// Rx<T> class
 class Rx<T> extends RxImpl<T> {
-  /// Returns a `Rx` with `initial` as initial value.
+  /// Constructor: With `initial` as initial value.
   Rx(T initial) : super(initial);
 
-  /// Returns a `Rx` with [Pub] `pub` as the model.
+  /// Constructor: With [Pub] `pub` as the model.
   Rx.withPub(T initial, Pub pub) : super.withPub(initial, pub);
+
+  /// Constructor: With dedicated [Pub] and [tag] parameter
+  /// if [tag] is null, then get an unique system tag for it.
+  Rx.fullInitialize(T initial, Pub pub, {String? tag})
+      : super.fullInitialize(initial, pub, tag: tag);
 }
 
 /// Helper Extension:

@@ -3,7 +3,8 @@ import 'package:flutter_mediator/mediator.dart';
 
 void main() {
   test('test RxInt operator+', () {
-    var a = 1.rx..pub = Pub();
+    final pub = Pub();
+    var a = RxInt.withPub(1, pub);
 
     expect(a.value, 1);
     final b = a + 1;
@@ -20,7 +21,8 @@ void main() {
   });
 
   test('test RxInt operator-', () {
-    var a = 5.rx..pub = Pub();
+    final pub = Pub();
+    var a = RxInt.withPub(5, pub);
 
     expect(a.value, 5);
     final b = a - 1;
@@ -87,7 +89,8 @@ void main() {
     // ignore: unused_local_variable
     var cnt = 0;
     // ignore: unused_local_variable
-    var rxi = 0.rx..pub = Pub();
+    final pub = Pub();
+    var rxi = RxInt.withPub(0, pub);
 
     var i = 0;
     var mark = 0;

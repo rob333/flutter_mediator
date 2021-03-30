@@ -1,9 +1,14 @@
+import '../pub.dart';
 import 'rx_impl.dart';
 // part of 'rx_impl.dart';
 
 /// Base Rx class for all num Rx's.
 class _RxNumBase<T extends num> extends RxImpl<T> {
+  /// Constructor: With value to [initial]
   _RxNumBase(T initial) : super(initial);
+
+  /// Constructor: With dedicated [Pub] parameter
+  _RxNumBase.withPub(T initial, Pub? pub) : super.withPub(initial, pub);
 
   /// Multiplication operator.
   num operator *(num other) => value * other;
@@ -419,7 +424,11 @@ class RxDouble extends _RxNumBase<double> {
 }
 
 class RxInt extends _RxNumBase<int> {
+  /// Constructor: With initial value to 0
   RxInt([int initial = 0]) : super(initial);
+
+  /// Constructor: With dedicated [Pub] parameter
+  RxInt.withPub(int initial, Pub? pub) : super.withPub(initial, pub);
 
   /// Addition operator.
   /// dart doesn't have operator++
