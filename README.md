@@ -175,9 +175,7 @@ return SizedBox(
       //* to register the watched variable to the host to rebuild it when updating.
       //* `watchedVar.consume()` is a helper function to
       //* `touch()` itself first and then `globalConsume`.
-      locale.consume(() {
-        return Text('${'app.hello'.i18n(context)} ');
-      }),
+      locale.consume(() => Text('${'app.hello'.i18n(context)} ')),
       Text('$name, '),
 
       // ...
@@ -362,7 +360,7 @@ class LocalePage extends StatelessWidget {
 
 - **_`Pub`_** : The base class of implementing a model, to **publish aspects**.
 - **_`Subscriber`_** : The widget class that register to the host to **subscribe aspects**, being notified to rebuild when updating.
-- **_`Host`_** : The inheritedModel widget, to place at the top of the widget tree, to **dispatch aspects**.
+- **_`Host`_** : The InheritedModel widget, to place at the top of the widget tree, to **dispatch aspects**.
 
 ### Flow chart
 
@@ -485,12 +483,12 @@ Or, use the generic form.
 
 There are two ways to subscribe a widget:
 
-- rx automatic aspect: (_Recommend_)
+- **Rx Automatic Aspect**: (_Recommend_)
 
   - The package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
     <br /> `rxSub`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
 
-- specific aspect:
+- **With Specific Aspect**:
 
   - Subscribe an aspect:
     <br /> **_`aspect`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
@@ -589,7 +587,7 @@ These are code snippets, for example, for visual studio code to easy using the p
 <br /> To add these code snippets in visual studio code, press
 
 `control+shift+p => Preferences: Configure user snippets => dart.json`
-<br /> Then add the content of [vscode_snippets.json](https://github.com/rob333/flutter_mediator/blob/main/example/lib/vscode_snippets.json) to the `dart.json`.
+<br /> Then add the content of [vscode_snippets.json](https://github.com/rob333/flutter_mediator/blob/main/example/lib/vscode_snippets.json) into the `dart.json`.
 
 Now you can type these shortcuts for code templates to easy using the package:
 
@@ -761,9 +759,11 @@ Plus with,
 
 ### Summing up
 
-- Subscriber: Use at least one rx variable or `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
+- **Subscriber**: Use at least one rx variable or `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
 
-- Controller: To publish the aspect, rx variables will do that automatically, or publish the aspect manually. To custom a rx class see [Detail: 21 implement custom rx class](#21-implement-custom-rx-class).
+- **Controller**: To publish the aspect, it's automatically done with the rx variables, or publish the aspect manually.
+
+> To custom a rx class please see [Detail: 21 implement a custom rx class](#21-implement-a-custom-rx-class).
 
 <br /> Happy Coding!
 
@@ -1218,7 +1218,7 @@ You can find the example in the [example](https://github.com/rob333/flutter_medi
 18. [**Subscribe all aspects** - specific aspect](#18-subscribe-all-aspects) - Subscriber
 19. [**Subscribe with enum aspects** - specific aspect](#19-subscribe-with-enum-aspects) - Subscriber
 20. [**Manage rx aspects - Chain react aspects**](#20-manage-rx-aspects---Chain-react-aspects) - advance topic
-21. [**Implement custom rx class**](#21-implement-custom-rx-class) - advance topic
+21. [**Implement a custom rx class**](#21-implement-a-custom-rx-class) - advance topic
 22. [**Aspect type**](#22-aspect-type) - terminology
 
 <br />
@@ -1836,7 +1836,7 @@ Then whenever **_`str1`_** of class **_`<MyModel>`_** updates, the widget rebuil
 
 <br />
 
-## 21. Implement custom rx class
+## 21. Implement a custom rx class
 
 If you need to write your own rx class, see [custom_rx_class.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/custom_rx_class.dart) for example.
 <br /> Or you can manipulate the underlying `value` directly. For example,
@@ -1854,7 +1854,7 @@ void updateSomeClass() {
 }
 ```
 
-> By the extension method, package can turn anything into a rx variable.
+> By using the `extension`, every object can turn into a rx variable.
 
 &emsp; [back to detail][]
 
