@@ -87,17 +87,25 @@ class SubscriberLite<Model extends Pub> extends StatelessWidget {
   }
 }
 
-/// Function of the Subscriber for rx automatic aspect
+/// A function for the Subscriber to create a `rx automatic aspect` widget.
 Subscriber<Model> rxSub<Model extends Pub>(CreatorFn<Model> create,
     {Key? key}) {
   assert(shouldExists(create, 'rxSub: Create method should not be null.'));
   return Subscriber<Model>(key: key, create: create, rxAuto: true);
 }
 
-/// Extension for rx automatic aspect from create method
+/// Extension for rx automatic aspect from create method [CreatorFn].
 extension RxAutoAspectExt on CreatorFn {
   Subscriber<T> rxSub<T extends Pub>({Key? key}) {
     return Subscriber<T>(key: key, create: this, rxAuto: true);
+  }
+}
+
+/// Extension for aspect from any type of [T].
+extension ModelAspectExtT<T> on T {
+  Subscriber<Model> subModel<Model extends Pub>(CreatorFn<Model> create,
+      {Key? key}) {
+    return Subscriber<Model>(key: key, aspects: this, create: create);
   }
 }
 

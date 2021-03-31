@@ -26,11 +26,8 @@ class RxImpl<T> {
   /// Constructor: With dedicated [Pub] and [tag] parameter
   /// if [tag] is null, then get an unique system tag for it.
   RxImpl.fullInitialize(this._value, this._pub, {String? tag}) {
-    if (tag == null) {
-      _checkRxTag();
-    } else {
-      _tag.add(tag);
-    }
+    tag ??= nextRxTag();
+    _addRxTag(tag);
   }
 
   //* region member variables
@@ -146,24 +143,25 @@ class RxImpl<T> {
 
   /// Touch to activate rx automatic aspect management.
   void touch() {
-    _checkRxTag();
-    // add the _tag to rx automatic aspect list,
+    // if _tag is empty, this is the first time. (lazy _tag initialization)
+    if (_tag.isEmpty) {
+      final tag = nextRxTag();
+      _addRxTag(tag);
+    }
+    // add the _tag to the rx automatic aspect list,
     // for later getRxAutoAspects() to register to host
     stateRxAutoAspects.addAll(_tag);
   }
 
-  /// Get next system `tag` for this Rx objectg if the `_tag` is empty.
-  void _checkRxTag() {
-    // if _tag is empty, this is the first time. (lazy _tag initialize)
-    if (_tag.isEmpty) {
-      final tag = nextRxTag();
-      _tag.add(tag);
-      // adds tag to registered aspects of the model
-      assert(_pub != null);
-      _pub!.regAspects.add(tag);
-      // adds tag to rx aspects of self
-      rxAspects.add(tag);
-    }
+  /// Add an unique system `tag` to the Rx object.
+  void _addRxTag(String tag) {
+    // Add the tag to the Rx tag list.
+    _tag.add(tag);
+    // Add the tag to the registered aspects of the model.
+    assert(_pub != null);
+    _pub!.regAspects.add(tag);
+    // Add the tag to the Rx Aspects list.
+    rxAspects.add(tag);
   }
 
   /// A helper function to `touch()` itself first and then `globalConsume`.
@@ -175,7 +173,7 @@ class RxImpl<T> {
     return globalConsume(wrapFn, key: key);
   }
 
-  /// add [aspects] to the rx aspects.
+  /// Add [aspects] to the Rx aspects.
   /// param aspects:
   ///   Iterable: add [aspects] to the rx aspects
   ///   null: broadcast to the model
@@ -193,7 +191,7 @@ class RxImpl<T> {
     }
   }
 
-  /// remove [aspects] from the rx aspects.
+  /// Remove [aspects] from the Rx aspects.
   /// param aspects:
   ///   Iterable: remove [aspects] from the rx aspects
   ///   null: don't broadcast to the model
@@ -211,7 +209,7 @@ class RxImpl<T> {
     }
   }
 
-  /// retain [aspects] in the rx aspects.
+  /// Retain [aspects] in the Rx aspects.
   /// param aspects:
   ///   Iterable: retain rx aspects in the [aspects]
   ///     RxImpl: retain rx aspects in the [(aspects as RxImpl).rxAspects]
@@ -226,17 +224,17 @@ class RxImpl<T> {
     }
   }
 
-  /// clear all rx aspects
+  /// Clear all the Rx aspects.
   void clearRxAspects() => rxAspects.clear();
 
-  /// copy info from another rx variable
+  /// Copy info from another Rx variable.
   void copyInfo(RxImpl<T> other) {
     _tag.addAll(other._tag);
     _pub = other._pub;
     rxAspects.addAll(other.rxAspects);
   }
 
-  /// publish rx aspects to host
+  /// Publish Rx aspects to the host.
   void publishRxAspects() {
     assert(shouldExists(_pub, 'Pub of RxImpl should not be null.'));
     if (_isNullBroadcast) {
@@ -246,7 +244,7 @@ class RxImpl<T> {
     }
   }
 
-  /// Alias of `publishRxAspects()`
+  /// Alias of `publishRxAspects()`.
   void notify() => publishRxAspects();
 
   /// RxVar(newVal): set new value to the Rx underlying value.

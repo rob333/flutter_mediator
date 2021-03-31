@@ -1,3 +1,7 @@
+## 2.1.2+2
+
+- Improve documents.
+
 ## 2.1.2+1
 
 - Minor improvements.
