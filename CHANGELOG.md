@@ -1,3 +1,7 @@
+## 2.1.2+3
+
+- Change the type of the system tag to `int`.
+
 ## 2.1.2+2
 
 - Improve documents.

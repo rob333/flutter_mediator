@@ -49,6 +49,6 @@ bool ifStateModel<Model extends Pub>(Pub? model) {
 //* rx_impl: Assert tag not to exceed maximum.
 bool ifTagMaximum(int rxTagCounter) {
   if (rxTagCounter == 0x7fffffffffffffff)
-    throw FlutterError('RxTagger exceeded maximum.');
+    throw FlutterError('Rx Tag exceeded maximum.');
   return true;
 }

@@ -25,8 +25,8 @@ class RxImpl<T> {
 
   /// Constructor: With dedicated [Pub] and [tag] parameter
   /// if [tag] is null, then get an unique system tag for it.
-  RxImpl.fullInitialize(this._value, this._pub, {String? tag}) {
-    tag ??= nextRxTag();
+  RxImpl.fullInitialize(this._value, this._pub, {int? tag}) {
+    tag ??= _nextRxTag();
     _addRxTag(tag);
   }
 
@@ -36,7 +36,7 @@ class RxImpl<T> {
   bool _isNullBroadcast = false; // if this rx variable is broadcasting
 
   T _value; // the underlying value with template type T
-  final _tag = <String>{};
+  final _tag = <int>{}; // As of v2.1.2+3 changes to `int` tag.
 
   //* region static section
   static final List<RxImpl> staticRxContainer = [];
@@ -76,11 +76,10 @@ class RxImpl<T> {
 
   //* region rx auto aspect static section
   static int rxTagCounter = 0;
-  static String nextRxTag() {
+  static int _nextRxTag() {
     assert(ifTagMaximum(rxTagCounter));
-    // print('nextRxTag: #$rxTagCounter');
-    // return '#${rxTagCounter++}';
-    return numToString128(rxTagCounter++);
+    // return numToString128(rxTagCounter++); // As of v2.1.2+3 changes to `int` tag.
+    return rxTagCounter++;
   }
 
   static bool stateRxAutoAspectFlag = false;
@@ -145,7 +144,7 @@ class RxImpl<T> {
   void touch() {
     // if _tag is empty, this is the first time. (lazy _tag initialization)
     if (_tag.isEmpty) {
-      final tag = nextRxTag();
+      final tag = _nextRxTag();
       _addRxTag(tag);
     }
     // add the _tag to the rx automatic aspect list,
@@ -154,7 +153,7 @@ class RxImpl<T> {
   }
 
   /// Add an unique system `tag` to the Rx object.
-  void _addRxTag(String tag) {
+  void _addRxTag(int tag) {
     // Add the tag to the Rx tag list.
     _tag.add(tag);
     // Add the tag to the registered aspects of the model.
@@ -293,7 +292,7 @@ class Rx<T> extends RxImpl<T> {
 
   /// Constructor: With dedicated [Pub] and [tag] parameter
   /// if [tag] is null, then get an unique system tag for it.
-  Rx.fullInitialize(T initial, Pub pub, {String? tag})
+  Rx.fullInitialize(T initial, Pub pub, {int? tag})
       : super.fullInitialize(initial, pub, tag: tag);
 }
 
