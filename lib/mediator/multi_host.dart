@@ -214,19 +214,19 @@ class MultiHost {
     // assert(hosts.isNotEmpty); // v2.1.0 add globalPub
     // ignore: unnecessary_null_comparison
     assert(globalPub != null || (hosts != null && hosts.isNotEmpty));
-    assert(Host.stateChildColl == null);
+    assert(Host.stateChildColl.isEmpty);
 
-    Host.stateChildColl = [child];
+    Host.stateChildColl.add(child);
     // if (globalPub != null) {
     final globalPubHost = Host(model: globalPub);
     if (hosts == null || hosts.isEmpty) {
       return globalPubHost;
     }
-    Host.stateChildColl!.add(globalPubHost);
+    Host.stateChildColl.add(globalPubHost);
     // }
 
     for (var i = hosts.length - 1; i >= 1; i--) {
-      Host.stateChildColl!.add(hosts[i]);
+      Host.stateChildColl.add(hosts[i]);
     }
     return hosts[0];
   }

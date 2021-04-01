@@ -1,6 +1,7 @@
 # Flutter Mediator
 
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
+[![MIT License](https://img.shields.io/github/license/rob333/flutter_mediator.svg)](https://github.com/rob333/flutter_mediator/blob/main/LICENSE)
 
 Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
@@ -1883,7 +1884,7 @@ Please see the [Changelog](https://github.com/rob333/flutter_mediator/blob/main/
 
 ## License
 
-Flutter mediator is distributed by [MIT license](https://github.com/rob333/flutter_mediator/blob/main/LICENSE).
+Flutter Mediator is distributed under the MIT License. See [LICENSE](https://github.com/rob333/flutter_mediator/blob/main/LICENSE) for more information.
 
 [allsubscriber@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160
 [cardpage@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L118

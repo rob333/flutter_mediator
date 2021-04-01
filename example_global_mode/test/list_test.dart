@@ -1,22 +1,39 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mediator/mediator.dart';
 
-//* Step1: import the var.dart
-import '../var.dart' show data, ListItem;
-import '../widgets/widget_extension.dart';
+// ignore: avoid_relative_lib_imports
+import '../lib/var.dart' show data, ListItem;
 
-class ListPage extends StatelessWidget {
-  const ListPage({Key? key}) : super(key: key);
+void main() {
+  runApp(
+    ListTestApp(),
+  );
+}
+
+class ListTestApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiHost.create(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Mediator List Test',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: const HomeWidget(),
+      ),
+    );
+  }
+}
+
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Global Mode:List Demo')),
-      //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
-      //* to register the watched variable to the host to rebuild it when updating.
       body: globalConsume(
         () => GridView.builder(
           itemCount: data.value.length,
@@ -32,7 +49,7 @@ class ListPage extends StatelessWidget {
               child: GridTile(
                 footer: Text(item.units.toString()),
                 child: Text(item.item),
-              ).padding(const EdgeInsets.all(7.0)),
+              ),
             );
           },
         ),

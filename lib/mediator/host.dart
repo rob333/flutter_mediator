@@ -32,7 +32,7 @@ class Host<TModel extends Pub> extends StatefulWidget {
   }
 
   /// For MultiHost.create, to accmulate the child
-  static List<Widget>? stateChildColl;
+  static List<Widget> stateChildColl = <Widget>[];
 
   /// Register method, which is [listen = true], and add aspects to the [regAspects]
   /// return the [TModel]
@@ -64,9 +64,9 @@ class Host<TModel extends Pub> extends StatefulWidget {
   _HostState createState() {
     var widget = child;
     if (child == null) {
-      assert(stateChildColl!.isNotEmpty,
+      assert(stateChildColl.isNotEmpty,
           'Host.stateChildColl is empty, make sure to use MultiHost.create()');
-      widget = stateChildColl!.removeLast();
+      widget = stateChildColl.removeLast();
     }
     return _HostState<TModel>(widget!);
   }
