@@ -147,9 +147,9 @@ class RxImpl<T> {
       final tag = _nextRxTag();
       _addRxTag(tag);
     }
-    // add the _tag to the rx automatic aspect list,
-    // for later getRxAutoAspects() to register to host
-    stateRxAutoAspects.addAll(_tag);
+    // add the [rxAspects] to the rx automatic aspect list,
+    // for later getRxAutoAspects() to register to [Host]
+    stateRxAutoAspects.addAll(rxAspects);
   }
 
   /// Add an unique system `tag` to the Rx object.

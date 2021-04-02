@@ -10,12 +10,12 @@ stateDiagram-v2
     Pub --> Host : belong to
     Subscriber --> Host : register aspects
     note left of Subscriber
-    A Widget, to rebuild
+    A Widget, to be rebuilt
     when watched variables updates.
     end note
     note right of Host
-    The InheritedModel,
-     to dispatch aspects.
+    The InheritedModel, to rebuild
+    descendant widgets with aspects.
     end note
 ```
 
