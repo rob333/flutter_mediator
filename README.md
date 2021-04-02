@@ -26,7 +26,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.1.2"
+  flutter_mediator: "^2.1.3"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -253,7 +253,9 @@ class _ScrollPageState extends State<ScrollPage> {
 
 - At step 2, `MultiHost` works with both `Global Mode` and `Model Mode`.
 
-- At step 3, create a widget and register it to the host to rebuild it when updating, use `globalConsume(() => widget)` if the value of the watched variable is used inside the widget; or use `watchedVar.consume(() => widget)` to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
+- At step 3, create a widget and register it to the host to rebuild it when updating,
+  <br>use `globalConsume(() => widget)` if the value of the watched variable is used inside the widget;
+  <br>or use `watchedVar.consume(() => widget)` to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
 
 - At step 4, update to the `watchedVar.value` will notify the host to rebuild; or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
 
@@ -924,7 +926,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.1.2
+  flutter_mediator: ^2.1.3
 
 flutter:
   assets:
