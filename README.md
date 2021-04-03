@@ -1,12 +1,16 @@
 # Flutter Mediator
 
+Flutter Mediator:
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
 [![MIT License](https://img.shields.io/github/license/rob333/flutter_mediator.svg)](https://github.com/rob333/flutter_mediator/blob/main/LICENSE)
+&nbsp; &nbsp;
+Lite:
+[![Pub](https://img.shields.io/pub/v/flutter_mediator_lite.svg)](https://pub.dev/packages/flutter_mediator_lite)
+[![MIT License](https://img.shields.io/github/license/rob333/flutter_mediator_lite.svg)](https://github.com/rob333/flutter_mediator_lite/blob/main/LICENSE)
 
-Flutter mediator is a state management package base on the InheritedModel with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
+Flutter mediator is a state management package base on the [InheritedModel][] with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
-<p align="center">
-<table border="0">
+<table border="0" align="center">
   <tr>
     <td>
       <img src="https://raw.githubusercontent.com/rob333/flutter_mediator/main/doc/images/main.gif">
@@ -16,7 +20,6 @@ Flutter mediator is a state management package base on the InheritedModel with a
     </td>
   </tr>
 </table>
-</p>
 
 <br>
 
@@ -351,6 +354,7 @@ class LocalePage extends StatelessWidget {
 <br>
 <br>
 
+[inheritedmodel]: https://api.flutter.dev/flutter/widgets/InheritedModel-class.html
 [example_global_mode/lib/main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart
 [example_global_mode/lib/var.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/var.dart
 [example_global_mode/lib/pages/list_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart
