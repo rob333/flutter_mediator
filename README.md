@@ -3,10 +3,12 @@
 Flutter Mediator:
 [![Pub](https://img.shields.io/pub/v/flutter_mediator.svg)](https://pub.dev/packages/flutter_mediator)
 [![MIT License](https://img.shields.io/github/license/rob333/flutter_mediator.svg)](https://github.com/rob333/flutter_mediator/blob/main/LICENSE)
+[![Build](https://github.com/rob333/flutter_mediator/workflows/Build/badge.svg)](https://github.com/rob333/flutter_mediator/actions)
 &nbsp; &nbsp;
 Lite:
 [![Pub](https://img.shields.io/pub/v/flutter_mediator_lite.svg)](https://pub.dev/packages/flutter_mediator_lite)
 [![MIT License](https://img.shields.io/github/license/rob333/flutter_mediator_lite.svg)](https://github.com/rob333/flutter_mediator_lite/blob/main/LICENSE)
+[![Build](https://github.com/rob333/flutter_mediator_lite/workflows/Build/badge.svg)](https://github.com/rob333/flutter_mediator_lite/actions)
 
 Flutter mediator is a state management package base on the [InheritedModel][] with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
@@ -44,7 +46,7 @@ For help getting started with Flutter, view the online [documentation](https://f
 
 # Global Mode
 
-As of v2.1.0 provides a `Global Mode` to support a super easy way to use the state management.
+As of v2.1.0 introduces a `Global Mode` to support a super easy way to use the state management.
 
 ## Steps:
 
@@ -352,9 +354,14 @@ class LocalePage extends StatelessWidget {
 - `globalAllAspects`, a getter, to return all the aspects that has been registered to the Global Mode.
 
 <br>
+
+> There is a [lite version of the Flutter Mediator][lite] which provides only the `Global Mode`.
+
+<br>
 <br>
 
 [inheritedmodel]: https://api.flutter.dev/flutter/widgets/InheritedModel-class.html
+[lite]: https://github.com/rob333/flutter_mediator_lite/
 [example_global_mode/lib/main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart
 [example_global_mode/lib/var.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/var.dart
 [example_global_mode/lib/pages/list_page.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/pages/list_page.dart
