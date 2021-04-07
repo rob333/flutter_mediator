@@ -1,3 +1,9 @@
+## 2.1.4
+
+- Fix problems when working with shared_preferences.
+  - Fix `WidgetsFlutterBinding.ensureInitialized()` issue.
+- Update example to use shared_preferences with locale.
+
 ## 2.1.3
 
 - Minor improvements.
