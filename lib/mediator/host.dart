@@ -76,8 +76,8 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   _HostState(this.child);
   final Widget child;
 
-  final _regAspects = HashSet<Object>(); // all aspects been registered
-  final _frameAspects = HashSet<Object>(); // aspects to be updated
+  late HashSet<Object> _regAspects; // all aspects been registered
+  late HashSet<Object> _frameAspects; // aspects to be updated
 
   /// Add [aspects] to the registered aspects of the model
   TModel addRegAspects(Iterable<Object>? aspects) {
@@ -114,7 +114,11 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   @override
   void initState() {
     super.initState();
-    widget._model.setCallback(_frameAspectListener, _regAspects, _frameAspects);
+
+    final model = widget._model;
+    model.setCallback(_frameAspectListener);
+    _frameAspects = model.frameAspects;
+    _regAspects = model.regAspects;
   }
 
   @override

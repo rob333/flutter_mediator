@@ -56,33 +56,33 @@ class Pub {
   /// Used before `Host` init state for models.
   static void dummyCallback([Object? aspects]) {}
 
-  /// The publish function, the setState function of the host state.
+  /// The publish function, the setState function of the [Host] state.
   PublishFn publish;
 
-  /// For reference of regAspects of the host state.
-  HashSet<Object>? _regAspects;
-  HashSet<Object> get regAspects => _regAspects!;
+  /// All aspects that has been registered to this [Pub].
+  final _regAspects = HashSet<Object>();
 
-  /// For reference of frameAspects of the host state.
-  HashSet<Object>? _frameAspects;
-  HashSet<Object> get frameAspects => _frameAspects!;
+  /// Aspects to be updated in this frame time of this [Pub].
+  final _frameAspects = HashSet<Object>();
+
+  /// Return all the aspects that has been registered to this [Pub].
+  HashSet<Object> get regAspects => _regAspects;
+
+  /// Return the updated aspects of this [Pub].
+  HashSet<Object> get frameAspects => _frameAspects;
 
   /// Set callback and aspects information of the model.
-  void setCallback(
-    PublishFn publish,
-    HashSet<Object> regAspects,
-    HashSet<Object> frameAspects,
-  ) {
+  void setCallback(PublishFn publish) {
     this.publish = publish;
-    _regAspects = regAspects;
-    _frameAspects = frameAspects;
+    _regAspects.clear();
+    _frameAspects.clear();
   }
 
   /// Clear the callback and aspects information of the model.
   void restoreCallback() {
     publish = dummyCallback;
-    _regAspects = null;
-    _frameAspects = null;
+    _regAspects.clear();
+    _frameAspects.clear();
   }
 
   //* subMap section:
