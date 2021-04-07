@@ -46,9 +46,9 @@ class Host<TModel extends Pub> extends StatefulWidget {
           InheritedMediator.inheritFrom<InheritedMediator<TModel>>(context);
       assert(ifInheritedModel<TModel>(inheritedModel));
 
-      final state = inheritedModel!._state;
+      final model = inheritedModel!._model;
       // aspects is null, no need to `addRegAspects`
-      return state.widget._model;
+      return model;
     }
 
     final inheritedModel =
@@ -56,8 +56,13 @@ class Host<TModel extends Pub> extends StatefulWidget {
             aspect: aspects);
     assert(ifInheritedModel<TModel>(inheritedModel));
 
-    final state = inheritedModel!._state;
-    return state.addRegAspects(aspects);
+    final model = inheritedModel!._model;
+
+    /// Add [aspects] to the registered aspects of the model
+    // if (aspects != null) {
+    model.regAspects.addAll(aspects);
+    // }
+    return model;
   }
 
   @override
@@ -78,14 +83,6 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
 
   late HashSet<Object> _regAspects; // all aspects been registered
   late HashSet<Object> _frameAspects; // aspects to be updated
-
-  /// Add [aspects] to the registered aspects of the model
-  TModel addRegAspects(Iterable<Object>? aspects) {
-    if (aspects != null) {
-      _regAspects.addAll(aspects);
-    }
-    return widget._model;
-  }
 
   /// When the aspects published, needs to setState to update the widget view.
   void _frameAspectListener([Object? aspects]) {
@@ -130,7 +127,7 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   @override
   Widget build(BuildContext context) {
     return InheritedMediator<TModel>(
-      state: this,
+      model: widget._model,
       frameAspect: _frameAspects,
       child: child,
     );
@@ -146,14 +143,17 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   /// only be rebuilt if a specific aspect of the model changes.
   const InheritedMediator({
     Key? key,
-    required _HostState<TModel> state,
+    // required _HostState<TModel> state,
+    required TModel model,
     required HashSet<Object> frameAspect,
     required Widget child,
-  })   : _state = state,
+  })   : //_state = state,
+        _model = model,
         _frameAspects = frameAspect,
         super(key: key, child: child);
 
-  final _HostState<TModel> _state;
+  // final _HostState<TModel> _state;
+  final TModel _model;
   final HashSet<Object> _frameAspects;
 
   // _HostState<TModel> get state => _state;

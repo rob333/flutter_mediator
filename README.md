@@ -31,7 +31,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.1.4"
+  flutter_mediator: "^2.1.5"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -991,7 +991,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.1.4
+  flutter_mediator: ^2.1.5
 
 flutter:
   assets:
