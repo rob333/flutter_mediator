@@ -1,3 +1,8 @@
+## 2.1.5+1
+
+- Update documents.
+  - Add a branch version, Flutter Mediator Persistence, which provides build in persistence.
+
 ## 2.1.5
 
 - Minor improvement.

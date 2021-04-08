@@ -257,7 +257,7 @@ class RxImpl<T> {
 
   //* override method
   @override
-  String toString() => value.toString();
+  String toString() => _value.toString();
 }
 
 /// Rx class for `bool` Type.
