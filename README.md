@@ -3,7 +3,7 @@
 <table cellpadding="0" border="0">
   <tr>
     <td align="right">
-    <a href=""https://github.com/rob333/flutter_mediator>Flutter Mediator</a>
+    <a href="https://github.com/rob333/flutter_mediator">Flutter Mediator</a>
     </td>
     <td>
     <a href="https://pub.dev/packages/flutter_mediator"><img src="https://img.shields.io/pub/v/flutter_mediator.svg" alt="pub.dev"></a>
@@ -189,11 +189,15 @@ final touchCount = globalWatch(0);
 Step 2:
 
 ```dart
-void main() {
+Future<void> main() async {
+  //* Initialize the persistent watched variables
+  //* whose value is stored by the SharedPreferences.
+  await initVars();
+
   runApp(
-    //* Step2: Create the host with `MultiHost.create`
+    //* Step2: Create the host with `globalHost`
     //* at the top of the widget tree.
-    MultiHost.create(
+    globalHost(
       child: MyApp(),
     ),
   );
