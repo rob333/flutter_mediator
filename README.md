@@ -1,9 +1,9 @@
-# Flutter Mediator <!-- omit in toc -->
+# Flutter Mediator
 
 <table cellpadding="0" border="0">
   <tr>
     <td align="right">
-    Flutter Mediator
+    <a href=""https://github.com/rob333/flutter_mediator>Flutter Mediator</a>
     </td>
     <td>
     <a href="https://pub.dev/packages/flutter_mediator"><img src="https://img.shields.io/pub/v/flutter_mediator.svg" alt="pub.dev"></a>
@@ -20,7 +20,7 @@
   </tr>
   <tr>
     <td align="right">
-    Lite
+    <a href="https://github.com/rob333/flutter_mediator_lite">Lite</a>
     </td>
     <td>
     <a href="https://pub.dev/packages/flutter_mediator_lite"><img src="https://img.shields.io/pub/v/flutter_mediator_lite.svg" alt="pub.dev"></a>
@@ -37,7 +37,7 @@
   </tr>
   <tr>
     <td align="right">
-    Persistence
+    <a href="https://github.com/rob333/flutter_mediator_persistence">Persistence</a>
     </td>
     <td>
     <a href="https://pub.dev/packages/flutter_mediator_persistence"><img src="https://img.shields.io/pub/v/flutter_mediator_persistence.svg" alt="pub.dev"></a>
