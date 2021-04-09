@@ -1,4 +1,4 @@
-# Flutter Mediator
+# Flutter Mediator <!-- omit in toc -->
 
 <table cellpadding="0" border="0">
   <tr>
@@ -90,6 +90,53 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
 </table>
 
 <br>
+<hr>
+
+## Table of Contents
+
+- [Global Mode](#global-mode)
+  - [Steps](#steps)
+    - [Case 1: Int](#case-1-int)
+    - [Case 2: List](#case-2-list)
+    - [Case 3: Locale setting with Persistence by SharedPreferences](#case-3-locale-setting-with-persistence-by-sharedpreferences)
+    - [Case 4: Scrolling effect](#case-4-scrolling-effect)
+  - [Recap](#recap)
+  - [Global Get](#global-get)
+    - [Case 1: By `Type`](#case-1-by-type)
+    - [Case 2: By `tag`](#case-2-by-tag)
+  - [Global Broadcast](#global-broadcast)
+  - [Versions](#versions)
+  - [Example: Logins to a REST server](#example-logins-to-a-rest-server)
+- [Model Mode](#model-mode)
+  - [Three main classes: **_`Pub`, `Subscriber`, `Host`_**](#three-main-classes-pub-subscriber-host)
+  - [Flow chart](#flow-chart)
+  - [Flutter Widget of the Week: InheritedModel explained](#flutter-widget-of-the-week-inheritedmodel-explained)
+  - [Key contepts](#key-contepts)
+    - [**Subscribe and Publish**](#subscribe-and-publish)
+    - [**Rx Variable**](#rx-variable)
+    - [**Widget Aspects**](#widget-aspects)
+    - [**Rx Related Widget**](#rx-related-widget)
+    - [**Rx Automatic Aspect**](#rx-automatic-aspect)
+    - [**View Map**](#view-map)
+  - [Getting Started Quick Steps](#getting-started-quick-steps)
+    - [1. **_Model:_**](#1-model)
+    - [2. **_Host:_**](#2-host)
+    - [3. **_View: Subscribe widgets_**](#3-view-subscribe-widgets)
+    - [4. **_Controller:_**](#4-controller)
+  - [Access the underlying value of rx variables](#access-the-underlying-value-of-rx-variables)
+  - [Visual Studio Code snippets](#visual-studio-code-snippets)
+  - [View Map - one step further of dependency injection](#view-map---one-step-further-of-dependency-injection)
+    - [Original View](#original-view)
+    - [After using the View Map](#after-using-the-view-map)
+    - [Here's how to use View Map.](#heres-how-to-use-view-map)
+    - [Summing up](#summing-up)
+  - [Use Case - explain how the package works](#use-case---explain-how-the-package-works)
+    - [Case 1: use rx automatic aspect](#case-1-use-rx-automatic-aspect)
+    - [Case 2: with specific aspect](#case-2-with-specific-aspect)
+    - [Case 3: manual publish aspect](#case-3-manual-publish-aspect)
+  - [Use Case - i18n with View Map](#use-case---i18n-with-view-map)
+
+<hr>
 
 ## Setting up
 
@@ -108,13 +155,13 @@ import 'package:flutter_mediator/mediator.dart';
 
 For help getting started with Flutter, view the online [documentation](https://flutter.dev/docs).
 
-<br />
+&emsp; [Table of Contents]
 
 # Global Mode
 
 As of v2.1.0 introduces a `Global Mode` to support a super easy way to use the state management.
 
-## Steps:
+## Steps
 
 1. Declare the watched variable with `globalWatch`.
    <br>**Suggest to put the watched variables into a file [var.dart][example_global_mode/lib/var.dart] and then import it.**
@@ -124,6 +171,8 @@ As of v2.1.0 introduces a `Global Mode` to support a super easy way to use the s
 3. Create a widget with `globalConsume` or `watchedVar.consume` to register the watched variable to the host to rebuild it when updating.
 
 4. Make an update to the watched variable, by `watchedVar.value` or `watchedVar.ob.updateMethod(...)`.
+
+&emsp; [Table of Contents]
 
 ### Case 1: Int
 
@@ -183,7 +232,7 @@ FloatingActionButton(
 ),
 ```
 
-<br>
+&emsp; [Table of Contents]
 
 ### Case 2: List
 
@@ -223,9 +272,13 @@ void updateListItem() {
 }
 ```
 
-<br>
+&emsp; [Table of Contents]
 
-### Case 3: Locale setting and Persistence with SharedPreferences
+### Case 3: Locale setting with Persistence by SharedPreferences
+
+> Or use [Flutter Mediator Persistence][persistence] for built in persistence support.
+> <br>
+> Please see [Flutter Mediator Persistence: use case 3][persistence_use_case3] for details.
 
 [example_global_mode/lib/pages/locale_page.dart][]
 
@@ -235,14 +288,14 @@ Step 1-1: [var.dart][example_global_mode/lib/var.dart]
 //* Declare a global scope SharedPreferences.
 late SharedPreferences prefs;
 
-//* Step1B: Declare the persistence watched variable with `late Rx<Type>`
+//* Step1B: Declare the persistent watched variable with `late Rx<Type>`
 //* And then import it in the file.
 const DefaultLocale = 'en';
 late Rx<String> locale; // local_page.dart
 
-/// Initialize the persistence watched variables
+/// Initialize the persistent watched variables
 /// whose value is stored by the SharedPreferences.
-Future<void>? initVars() async {
+Future<void> initVars() async {
   // To make sure SharedPreferences works.
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -255,7 +308,7 @@ Step 1-2: [main.dart][example_global_mode/lib/main.dart]
 
 ```dart
 Future<void> main() async {
-  //* Step1-2: initialize the persistence watched variables
+  //* Step1-2: initialize the persistent watched variables
   //* whose value is stored by the SharedPreferences.
   await initVars();
 
@@ -268,7 +321,7 @@ Future<void> main() async {
 Step 1-3: [main.dart][example_global_mode/lib/main.dart]
 
 ```dart
-//* Initial the locale with the persistence value.
+//* Initialize the locale with the persistent value.
 localizationsDelegates: [
   FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
@@ -277,6 +330,7 @@ localizationsDelegates: [
       // ...
     ),
     // ...
+  ),
 ],
 ```
 
@@ -312,7 +366,7 @@ Future<void> changeLocale(BuildContext context, String countryCode) async {
 }
 ```
 
-<br>
+&emsp; [Table of Contents]
 
 ### Case 4: Scrolling effect
 
@@ -361,7 +415,7 @@ class _ScrollPageState extends State<ScrollPage> {
   }
 ```
 
-<br>
+&emsp; [Table of Contents]
 
 ## Recap
 
@@ -375,7 +429,7 @@ class _ScrollPageState extends State<ScrollPage> {
 
 - At step 4, update to the `watchedVar.value` will notify the host to rebuild; or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
 
-<br>
+&emsp; [Table of Contents]
 
 ## Global Get
 
@@ -384,6 +438,8 @@ class _ScrollPageState extends State<ScrollPage> {
 - With `globalWatch(variable)`, the watched variable will be retrieved by the `Type` of the variable, i.e. retrieve by `globalGet<Type>()`.
 
 - With `globalWatch(variable, tag: object)`, the watched variable will be retrieved by the tag, i.e. retrieve by `globalGet(tag: object)`.
+
+&emsp; [Table of Contents]
 
 <br>
 
@@ -415,7 +471,7 @@ class LocalePage extends StatelessWidget {
       // ...
 ```
 
-<br>
+&emsp; [Table of Contents]
 
 ### Case 2: By `tag`
 
@@ -455,7 +511,7 @@ class LocalePage extends StatelessWidget {
 
 > Or put the watched variables into a file and then import it.
 
-<br>
+&emsp; [Table of Contents]
 
 ## Global Broadcast
 
@@ -464,15 +520,15 @@ class LocalePage extends StatelessWidget {
 - `globalFrameAspects`, a getter, to return the updated aspects of the Global Mode.
 - `globalAllAspects`, a getter, to return all the aspects that has been registered to the Global Mode.
 
-<br>
+&emsp; [Table of Contents]
 
-## Versions:
+## Versions
 
 - [Flutter Mediator][flutter_mediator]: Global Mode + Model Mode.
 - [Lite][]: Global Mode only.
-- [Persistence][]: Lite + Build in persistence.
+- [Persistence][]: Lite + built in persistence.
 
-<br>
+&emsp; [Table of Contents]
 
 ## Example: Logins to a REST server
 
@@ -480,12 +536,15 @@ A boilerplate example that logins to a REST server with i18n, theming, persisten
 
 Please see the [login to a REST server example][loginrestexample] for details.
 
-<br>
+&emsp; [Table of Contents]
+
 <br>
 
+[table of contents]: #table-of-contents
 [flutter_mediator]: https://github.com/rob333/flutter_mediator/
 [lite]: https://github.com/rob333/flutter_mediator_lite/
 [persistence]: https://github.com/rob333/flutter_mediator_persistence/
+[persistence_use_case3]: https://github.com/rob333/flutter_mediator_persistence#case-3-locale-setting-with-built-in-persistence
 [inheritedmodel]: https://api.flutter.dev/flutter/widgets/InheritedModel-class.html
 [example_global_mode/lib/main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/main.dart
 [example_global_mode/lib/var.dart]: https://github.com/rob333/flutter_mediator/blob/main/example_global_mode/lib/var.dart
@@ -523,6 +582,8 @@ InheritedModel provides an aspect parameter to its descendants to indicate which
 " target="_blank"><img src="https://img.youtube.com/vi/ml5uefGgkaA/0.jpg" 
 alt="Flutter Widget of the Week: InheritedModel Explained" /></a></p>
 
+&emsp; [Table of Contents]
+
 ## Key contepts
 
 #### **Subscribe and Publish**
@@ -554,18 +615,18 @@ By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate
 
 View map consists of two maps of create methods, `Subscriber` and `Controller`, that build upon **_rx automatic aspect_** and try to go one step further to make the UI view cleaner.
 
-<br />
+&emsp; [Table of Contents]
 
 ## Getting Started Quick Steps
 
-### **_Host_**, **_Model_**, **_View_**, **_Controller_**:
+**_Host_**, **_Model_**, **_View_**, **_Controller_**:
 
 ### 1. **_Model:_**
 
 &emsp; 1-1. Implement the model by extending from **_`Pub`_**
-<br />
+<br>
 &emsp; 1-2. Use **_`.rx`_** to turn the model variable into a rx variable which will automatically rebuild related widgets when updating.
-<br />
+<br>
 &emsp; 1-3. Implement the controller method of that variable.
 
 &emsp; For example,
@@ -592,8 +653,8 @@ class MyModel extends Pub {
 ### 2. **_Host:_**
 
 Register the models to the **_`Host`_**, and place it at the top level of the widget tree.
-<br />**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
-<br /> For example, register `2` models, **_`MyModel`_** and **_`ListModel`_**, to the host.
+<br>**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
+<br> For example, register `2` models, **_`MyModel`_** and **_`ListModel`_**, to the host.
 
 ```dart
 void main() {
@@ -626,19 +687,19 @@ There are two ways to subscribe a widget:
 - **Rx Automatic Aspect**: (_Recommend_)
 
   - The package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
-    <br /> `rxSub`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+    <br> `rxSub`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
 
 - **With Specific Aspect**:
 
   - Subscribe an aspect:
-    <br /> **_`aspect`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+    <br> **_`aspect`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
   - Subscribe multiple aspects: (Place aspects in a list)
-    <br /> **_`[a1, a2]`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+    <br> **_`[a1, a2]`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
   - Broadcast to all aspects of the model: (Subscribe with `null` aspect to broadcast)
-    <br /> **_`null`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
+    <br> **_`null`_**`.subModel`**_`<Model>`_**`((context, model) {/*`**_`create method`_** `*/})`
 
 Place that `Subscriber` in the widget tree then any rx variables used inside the create method will automatically rebuild related widgets when updating. _(triggered by getter and setter)_
-<br />
+<br>
 
 For example, subscribes a widget with model class **_`<MyModel>`_**
 
@@ -657,7 +718,7 @@ rxSub<MyModel>((context, model) => Text('Int1 is ${model.int1}'))
 <!-- same as detail: Touch the rx variable -->
 
 - Case 3: When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
-  <br /> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+  <br> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
 
 ```dart
 rxSub<MyModel>((context, model) {
@@ -670,7 +731,7 @@ rxSub<MyModel>((context, model) {
 ### 4. **_Controller:_**
 
 Place the controller in the widget tree.
-<br /> For example, to get the model class **_`<MyModel>`_** and execute its controller method within a `ElevatedButton`.
+<br> For example, to get the model class **_`<MyModel>`_** and execute its controller method within a `ElevatedButton`.
 
 ```dart
 Controller<MyModel>(
@@ -694,18 +755,18 @@ Widget int1Controller() {
 }
 ```
 
-### 5. **_Works automatically!_**
+### **_Works automatically!_**
 
 Then whenever the rx variable updates, the related widgets will rebuild automatically!
 
-<br />
+&emsp; [Table of Contents]
 
 <!-- same as detail: Access the underlying value of rx variables -->
 
 ## Access the underlying value of rx variables
 
 Sometimes, an operation of a rx variable can not be done, then you need to do that with the underlying value by denoting **`.value`** .
-<br /> For example,
+<br> For example,
 
 ```dart
 /// my_model.dart
@@ -719,15 +780,15 @@ void updateInt1() {
 }
 ```
 
-<br />
+&emsp; [Table of Contents]
 
 ## Visual Studio Code snippets
 
 These are code snippets, for example, for visual studio code to easy using the package.
-<br /> To add these code snippets in visual studio code, press
+<br> To add these code snippets in visual studio code, press
 
 `control+shift+p => Preferences: Configure user snippets => dart.json`
-<br /> Then add the content of [vscode_snippets.json](https://github.com/rob333/flutter_mediator/blob/main/example/lib/vscode_snippets.json) into the `dart.json`.
+<br> Then add the content of [vscode_snippets.json](https://github.com/rob333/flutter_mediator/blob/main/example/lib/vscode_snippets.json) into the `dart.json`.
 
 Now you can type these shortcuts for code templates to easy using the package:
 
@@ -750,7 +811,7 @@ Now you can type these shortcuts for code templates to easy using the package:
 - `submodel` - Create a Flutter Mediator Subscriber with Aspect.
 - `rxsub` - Create a Flutter Mediator Subscriber with RX Automatic Aspect.
 
-<br />
+&emsp; [Table of Contents]
 
 ## View Map - one step further of dependency injection
 
@@ -877,9 +938,7 @@ Isn't it cleaner.
       ),
 ```
 
-#### Done.
-
-<br />
+<br>
 
 **Now you just need to use these shortcuts, or commands, to do state management.**
 
@@ -895,7 +954,7 @@ Plus with,
 - `rxVar.touch()` - Used when the create method doesn't have to display the value of that rx variable, then you `touch()` that rx variable to activate rx automatic aspect.
 - `getmodel` - Get the model. (Note that `context` is not needed to get the model.)
 
-<br />
+&emsp; [Table of Contents]
 
 ### Summing up
 
@@ -905,9 +964,7 @@ Plus with,
 
 > To custom a rx class please see [Detail: 21 implement a custom rx class](#21-implement-a-custom-rx-class).
 
-<br /> Happy Coding!
-
-<br />
+&emsp; [Table of Contents]
 
 ## Use Case - explain how the package works
 
@@ -986,6 +1043,8 @@ Widget mainPage() {
 }
 ```
 
+&emsp; [Table of Contents]
+
 #### Case 2: with specific aspect
 
 Specific an aspect, for example, `'star'`, then implement the `Subscriber` and `Controller` functions for that aspect, and place them in the widget tree.
@@ -1017,6 +1076,8 @@ Widget mainPage() {
   );
 }
 ```
+
+&emsp; [Table of Contents]
 
 #### Case 3: manual publish aspect
 
@@ -1050,7 +1111,7 @@ Widget mainPage() {
 }
 ```
 
-<br />
+&emsp; [Table of Contents]
 
 ## Use Case - i18n with View Map
 
@@ -1071,7 +1132,7 @@ flutter:
 ```
 
 2. Create the i18n folder `asserts/flutter_i18n` and edit the locale files, [see folder](https://github.com/rob333/flutter_mediator/tree/main/example/assets/flutter_i18n).
-   <br /> For example, an [`en.json`](https://github.com/rob333/flutter_mediator/blob/main/example/assets/flutter_i18n/en.json) locale file.
+   <br> For example, an [`en.json`](https://github.com/rob333/flutter_mediator/blob/main/example/assets/flutter_i18n/en.json) locale file.
 
 ```json
 {
@@ -1097,7 +1158,7 @@ extension StringI18n on String {
 ```
 
 5. Add the `locale` variable and make it a rx variable along with the `changeLocale` function, then add create methods to the `Setting` model. (in the `init()` method)
-   <br /> Add the `SettingEnum` to represent the map keys of the view map.
+   <br> Add the `SettingEnum` to represent the map keys of the view map.
 
 ```dart
 /// setting_model.dart
@@ -1138,7 +1199,7 @@ class Setting extends Pub {
 ```
 
 6. Setup `main.dart`.
-   <br /> Import files, add `Setting` model to the host, i18n stuff and set `home` to `infoPage()`.
+   <br> Import files, add `Setting` model to the host, i18n stuff and set `home` to `infoPage()`.
 
 ```dart
 /// main.dart
@@ -1324,19 +1385,17 @@ final names = [
 
 8. Work completed. Now you get an app with i18n support.
 
-&emsp; &emsp;
+&emsp; [Table of Contents]
 
 ## Example
 
-You can find the example in the [example](https://github.com/rob333/flutter_mediator/tree/main/example/lib) folder.
+You can find the example in the [example/lib](https://github.com/rob333/flutter_mediator/tree/main/example/lib) folder.
 
-<br />
+<br>
 
-**These steps can help you in most situations. The following details explain the package one step further, you can skip it.**
+> **These steps can help you in most situations. The following details explain the package one step further, you can skip it.**
 
-## Detail
-
-<!-- These details explains the package one step further, you can skip this section. -->
+# Details
 
 1.  [**Single model**](#1-single-model) - host
 2.  [**Multiple models**](#2-multiple-models) - host
@@ -1361,7 +1420,7 @@ You can find the example in the [example](https://github.com/rob333/flutter_medi
 21. [**Implement a custom rx class**](#21-implement-a-custom-rx-class) - advance topic
 22. [**Aspect type**](#22-aspect-type) - terminology
 
-<br />
+<br>
 
 ## 1. Single model
 
@@ -1379,14 +1438,14 @@ void main() {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 2. Multiple models
 
 Register multiple models to the Host, and place it at the top level of the widget tree.
-<br />**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
+<br>**`MultiHost.create1`** to **`MultiHost.create9`** are provided by the package, use it with the number of the amount of models.
 
 ```dart
 /// main.dart
@@ -1413,9 +1472,9 @@ Or, use the generic form.
     ),
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 3. Automatically rebuild the widget whenever the rx variable updates
 
@@ -1452,13 +1511,13 @@ class ListModel extends Pub {
 ```
 
 rx variable of type `int`, `double`, `num`, `string`, `bool`, `list`, `map`, `set` are provided by the package.
-<br /> See also _[RxInt class](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_num.dart#L421)_,
+<br> See also _[RxInt class](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_num.dart#L421)_,
 [RxList class](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_iterable/rx_list.dart#L5),
 [RxList.add](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/rx/rx_iterable/rx_list.dart#L35)
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 <!-- same as Access the underlying value of rx variables -->
 
@@ -1488,9 +1547,9 @@ void updateData() {
 
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 5. Update the rx variables by call style
 
@@ -1508,9 +1567,9 @@ set foo(int value) {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 6. Manually publish an aspect
 
@@ -1525,9 +1584,9 @@ void manuallyPublishDemo(int value) {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 7. Manually publish multiple aspects
 
@@ -1544,9 +1603,9 @@ void increaseBoth() {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 8. Broadcast to the model
 
@@ -1560,9 +1619,9 @@ void increaseAll() {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 9. Publish aspects of a rx variable
 
@@ -1577,9 +1636,9 @@ void publishInt1Related() {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 10. Future publish
 
@@ -1594,14 +1653,14 @@ Future<void> futureInt1() async {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 11. Rebuild only once a frame
 
 By using `Set` to accumulate aspects, the same aspect only causes the related widget to rebuild only once.
-<br /> The following code only causes the related widget to rebuild once.
+<br> The following code only causes the related widget to rebuild once.
 
 ```dart
 /// my_model.dart
@@ -1614,9 +1673,9 @@ void incermentInt1() async {
 }
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 12. Writing model extension
 
@@ -1660,9 +1719,9 @@ extension ListModelExtT<T> on T {
 
 > _See also [extension.dart](https://github.com/rob333/flutter_mediator/blob/main/lib/mediator/extension.dart) for package extension._
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 13. Get the model
 
@@ -1689,14 +1748,14 @@ final model = Host.model<MyModel>();
 final aspects = model.frameAspects;
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 14. Subscribe with rx automatic aspect
 
 By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate aspects for the widget automatically, **provides there is at least one rx variable used or use `model.rxVar.touch()` inside the create method** to activate rx automatic aspect. (and so this widget is a rx related widget)
-<br /> For example,
+<br> For example,
 
 ```dart
 /// my_model.dart
@@ -1710,16 +1769,16 @@ rxSub<MyModel>((context, model) {
 }),
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 <!-- same as Case 3: Use rx automatic aspect -->
 
 ## 15. Touch the rx variable
 
 When using rx automatic aspect, but the create method does not use any rx variables, then you can use `model.rxVar.touch()` which the widget depends on that `rxVar` to activate rx automatic aspect.
-<br /> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
+<br> For example, when changing locale, the create method doesn't have to display the value of the locale, then you can use `model.locale.touch()` to activate rx automatic aspect.
 
 ```dart
 rxSub<MyModel>((context, model) {
@@ -1729,9 +1788,9 @@ rxSub<MyModel>((context, model) {
 })
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 16. Subscribe an aspect
 
@@ -1760,9 +1819,9 @@ Subscriber<MyModel>(
 'int1'.subMyModel((context, model) => Text('Int1 is ${model.int1}')),
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 17. Subscribe multiple aspects
 
@@ -1807,14 +1866,14 @@ Subscriber<MyModel>(
 ),
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 18. Subscribe all aspects
 
 Provide no aspects parameter, or use null as aspect to subscribe to all aspects of the model.
-<br /> See also [allSubscriber@main.dart][].
+<br> See also [allSubscriber@main.dart][].
 
 - simple form
 
@@ -1855,14 +1914,14 @@ null.subMyModel( // null aspects means broadcasting to the model
 
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 19. Subscribe with enum aspects
 
 You can use `enum` as aspect.
-<br /> For example, first, define the enum.
+<br> For example, first, define the enum.
 
 ```dart
 /// list_model.dart
@@ -1872,7 +1931,7 @@ enum ListEnum {
 ```
 
 Then everything is the same as `String` aspect, just to replace the `String` with `enum`.
-<br /> See also [cardPage@main.dart][].
+<br> See also [cardPage@main.dart][].
 
 - simple form
 
@@ -1900,16 +1959,16 @@ ListEnum.ListUpdate.subMyModel((context, model) {
 }),
 ```
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 20. Manage rx aspects - Chain react aspects
 
 ### **Chain react aspects:**
 
 Supposed you need to rebuild a widget whenever a model variable is updated, but it has nothing to do with the variable. Then you can use chain react aspects.
-<br /> For example, to rebuild a widget whenever **_`str1`_** of class **_`<MyModel>`_** is updated, and chained by the aspect **`'chainStr1'`**.
+<br> For example, to rebuild a widget whenever **_`str1`_** of class **_`<MyModel>`_** is updated, and chained by the aspect **`'chainStr1'`**.
 
 ```dart
 /// my_model.dart
@@ -1972,14 +2031,14 @@ Then whenever **_`str1`_** of class **_`<MyModel>`_** updates, the widget rebuil
 
   - `rxVar.clearRxAspects()`
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 21. Implement a custom rx class
 
 If you need to write your own rx class, see [custom_rx_class.dart](https://github.com/rob333/flutter_mediator/blob/main/example/lib/custom_rx_class.dart) for example.
-<br /> Or you can manipulate the underlying `value` directly. For example,
+<br> Or you can manipulate the underlying `value` directly. For example,
 
 ```dart
 /// someclass.dart
@@ -1996,9 +2055,9 @@ void updateSomeClass() {
 
 > By using the `extension`, every object can turn into a rx variable.
 
-&emsp; [back to detail][]
+&emsp; [back to details][]
 
-<br />
+<br>
 
 ## 22. Aspect type
 
@@ -2009,9 +2068,9 @@ void updateSomeClass() {
 - Registered aspects - Aspects of the model that has been registered.
 - RX aspects - Aspects that have been attached to the rx variable. The rx variable will rebuild the related widgets whenever updated.
 
-&emsp; [back to detail]
+&emsp; [back to details]
 
-<br />
+<br>
 
 <!-- &nbsp;&nbsp; -->
 
@@ -2019,7 +2078,7 @@ void updateSomeClass() {
 
 Please see the [Changelog](https://github.com/rob333/flutter_mediator/blob/main/CHANGELOG.md) page.
 
-<br />
+<br>
 
 ## License
 
@@ -2027,4 +2086,4 @@ Flutter Mediator is distributed under the MIT License. See [LICENSE](https://git
 
 [allsubscriber@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L160
 [cardpage@main.dart]: https://github.com/rob333/flutter_mediator/blob/main/example/lib/main.dart#L118
-[back to detail]: #detail
+[back to details]: #details
