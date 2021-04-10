@@ -243,7 +243,7 @@ class RxImpl<T> {
     }
   }
 
-  /// Alias of `publishRxAspects()`.
+  /// Synonym of `publishRxAspects()`.
   void notify() => publishRxAspects();
 
   /// RxVar(newVal): set new value to the Rx underlying value.

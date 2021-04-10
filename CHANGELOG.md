@@ -74,7 +74,7 @@
 
 - RxImpl class:
 
-  - Add `rxImpl.notify()`, alias of `rxImpl.publishRxAspects()`, to notify the host to rebuild.
+  - Add `rxImpl.notify()`, synonym of `rxImpl.publishRxAspects()`, to notify the host to rebuild.
 
   - Add `rxImpl.ob` (a getter), to `notify()` the host to rebuild and then return the underlying object.
 
