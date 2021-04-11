@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'list_test.dart';
-// import 'locale_test.dart';
 import 'touch_cnt.dart';
 // import 'package:example_global_mode/main.dart';
 

@@ -13,10 +13,12 @@ class Setting extends Pub {
 
   //* controller function
   Future<void> changeLocale(BuildContext context, String countryCode) async {
-    final loc = Locale(countryCode);
-    await FlutterI18n.refresh(context, loc);
-    locale.value = countryCode;
-    // `locale` is a rx variable which will rebuild related widgets when updating.
+    if (countryCode != locale.value) {
+      final loc = Locale(countryCode);
+      await FlutterI18n.refresh(context, loc);
+      locale.value = countryCode;
+      // `locale` is a rx variable which will rebuild related widgets when updating.
+    }
   }
 
   //* View Map:
