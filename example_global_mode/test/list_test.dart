@@ -18,7 +18,7 @@ void main() {
 class ListTestApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiHost.create(
+    return globalHost(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Mediator List Test',

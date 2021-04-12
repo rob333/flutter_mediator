@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
 
+import 'multi_host.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 import 'subscriber.dart';
@@ -12,7 +13,7 @@ final Pub _globalPub = Pub();
 /// A getter, to return the global pub of the `Global Mode`.
 Pub get globalPub => _globalPub;
 
-/// Memory the watched variables, retrieved by [globalGet].
+/// Memory the watched variables, retrieved by `globalGet`.
 final _globalWatchedVar = HashMap<Object, Object>();
 
 /// Create a watched variable from the variable [v],
@@ -71,24 +72,39 @@ Rx globalGet<T>({Object? tag}) {
   return _globalWatchedVar[tag] as Rx;
 }
 
-/// A helper function to create a widget for the watched variable,
-/// and register it to the host to rebuild the widget when updating.
+/// Create a comsume widget for the watched variable
+/// whose **value is used inside the widget**, and register it
+/// to the host to rebuild it when updating the watched variable.
+///
+/// If the value of the watched variable is not used inside the widget,
+/// then use `watchedVar.consume` to create the consume widget to notify
+/// the host to rebuild when updating.
 SubscriberLite globalConsume(Widget Function() create, {Key? key}) {
   return SubscriberLite<Pub>(key: key, create: create);
 }
 
-/// Broadcast to all the globalConsume widgets.
+/// Broadcast to all the consume widgets.
 void globalBroadcast() => _globalPub.publish();
 
-/// Create a widget that will be rebuilt whenever any watched variables
-/// changes are made.
+/// Create a consume widget that will be rebuilt whenever
+/// any watched variables changes are made.
 Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
   final wrapFn = (BuildContext _, Pub __) => create();
   return Subscriber<Pub>(key: key, create: wrapFn);
 }
 
-/// Return the updated aspects of the `Global Mode`.
-HashSet<Object> get globalFrameAspects => _globalPub.frameAspects;
+/// Create a [InheritedModel] widget to listen to the watched variables
+/// and rebuild related consume widgets when updating the watched variable.
+///
+/// Place at the top of the widget tree.
+Widget globalHost({
+  required Widget child,
+}) {
+  return MultiHost.create(child: child);
+}
 
 /// Return all the aspects that has been registered to the `Global Mode`.
 HashSet<Object> get globalAllAspects => _globalPub.regAspects;
+
+/// Return the updated aspects of the `Global Mode`.
+HashSet<Object> get globalFrameAspects => _globalPub.frameAspects;

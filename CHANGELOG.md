@@ -1,3 +1,8 @@
+## 2.1.6
+
+- Improve documents.
+- Add `globalHost` for compatibility with lite and persistence version.
+
 ## 2.1.5+3
 
 - Update documents.

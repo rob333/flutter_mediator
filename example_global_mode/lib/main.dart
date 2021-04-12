@@ -13,14 +13,15 @@ import 'widgets/bottom_navigation_controller.dart';
 import 'widgets/widget_extension.dart';
 
 Future<void> main() async {
-  //* Step1: initialize the persistent watched variables
+  //* Initialize the persistent watched variables
   //* whose value is stored by the SharedPreferences.
   await initVars();
 
   runApp(
     //* Step2: Create the host with `MultiHost.create`
     //* at the top of the widget tree.
-    MultiHost.create(
+    globalHost(
+      // or MultiHost.create(
       child: MyApp(),
     ),
   );
@@ -106,8 +107,9 @@ class IntPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text('You have pushed the button this many times:'),
-          //* Step3: Create a widget with `globalConsume` or `watchedVar.consume`
-          //* to register the watched variable to the host to rebuild it when updating.
+          //* Step3: Create a consume widget with
+          //* `globalConsume` or `watchedVar.consume` to register the
+          //* watched variable to the host to rebuild it when updating.
           globalConsume(
             () => Text(
               '${touchCount.value}',
