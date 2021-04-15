@@ -5,9 +5,19 @@ import 'host.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-/// A widget class for the watched variables, to register them to the host.
+/// The consume widget class
 @immutable
 class Subscriber<Model extends Pub> extends StatelessWidget {
+  /// Create a consume widget.
+  ///
+  /// [aspects] : register the aspects with the consume widget. This widget
+  /// will rebuild whenever any aspect in the [aspects] is notified.
+  ///
+  /// [rxAuto] : if enable automatic aspect management, i.e. any watched
+  /// variable value used inside the [create] function will rebuild the
+  /// consume widget when updating the value of the watched variable.
+  ///
+  /// [create] : create a child widget of this consume widget.
   const Subscriber({
     Key? key,
     this.aspects,
@@ -60,11 +70,20 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
   }
 }
 
+/// The consume widget class with automatic aspect management.
+///
 /// A lite version of the Subscribe class,
-/// used specially for the Global Mode.
+/// used specially for Global Mode.
 @immutable
-class SubscriberLite<Model extends Pub> extends StatelessWidget {
-  const SubscriberLite({
+class SubscriberAuto<Model extends Pub> extends StatelessWidget {
+  /// Create a consume widget.
+  ///
+  /// Register to the host to rebuild when any of the watched variable value
+  /// used inside this widget is updating; or use `watchedVar.consume` to
+  /// `touch()` the watched variable first.
+  ///
+  /// [create] : create a child widget of this consume widget.
+  const SubscriberAuto({
     Key? key,
     required this.create,
   }) : super(key: key);
