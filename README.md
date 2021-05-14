@@ -1682,7 +1682,7 @@ Future<void> futureInt1() async {
 
 ## 11. Rebuild only once a frame
 
-By using `Set` to accumulate aspects, the same aspect only causes the related widget to rebuild only once.
+By using `Set` to accumulate aspects, the same aspect only causes the related widget to rebuild once.
 <br> The following code only causes the related widget to rebuild once.
 
 ```dart

@@ -6,8 +6,8 @@ import 'assert.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-/// Class `Host` handles the registration of widget aspects.
-/// And dispatch aspects when updating.
+/// Class [Host] handles the registration of consume widget with [aspects],
+/// and rebuild consume widgets with aspects when updating.
 @immutable
 class Host<TModel extends Pub> extends StatefulWidget {
   const Host({
@@ -34,8 +34,9 @@ class Host<TModel extends Pub> extends StatefulWidget {
   /// For MultiHost.create, to accmulate the child
   static List<Widget> stateChildColl = <Widget>[];
 
-  /// Register method, which is [listen = true], and add aspects to the [regAspects]
-  /// return the [TModel]
+  /// Register the consume widget [context] to the [Host] with [aspects],
+  /// and add these [aspects] to [regAspects].
+  /// Return the [TModel]
   static TModel register<TModel extends Pub>(
     BuildContext context, {
     Iterable<Object>? aspects,
@@ -84,7 +85,15 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   late HashSet<Object> _regAspects; // all aspects been registered
   late HashSet<Object> _frameAspects; // aspects to be updated
 
-  /// When the aspects published, needs to setState to update the widget view.
+  /// To `setState()` of the [Host] when any aspect publishs,
+  /// to rebuild the descendant widgets by [aspects].
+  ///
+  /// [aspects] could be:
+  ///
+  ///     null: broadcast to all the consume widget of this host
+  ///     Iterable<Object>: all the aspects in the iterable
+  ///     Rx variable: the aspects related with the Rx variableg
+  ///     aspect: a single aspect
   void _frameAspectListener([Object? aspects]) {
     setState(() {
       /// Add aspect into [_frameAspects]
@@ -134,9 +143,9 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   }
 }
 
-/// The [InheritedModel] subclass that is rebuilt by [_HostState].
-/// The type parameter `TModel` is the type of the model.
-/// The aspect type is always  `Object`.
+/// An [InheritedModel] subclass that is rebuilt by [_HostState].
+/// `TModel` is the type of the model.
+/// Aspect type always is `Object`.
 class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   /// Creates an inherited widget that supports dependencies qualified by
   /// "aspects", i.e. a descendant widget can indicate that it should
@@ -147,7 +156,7 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
     required TModel model,
     required HashSet<Object> frameAspect,
     required Widget child,
-  })   : //_state = state,
+  })  : //_state = state,
         _model = model,
         _frameAspects = frameAspect,
         super(key: key, child: child);
@@ -249,9 +258,9 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   }
 }
 
-/// An [Element] that uses a [InheritedMediator] as its configuration.
-/// The type parameter `TModel` is the model type.
-/// Aspect type is always `Object`.
+/// An [Element] that uses an [InheritedMediator] as its configuration.
+/// `TModel` is the type of the model.
+/// Aspect type always is `Object`.
 class InheritedMediatorElement<TModel extends Pub> extends InheritedElement {
   /// Creates an element that uses the given widget as its configuration.
   InheritedMediatorElement(InheritedMediator<TModel> widget) : super(widget);

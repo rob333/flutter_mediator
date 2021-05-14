@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_mediator/mediator.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../example_global_mode/test/touch_cnt.dart';
 
