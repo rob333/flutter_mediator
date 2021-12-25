@@ -74,9 +74,7 @@ class MyModel extends Pub {
   }
 
   void updateInt1() {
-    int1 += 1; // Automatically rebuild related widgets when updating.
-    /// The same as:
-    // int1.value += 1;
+    int1.value += 1; // Automatically rebuild related widgets when updating.
   }
 
   void ifUpdateInt1({bool update = true}) {
@@ -89,7 +87,7 @@ class MyModel extends Pub {
 
   Future<void> futureInt1() async {
     await Future.delayed(const Duration(seconds: 1));
-    int1 += 1;
+    int1.value += 1;
   }
 
   void updateNone() {

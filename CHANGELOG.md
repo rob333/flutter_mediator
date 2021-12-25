@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Fix example and migrate to flutter 2.8
+
 ## 2.1.6
 
 - Improve documents.

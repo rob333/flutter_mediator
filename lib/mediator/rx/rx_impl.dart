@@ -16,18 +16,13 @@ class RxImpl<T> {
     /// 2. Pub inline variables ->
     /// 3. Pub constructor ->
     /// 4. Model constructor
+    _addTag();
     staticRxContainer.add(this);
   }
 
   /// Constructor: With dedicated [Pub] parameter
-  RxImpl.withPub(this._value, this._pub);
-  // RxImpl.withPub(T initial, this.pub) : _value = initial;
-
-  /// Constructor: With dedicated [Pub] and [tag] parameter
-  /// if [tag] is null, then get an unique system tag for it.
-  RxImpl.fullInitialize(this._value, this._pub, {int? tag}) {
-    tag ??= _nextRxTag();
-    _addRxTag(tag);
+  RxImpl.withPub(this._value, this._pub) {
+    _addTag();
   }
 
   //* region member variables
@@ -45,6 +40,7 @@ class RxImpl<T> {
   static void setPub(Pub pub) {
     for (final element in staticRxContainer) {
       element._pub = pub;
+      pub.regAspects.addAll(element._tag);
     }
     staticRxContainer.clear();
   }
@@ -164,25 +160,24 @@ class RxImpl<T> {
 
   /// Activate automatic aspect management for this watched variable.
   void touch() {
-    // if _tag is empty, this is the first time. (lazy _tag initialization)
-    if (_tag.isEmpty) {
-      final tag = _nextRxTag();
-      _addRxTag(tag);
-    }
     // add the [rxAspects] to the rx automatic aspect list,
     // for later getRxAutoAspects() to register to [Host]
     stateRxAutoAspects.addAll(rxAspects);
   }
 
   /// Add an unique system `tag` to this Rx object.
-  void _addRxTag(int tag) {
+  void _addTag() {
+    final tag = _nextRxTag();
+
     // Add the tag to the Rx tag list.
     _tag.add(tag);
-    // Add the tag to the registered aspects of the model.
-    assert(_pub != null);
-    _pub!.regAspects.add(tag);
     // Add the tag to the Rx Aspects list.
     rxAspects.add(tag);
+
+    // Add the tag to the registered aspects of the model.
+    // assert(_pub != null);
+    // _pub!.regAspects.add(tag);
+    _pub?.regAspects.add(tag);
   }
 
   /// Create a consume widget and connect with the watched variable.
@@ -318,11 +313,6 @@ class Rx<T> extends RxImpl<T> {
 
   /// Constructor: With [Pub] `pub` as the model.
   Rx.withPub(T initial, Pub pub) : super.withPub(initial, pub);
-
-  /// Constructor: With dedicated [Pub] and [tag] parameter
-  /// if [tag] is null, then get an unique system tag for it.
-  Rx.fullInitialize(T initial, Pub pub, {int? tag})
-      : super.fullInitialize(initial, pub, tag: tag);
 }
 
 /// Extension for string type to Rx object.

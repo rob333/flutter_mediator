@@ -108,16 +108,16 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
   - [Versions](#versions)
   - [Example: Logins to a REST server](#example-logins-to-a-rest-server)
 - [Model Mode](#model-mode)
-  - [Three main classes: **_`Pub`, `Subscriber`, `Host`_**](#three-main-classes-pub-subscriber-host)
-  - [Flow chart](#flow-chart)
-  - [Flutter Widget of the Week: InheritedModel explained](#flutter-widget-of-the-week-inheritedmodel-explained)
+    - [Three main classes: **_`Pub`, `Subscriber`, `Host`_**](#three-main-classes-pub-subscriber-host)
+    - [Flow chart](#flow-chart)
+    - [Flutter Widget of the Week: InheritedModel explained](#flutter-widget-of-the-week-inheritedmodel-explained)
   - [Key contepts](#key-contepts)
-    - [**Subscribe and Publish**](#subscribe-and-publish)
-    - [**Rx Variable**](#rx-variable)
-    - [**Widget Aspects**](#widget-aspects)
-    - [**Rx Related Widget**](#rx-related-widget)
-    - [**Rx Automatic Aspect**](#rx-automatic-aspect)
-    - [**View Map**](#view-map)
+      - [**Subscribe and Publish**](#subscribe-and-publish)
+      - [**Rx Variable**](#rx-variable)
+      - [**Widget Aspects**](#widget-aspects)
+      - [**Rx Related Widget**](#rx-related-widget)
+      - [**Rx Automatic Aspect**](#rx-automatic-aspect)
+      - [**View Map**](#view-map)
   - [Getting Started Quick Steps](#getting-started-quick-steps)
     - [1. **_Model:_**](#1-model)
     - [2. **_Host:_**](#2-host)
@@ -126,14 +126,14 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
   - [Access the underlying value of rx variables](#access-the-underlying-value-of-rx-variables)
   - [Visual Studio Code snippets](#visual-studio-code-snippets)
   - [View Map - one step further of dependency injection](#view-map---one-step-further-of-dependency-injection)
-    - [Original View](#original-view)
-    - [After using the View Map](#after-using-the-view-map)
+      - [Original View](#original-view)
+      - [After using the View Map](#after-using-the-view-map)
     - [Here's how to use View Map.](#heres-how-to-use-view-map)
     - [Summing up](#summing-up)
   - [Use Case - explain how the package works](#use-case---explain-how-the-package-works)
-    - [Case 1: use rx automatic aspect](#case-1-use-rx-automatic-aspect)
-    - [Case 2: with specific aspect](#case-2-with-specific-aspect)
-    - [Case 3: manual publish aspect](#case-3-manual-publish-aspect)
+      - [Case 1: use rx automatic aspect](#case-1-use-rx-automatic-aspect)
+      - [Case 2: with specific aspect](#case-2-with-specific-aspect)
+      - [Case 3: manual publish aspect](#case-3-manual-publish-aspect)
   - [Use Case - i18n with View Map](#use-case---i18n-with-view-map)
 
 <hr>
@@ -144,7 +144,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.1.6"
+  flutter_mediator: "^2.2.0"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -1146,8 +1146,8 @@ For example, to write an i18n app using flutter_i18n with View Map.
 
 ```yaml
 dependencies:
-  flutter_i18n: ^0.22.3
-  flutter_mediator: ^2.1.6
+  flutter_i18n: ^0.31.0
+  flutter_mediator: ^2.2.0
 
 flutter:
   assets:

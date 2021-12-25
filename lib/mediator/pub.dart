@@ -90,7 +90,8 @@ class Pub {
   final _subMap = HashMap<Object, Object>();
 
   /// static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
-  static Subscriber<Model> sub<Model extends Pub>(Object mapKey, {Key? key}) {
+  static SubscriberAuto<Model> sub<Model extends Pub>(Object mapKey,
+      {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.sub'));
 
     final model = Host.model<Model>();

@@ -19,7 +19,7 @@ final _globalWatchedVar = HashMap<Object, Object>();
 /// Create a watched variable from the variable [v],
 /// a proxy object of the Type of [Rx<T>]
 Rx<T> globalWatch<T>(T v, {Object? tag}) {
-  final rx = Rx.fullInitialize(v, _globalPub);
+  final rx = Rx.withPub(v, _globalPub);
 
   //* Check if the variable [Type] or the [tag] already exists
   if (tag == null) {
@@ -79,8 +79,8 @@ Rx globalGet<T>({Object? tag}) {
 /// If the value of the watched variable is not used inside the widget,
 /// then use `watchedVar.consume` to create the consume widget to notify
 /// the host to rebuild when updating the watched variable.
-SubscriberAuto globalConsume(Widget Function() create, {Key? key}) {
-  return SubscriberAuto<Pub>(key: key, create: create);
+SubscriberGlobal globalConsume(Widget Function() create, {Key? key}) {
+  return SubscriberGlobal(key: key, create: create);
 }
 
 /// Broadcast to all the consume widgets.

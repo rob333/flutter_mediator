@@ -33,10 +33,9 @@ bool ifModelTypeCorrect(Type model, String fnstr) {
 //* Assert rx auto aspect is not empty, i.e. rx automatic aspect is actived.
 bool ifRxAutoAspectEmpty(List<Object> rxAutoAspectList) {
   if (rxAutoAspectList.isEmpty)
-    throw FlutterError(
-        'Flutter Mediator Error: No watched variable found in the widget.\n'
-        'Try using `watchedVar.consume` or `model.rxVar.touch()`.\n'
-        'Or use at least one watched variable in the widget.');
+    print('Mediator Warning: Not finding any watched variable in the widget. '
+        'Use `watchedVar.consume()` or `model.rxVar.touch()`, '
+        'or use at least one watched variable in the widget.');
   return true;
 }
 

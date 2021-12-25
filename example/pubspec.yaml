@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  flutter_i18n: ^0.22.3
+  flutter_i18n: ^0.31.0
   flutter_mediator:
     path: ../
 

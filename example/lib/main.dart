@@ -216,7 +216,7 @@ Widget starSubscriber() {
 
 //* Subscriber in simple form.
 Widget str1Subscriber() {
-  return 'str1'.subModel<MyModel>((context, model) {
+  return rxSub<MyModel>((_, model) {
     print('str1 build');
     return Text('Str1 is ${model.str1}');
   });
@@ -232,12 +232,12 @@ Widget int1Subscriber() {
   // return 'int1'.subMyModel(
   // return 'int1'.subModel<MyModel>(
   //* Automatic aspect form:
-  // return rxSub<MyModel>((_, model) => Text('Int1 is ${model.int1}'));
-  //* Automatic aspect extension form:
-  return (context, model) {
-    print('int1 build');
-    return Text('Int1 is ${model.int1}');
-  }.rxSub<MyModel>();
+  return rxSub<MyModel>((_, model) => Text('Int1 is ${model.int1}'));
+  // //* Automatic aspect extension form:
+  // return (context, model) {
+  //   print('int1 build');
+  //   return Text('Int1 is ${model.int1}');
+  // }.rxSub<MyModel>();
 }
 
 //* Subscriber with the Global variable
