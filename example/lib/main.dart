@@ -202,7 +202,7 @@ Widget fooSubscriber() {
 Widget barSubscriber() {
   return 'bar'.subModel<MyModel>((context, model) {
     print('bar build');
-    return Text('bar is ${model.bar}');
+    return Text('Bar is ${model.bar}');
   });
 }
 
@@ -216,7 +216,7 @@ Widget starSubscriber() {
 
 //* Subscriber in simple form.
 Widget str1Subscriber() {
-  return rxSub<MyModel>((_, model) {
+  return 'str1'.subMyModel((context, model) {
     print('str1 build');
     return Text('Str1 is ${model.str1}');
   });
@@ -236,7 +236,7 @@ Widget int1Subscriber() {
   // //* Automatic aspect extension form:
   // return (context, model) {
   //   print('int1 build');
-  //   return Text('Int1 is ${model.int1}');
+  //   return Text('Int1 is ${model.int1.value}');
   // }.rxSub<MyModel>();
 }
 
@@ -288,7 +288,7 @@ Widget fooController() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
       child: const Text('Update foo'),
-      onPressed: () => model.foo++,
+      onPressed: () => model.increaseFoo(),
     ),
   );
 }
@@ -298,7 +298,7 @@ Widget barController() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
       child: const Text('Update bar'),
-      onPressed: () => model.bar++,
+      onPressed: () => model.increaseBar(),
     ),
   );
 }

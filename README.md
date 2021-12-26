@@ -144,7 +144,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.2.0"
+  flutter_mediator: "^2.2.1"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -622,7 +622,7 @@ Variables in the model can turn into a proxy object by denoting **_`.rx`_**
 
 #### **Widget Aspects**
 
-Aspects denote what the widget is interested in. That widget will rebuild whenever any of those aspects is published.
+Aspects which the widget is listen to. The widget will rebuild whenever any of these aspects is published.
 
 #### **Rx Related Widget**
 
@@ -646,11 +646,11 @@ View map consists of two maps of create methods, `Subscriber` and `Controller`, 
 
 ### 1. **_Model:_**
 
-&emsp; 1-1. Implement the model by extending from **_`Pub`_**
+&emsp; 1-1. Implement the model by extending **_`Pub`_** .
 <br>
 &emsp; 1-2. Use **_`.rx`_** to turn the model variable into a rx variable which will automatically rebuild related widgets when updating.
 <br>
-&emsp; 1-3. Implement the controller method of that variable.
+&emsp; 1-3. Implement the controller method of the variable.
 
 &emsp; For example,
 
@@ -658,18 +658,19 @@ View map consists of two maps of create methods, `Subscriber` and `Controller`, 
 /// my_model.dart
 class MyModel extends Pub {
   /// `.rx` make the var automatically rebuild related widgets when updating.
-  var int1 = 0.rx;
+  final _int1 = 0.rx;
+  /// Implement getter and setter of the rx variable.
+  int get int1 => _int1.value;
+  set int1(int v) => _int1.value = v;
 
   void updateInt1() {
     /// `int1` is a rx variable which will automatically rebuild realted widgets when updating.
-    int1 +=  1;
+    int1 += 1;
   }
 }
 ```
 
-&emsp; **Then, later, get the model by**
-
-- `Host.model`**_`<Model>`_**`()`
+&emsp; **Get the model by using** `Host.model`**_`<Model>`_**`()`
 
 > Note that you don't need `context` to get the model, this provides you the flexibility to do things anywhere.
 
@@ -793,13 +794,11 @@ Sometimes, an operation of a rx variable can not be done, then you need to do th
 
 ```dart
 /// my_model.dart
-var int1 = 0.rx;   // turn int1 into a rx variable (i.e. a proxy object)
-var str1 = 'A'.rx; // turn str1 into a rx variable (i.e. a proxy object)
+final _int1 = 0.rx;   // turn _int1 into a rx variable (i.e. a proxy object)
+final _str1 = 'A'.rx; // turn _str1 into a rx variable (i.e. a proxy object)
 void updateInt1() {
-  // int1 *= 5; // can not do this (dart doesn't support operator*= to override)
-  int1.value *= 5; // need to do that with the underlying value
-  // str1 = 'B'; // can not do this
-  str1.value = 'B'; // need to do that with the underlying value
+  _int1.value *= 5;
+  _str1.value = 'B';
 }
 ```
 
@@ -998,23 +997,21 @@ First of all, implement the **`Model`** and place the **`Host`** at the top leve
 ```dart
 /// my_model.dart
 class MyModel extends Pub {
-  var int1 = 0.rx; // turn int1 into a rx variable (i.e. a proxy object)
-  var star = 0.rx; // turn str1 into a rx variable (i.e. a proxy object)
-  var m = 0;       // ordinary variable
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _int1 = 0.rx;
+  int get int1 => _int1.value;
+  set int1(int v) => _int1.value = v;
 
-  /// controller function for case 1
-  void ifUpdateInt1({bool update = true}) {
-    if (update == true) {
-      int1 += 1; // `int1` is a rx variable which will rebuild related widgets when updating.
-    } else {
-      int1.touch(); // `touch()` to activate rx automatic aspect which will also rebuild related widgets.
-    }
+  // controller function for int1
+  void updateInt1() {
+    int1 += 1; // Automatically rebuild related widgets when updating.
   }
 
-  /// controller function for case 2
-  void increaseStar() => star++; // `star` is a rx variable which will rebuild related widgets when updating.
 
-  /// controller function for case 3
+  /// ordinary variable
+  var m = 0;
+
+  // controller function for ordinary variable
   void increaseManual(Object aspect) {
     m++;
     publish(aspect); // `m` is an ordinary variable which needs to publish the aspect manually.
@@ -1041,17 +1038,17 @@ Implement the `Subscriber` and `Controller` functions, and place them in the wid
 ```dart
 /// main.dart
 /// Subscriber function
-Widget rxAAInt1Subscriber() {
+Widget Int1Subscriber() {
   return rxSub<MyModel>((context, model) {
     return Text('int1: ${model.int1}');
   });
 }
 /// Controller function
-Widget rxAAInt1Controller() {
+Widget Int1Controller() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
-      child: const Text('ifInt1'),
-      onPressed: () => model.ifUpdateInt1(),
+      child: const Text('Int1'),
+      onPressed: () => model.UpdateInt1(),
     ),
   );
 }
@@ -1059,8 +1056,8 @@ Widget rxAAInt1Controller() {
 Widget mainPage() {
   return Column(
     children: [
-      rxAAInt1Subscriber(),
-      rxAAInt1Controller(),
+      Int1Subscriber(),
+      Int1Controller(),
     ],
   );
 }
@@ -1070,22 +1067,22 @@ Widget mainPage() {
 
 #### Case 2: with specific aspect
 
-Specific an aspect, for example, `'star'`, then implement the `Subscriber` and `Controller` functions for that aspect, and place them in the widget tree.
+Specific an aspect, for example `'Int1'`, implement the `Subscriber` and `Controller` functions of the aspect, and place them in the widget tree.
 
 ```dart
 /// main.dart
 /// Subscriber function
-Widget starSubscriber() {
-  return 'star'.subModel<MyModel>((context, model) {
-    return Text('star: ${model.star}');
+Widget Int1Subscriber() {
+  return 'Int1'.subModel<MyModel>((context, model) {
+    return Text('Int1: ${model.int1}');
   });
 }
 /// Controller function
-Widget starController() {
+Widget Int1Controller() {
   return Controller<MyModel>(
     create: (context, model) => ElevatedButton(
-      child: const Text('update star'),
-      onPressed: () => increaseStar(), // or simplely model.star++,
+      child: const Text('update int1'),
+      onPressed: () => UpdateInt1(), // or simplely model.star++,
     ),
   );
 }
@@ -1093,8 +1090,8 @@ Widget starController() {
 Widget mainPage() {
   return Column(
     children: [
-      starSubscriber(),
-      starController(),
+      Int1Subscriber(),
+      Int1Controller(),
     ],
   );
 }
@@ -1104,7 +1101,7 @@ Widget mainPage() {
 
 #### Case 3: manual publish aspect
 
-Specific an aspect, for example, `'manual'`, then implement the `Subscriber` and `Controller` functions for that aspect, and place them in the widget tree, and do `publish` the aspect in the controller function.
+Specific an aspect, for example `'manual'`, implement the `Subscriber` and `Controller` functions of the aspect, and place them in the widget tree, then `publish` the aspect in the controller function.
 
 ```dart
 /// main.dart
@@ -1147,7 +1144,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 ```yaml
 dependencies:
   flutter_i18n: ^0.31.0
-  flutter_mediator: ^2.2.0
+  flutter_mediator: ^2.2.1
 
 flutter:
   assets:
@@ -1508,13 +1505,14 @@ Denoting **_`.rx`_** turns the variable of the model into a rx variable, a proxy
 ```dart
 /// my_model.dart
 class MyModel extends Pub {
-/// `.rx` turns the var into a rx variable(i.e. a proxy object)
-/// which will rebuild related widgets when updating.
-var int1 = 0.rx;
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _int1 = 0.rx;
+  int get int1 => _int1.value;
+  set int1(int v) => _int1.value = v;
 
-void  updateInt1() {
-  int1 += 1; // Automatically rebuild related widgets.
-}
+  void updateInt1() {
+    int1 += 1; // Automatically rebuild related widgets when updating.
+  }
 ```
 
 #### rx list:
@@ -1553,13 +1551,11 @@ For example,
 
 ```dart
 /// my_model.dart
-var int1 = 0.rx;   // turn int1 into a rx variable (i.e. a proxy object)
-var str1 = 'A'.rx; // turn str1 into a rx variable (i.e. a proxy object)
+var _int1 = 0.rx;   // turn _int1 into a rx variable (i.e. a proxy object)
+var _str1 = 'A'.rx; // turn _str1 into a rx variable (i.e. a proxy object)
 void updateInt1() {
-  // int1 *= 5; // can not do this (dart doesn't support operator*= to override)
-  int1.value *= 5; // need to do that with the underlying value
-  // str1 = 'B'; // can not do this
-  str1.value = 'B'; // need to do that with the underlying value
+  _int1.value *= 5;
+  _str1.value = 'B';
 }
 
 final customClass = CustomClass();
@@ -1583,10 +1579,6 @@ Dart provides a `call(T)` to override, you can use `rxVar(value)` to update the 
 var _foo = 1.rx;
 set foo(int value) {
   _foo(value); // update the rx variable by call() style
-  /// The same as:
-  // _foo = value;
-  /// The same as:
-  // _foo.value = value;
 }
 ```
 
@@ -1782,7 +1774,9 @@ By using `rxSub`**_`<Model>`_** to subscribe a widget, the package will generate
 
 ```dart
 /// my_model.dart
-int tick1 = 0.rx;
+final _tick1 = 0.rx;
+int get tick1 => _tick1.value;
+set tick1(int v) => _tick1.value = v;
 ```
 
 ```dart
@@ -1995,7 +1989,9 @@ Supposed you need to rebuild a widget whenever a model variable is updated, but 
 
 ```dart
 /// my_model.dart
-final str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
+final _str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
+String get str1 => _str1.value;
+set str1(String v) => _str1.value = v;
 ```
 
 ```dart
@@ -2086,10 +2082,10 @@ void updateSomeClass() {
 
 <!-- same as Key contepts : widget aspects -->
 
-- Widget aspects - Aspects denotes what the widget is interested in.
-- Frame aspects - Aspects which will rebuild the related widgets in the next UI frame.
-- Registered aspects - Aspects of the model that has been registered.
-- RX aspects - Aspects that have been attached to the rx variable. The rx variable will rebuild the related widgets whenever updated.
+- Widget aspects - Aspects which the widget is listen to.
+- Frame aspects - Aspects which will be sent to rebuild the related widgets in the next UI frame.
+- Registered aspects - Aspects that have been registered to the model.
+- RX aspects - Aspects that have been attached to the rx variable. The rx variable will rebuild the related widgets when updating.
 
 &emsp; [back to details]
 

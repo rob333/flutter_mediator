@@ -10,50 +10,57 @@ class MyModel extends Pub {
   }
 
   final int updateMs;
+  Timer? updateTimer;
+
+  int foo = 1;
+  int bar = 2;
+  int star = 3;
 
   /// `.rx` make the var automatically rebuild related widgets when updating.
-  var _foo = 1.rx;
-  var _bar = 2.rx;
-  var _star = 3.rx;
+  final _str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
+  String get str1 => _str1.value;
+  set str1(String v) => _str1.value = v;
 
-  final str1 = 's'.rx..addRxAspects('chainStr1'); // to chain react aspects
-  var int1 = 0.rx;
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _int1 = 0.rx;
+  int get int1 => _int1.value;
+  set int1(int v) => _int1.value = v;
 
-  Timer? updateTimer;
-  var _tick1 = 0.rx;
-  var _tick2 = 0.rx;
-  int _tick3 = 0;
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _tick1 = 0.rx;
+  int get tick1 => _tick1.value;
+  set tick1(int v) => _tick1.value = v;
 
-  int get foo => _foo.value;
-  int get bar => _bar.value;
-  int get star => _star.value;
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _tick2 = 0.rx;
+  int get tick2 => _tick2.value;
+  set tick2(int v) => _tick2.value = v;
 
-  set foo(int value) {
-    _foo(value); // update rx variable by call() style
-    /// The same as:
-    // _foo = value;
-    /// The same as:
-    // _foo.value = value;
+  /// `.rx` make the var automatically rebuild related widgets when updating.
+  final _tick3 = 0.rx;
+  int get tick3 => _tick3.value;
+  set tick3(int v) => _tick3.value = v;
 
-    // publish('foo'); // `foo` is a rx variable which will rebuild related widgets when updating.
+  void increaseFoo() {
+    foo += 1;
+    publish('foo');
   }
 
-  set bar(int value) {
-    // Update the rx variable by setting the underlying value.
-    _bar.value = value;
+  void increaseBar() {
+    bar += 1;
+    publish('bar');
   }
 
   void increaseBoth() {
-    _foo += 1;
-    _bar += 1;
-
-    publish(['foo', 'bar']); // Manually publish multiple aspects.
+    foo += 1;
+    bar += 1;
+    publish(['foo', 'bar']); // Publish multiple aspects manually.
   }
 
   void increaseAll() {
-    _foo += 1;
-    _bar += 1;
-    _star += 1;
+    foo += 1;
+    bar += 1;
+    star += 1;
     updateStr1();
     int1++;
     publish(); // Broadcasting, publish all aspects of the model.
@@ -68,63 +75,34 @@ class MyModel extends Pub {
       ch = chA;
     }
 
-    str1(String.fromCharCode(ch)); //
-    /// The same as:
-    // str1.value = String.fromCharCode(ch);
+    str1 = String.fromCharCode(ch); //
   }
 
   void updateInt1() {
-    int1.value += 1; // Automatically rebuild related widgets when updating.
-  }
-
-  void ifUpdateInt1({bool update = true}) {
-    if (update == true) {
-      int1 += 1; // Updates `int1` which will rebuild related widgets.
-    } else {
-      int1.touch(); // `touch()` to activate rx automatic aspect which will also rebuild related widgets.
-    }
+    int1 += 1; // Automatically rebuild related widgets when updating.
   }
 
   Future<void> futureInt1() async {
     await Future.delayed(const Duration(seconds: 1));
-    int1.value += 1;
+    int1 += 1;
   }
 
   void updateNone() {
     publish('updateNone');
   }
 
-  int get tick1 => _tick1.value;
-  int get tick2 => _tick2.value;
-  int get tick3 => _tick3;
-
-  set tick1(int value) {
-    _tick1.value = value;
-    // publish('tick1'); // `_tick1` is a rx variable which will rebuild related widgets when updating.
-  }
-
-  set tick2(int value) {
-    _tick2.value = value;
-    // publish('tick2'); // `_tick2` is a rx variable which will rebuild related widgets when updating.
-  }
-
-  set tick3(int value) {
-    _tick3 = value;
-    publish('tick3');
-  }
-
   void resetTimer() {
     stopTimer();
     updateTimer = Timer.periodic(Duration(milliseconds: updateMs), (timer) {
       // _tick1.value++;
-      _tick1++;
+      tick1++;
       // publish('tick1'); // `_tick1` is a rx variable which will rebuild related widgets when updating.
       if (_tick1.value % 2 == 0) {
-        _tick2++;
+        tick2++;
         // publish('tick2'); // `_tick2` is a rx variable which will rebuild related widgets when updating.
         if (_tick2 % 2 == 0) {
-          _tick3++;
-          publish('tick3');
+          tick3++;
+          // publish('tick3'); // `_tick3` is a rx variable which will rebuild related widgets when updating.
         }
       }
     });

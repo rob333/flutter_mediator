@@ -67,15 +67,15 @@ class SubscriberAuto<Model extends Pub> extends StatelessWidget {
   Widget build(BuildContext context) {
     /// rx automatic aspect
     /// automatic generates aspects for the widget
-    RxImpl.enableRxAutoAspect();
     final model = Host.model<Model>();
+    RxImpl.enableRxAutoAspect();
     final widget = create(context, model);
     final rxAutoAspectList = RxImpl.getAndDisableRxAutoAspect();
 
-    // assert(ifRxAutoAspectEmpty(rxAutoAspectList));
-    // if (rxAutoAspectList.isNotEmpty) {
-    Host.register<Model>(context, aspects: rxAutoAspectList);
-    // }
+    assert(ifRxAutoAspectEmpty(rxAutoAspectList));
+    if (rxAutoAspectList.isNotEmpty) {
+      Host.register<Model>(context, aspects: rxAutoAspectList);
+    }
     // addRegAspect automatically in the RxImpl getter
 
     RxImpl.clearRxAutoAspects();
@@ -110,8 +110,9 @@ class SubscriberGlobal extends StatelessWidget {
     final rxAutoAspectList = RxImpl.getAndDisableRxAutoAspect();
 
     assert(ifRxAutoAspectEmpty(rxAutoAspectList));
-
-    Host.register<Pub>(context, aspects: rxAutoAspectList);
+    if (rxAutoAspectList.isNotEmpty) {
+      Host.register<Pub>(context, aspects: rxAutoAspectList);
+    }
     // addRegAspect automatically in the RxImpl getter
 
     RxImpl.clearRxAutoAspects();

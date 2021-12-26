@@ -166,7 +166,7 @@ class InheritedMediator<TModel extends Pub> extends InheritedWidget {
   final HashSet<Object> _frameAspects;
 
   // _HostState<TModel> get state => _state;
-  // Pub get model => _state.widget.model;
+  TModel get model => _model;
 
   @override
   InheritedMediatorElement<TModel> createElement() =>
