@@ -11,11 +11,13 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
-    ListTestApp(),
+    const ListTestApp(),
   );
 }
 
 class ListTestApp extends StatelessWidget {
+  const ListTestApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return globalHost(
@@ -74,8 +76,8 @@ class HomeWidget extends StatelessWidget {
 }
 
 //* item data
-const int MaxItems = 35;
-const int MaxUnits = 100;
+const int maxItems = 35;
+const int maxUnits = 100;
 const List<String> itemNames = [
   'Pencil',
   'Binder',
@@ -96,11 +98,11 @@ const List<Color> itemColors = [
 ];
 
 void updateListItem() {
-  final units = Random().nextInt(MaxUnits) + 1;
+  final units = Random().nextInt(maxUnits) + 1;
   final itemIdx = Random().nextInt(itemNames.length);
   final itemName = itemNames[itemIdx];
   final color = itemColors[Random().nextInt(itemColors.length)];
-  if (data.value.length >= MaxItems) data.value.clear();
+  if (data.value.length >= maxItems) data.value.clear();
 
   //* Step4: Make an update to the watched variable.
   //* watchedVar.ob = watchedVar.notify() and then return the underlying object

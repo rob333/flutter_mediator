@@ -12,7 +12,7 @@ final touchCount = globalWatch(0, tag: 'tagCount'); // main.dart
 final data = globalWatch(<ListItem>[]); // list_page.dart
 
 //* Step1B: Declare the persistent watched variable with `late Rx<Type>`
-const DefaultLocale = 'en';
+const defaultLocale = 'en';
 late Rx<String> locale; // local_page.dart
 
 final opacityValue = globalWatch(0.0); // scroll_page.dart
@@ -36,7 +36,7 @@ Future<void> initVars() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   prefs = await SharedPreferences.getInstance();
-  locale = globalWatch(prefs.getString('locale') ?? DefaultLocale);
+  locale = globalWatch(prefs.getString('locale') ?? defaultLocale);
 }
 
 /// Change the locale, by `String`[countryCode]

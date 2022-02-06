@@ -4,14 +4,15 @@ version: 2.2.1
 homepage: https://github.com/rob333/flutter_mediator
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=2.3.0"
+  sdk: ">=2.14.0 <3.0.0"
+  flutter: ">=2.8.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
 

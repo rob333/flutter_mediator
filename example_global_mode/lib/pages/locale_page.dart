@@ -12,49 +12,46 @@ class LocalePage extends StatelessWidget {
     //* Get the watched variable by tag:'tagCount' from `../main.dart`
     final mainInt = globalGet(tag: 'tagCount');
 
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 50),
-          Text(
-            'Global Mode: Locale demo',
-            style: Theme.of(context).textTheme.headline5,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 50),
+        Text(
+          'Global Mode: Locale demo',
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        const SizedBox(height: 25),
+        //* `globalConsume` the watched variable from `../main.dart`
+        globalConsume(
+          () => Text(
+            'You have pressed the button at the first page ${mainInt.value} times',
+            style: const TextStyle(fontSize: 16),
           ),
-          const SizedBox(height: 25),
-          //* `globalConsume` the watched variable from `../main.dart`
-          globalConsume(
-            () => Text(
-              'You have pressed the button at the first page ${mainInt.value} times',
-              style: const TextStyle(fontSize: 16),
-            ),
+        ),
+        globalConsume(
+          () => Text(
+            'Data length at the second page ${data.value.length} times',
+            style: const TextStyle(fontSize: 16),
           ),
-          globalConsume(
-            () => Text(
-              'Data length at the second page ${data.value.length} times',
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-          globalConsumeAll(() {
-            final txt = globalFrameAspects.isEmpty
-                ? ''
-                : 'Updated: $globalFrameAspects';
-            return Text(
-              txt,
-              style: const TextStyle(fontSize: 16),
-            );
-          }),
-          const SizedBox(height: 35),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              RadioGroup(),
-              LocalePanel(),
-            ],
-          ),
-        ],
-      ),
+        ),
+        globalConsumeAll(() {
+          final txt =
+              globalFrameAspects.isEmpty ? '' : 'Updated: $globalFrameAspects';
+          return Text(
+            txt,
+            style: const TextStyle(fontSize: 16),
+          );
+        }),
+        const SizedBox(height: 35),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            RadioGroup(),
+            LocalePanel(),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -137,7 +134,7 @@ class _RadioGroupState extends State<RadioGroup> {
       );
     }
 
-    return Container(
+    return SizedBox(
       width: 130,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

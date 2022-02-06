@@ -9,7 +9,7 @@ void main() {
   testWidgets('Counter increments Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
-      TouchCntApp(),
+      const TouchCntApp(),
     );
 
     // Verify that our counter starts at 0.
@@ -28,7 +28,7 @@ void main() {
   });
 
   testWidgets('List Test', (WidgetTester tester) async {
-    await tester.pumpWidget(ListTestApp());
+    await tester.pumpWidget(const ListTestApp());
 
     // Verify that list starts empty.
     expect(find.byType(GridTile), findsNothing);

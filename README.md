@@ -296,7 +296,7 @@ late SharedPreferences prefs;
 
 //* Step1B: Declare the persistent watched variable with `late Rx<Type>`
 //* And then import it in the file.
-const DefaultLocale = 'en';
+const defaultLocale = 'en';
 late Rx<String> locale; // local_page.dart
 
 /// Initialize the persistent watched variables
@@ -306,7 +306,7 @@ Future<void> initVars() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   prefs = await SharedPreferences.getInstance();
-  locale = globalWatch(prefs.getString('locale') ?? DefaultLocale);
+  locale = globalWatch(prefs.getString('locale') ?? defaultLocale);
 }
 ```
 
@@ -332,7 +332,7 @@ localizationsDelegates: [
   FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
       forcedLocale: Locale(locale.value),
-      fallbackFile: DefaultLocale,
+      fallbackFile: defaultLocale,
       // ...
     ),
     // ...

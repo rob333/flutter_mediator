@@ -22,7 +22,7 @@ Future<void> main() async {
     //* at the top of the widget tree.
     globalHost(
       // or MultiHost.create(
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -61,6 +61,8 @@ final navPages = [
 ];
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -80,11 +82,12 @@ class MyApp extends StatelessWidget {
           translationLoader: FileTranslationLoader(
             forcedLocale: Locale(locale.value),
             // useCountryCode: true,
-            fallbackFile: DefaultLocale,
+            fallbackFile: defaultLocale,
             basePath: 'assets/flutter_i18n',
             decodeStrategies: [JsonDecodeStrategy()],
           ),
           missingTranslationHandler: (key, locale) {
+            // ignore: avoid_print
             print(
                 '--- Missing Key: $key, languageCode: ${locale!.languageCode}');
           },

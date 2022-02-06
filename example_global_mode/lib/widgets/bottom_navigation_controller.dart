@@ -66,6 +66,7 @@ void makeBottomNavBarIconDifferentType(
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   late int _currentBNBIndex;
+  // ignore: prefer_function_declarations_over_variables
   final defaultTransition = (Widget child, Animation<double> animation) =>
       ScaleTransition(child: child, scale: animation);
   final icons = <Widget>[];
