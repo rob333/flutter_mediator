@@ -151,7 +151,6 @@ class Pub {
     return _conMap[o] as CreatorFn<Model>;
   }
   //! end subMap section
-
 }
 
 typedef PublishFn = void Function([Object aspects]);
