@@ -89,7 +89,7 @@ class Pub {
   /// Map of subscriber create methods of the model.
   final _subMap = HashMap<Object, Object>();
 
-  /// static: Create a `Subscriber<Model>` widget from the `subMap` by the [mapKey] of the `<Model>`.
+  /// static: Create a `Subscriber<Model>` widget by [mapKey] of `<Model>`.
   static SubscriberAuto<Model> sub<Model extends Pub>(Object mapKey,
       {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.sub'));
@@ -121,7 +121,7 @@ class Pub {
   /// Map of controller create methods of the model.
   final _conMap = HashMap<Object, Object>();
 
-  /// static: Create a `Controller<Model>` widget from the `conMap` by the [mapKey] of the `<Model>`.
+  /// static: Create a `Controller<Model>` by [mapKey] of `<Model>`.
   static Controller<Model> controller<Model extends Pub>(Object mapKey,
       {Key? key}) {
     assert(ifModelTypeCorrect(Model, 'Pub.controller'));
