@@ -26,7 +26,7 @@ Rx<T> globalWatch<T>(T v, {Object? tag}) {
     if (!_globalWatchedVar.containsKey(T)) {
       _globalWatchedVar[T] = rx;
       assert(() {
-        print('Info: Global watched variable of Type: $T');
+        print('Info: global watched variable of type: $T');
         return true;
       }());
     }
