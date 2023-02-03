@@ -305,8 +305,8 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 
   @override
-  Iterable<E> whereType<E>() {
-    return value.whereType<E>();
+  Iterable<W> whereType<W>() {
+    return value.whereType<W>();
   }
 
   @override

@@ -30,7 +30,7 @@ class LocalePage extends StatelessWidget {
         ),
         globalConsume(
           () => Text(
-            'Data length at the second page ${data.value.length} times',
+            'Data length at the second page ${data.value.length}',
             style: const TextStyle(fontSize: 16),
           ),
         ),

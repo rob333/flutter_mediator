@@ -1,12 +1,7 @@
 import '../rx.dart';
 
 class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
-  RxSet(Set<E> initial) : super(initial) {
-    _set = value;
-  }
-
-  //! _set, why cannot use value?
-  late Set<E> _set;
+  RxSet(Set<E> initial) : super(initial);
 
   @override
   Iterator<E> get iterator => value.iterator;
@@ -18,9 +13,8 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   bool get isNotEmpty => value.isNotEmpty;
 
   @override
-  bool add(E value) {
-    //! _set, why cannot use value?
-    final val = _set.add(value);
+  bool add(E newValue) {
+    final val = value.add(newValue);
     if (val) publishRxAspects();
     return val;
   }
@@ -173,8 +167,8 @@ class RxSet<E> extends RxImpl<Set<E>> implements Set<E> {
   }
 
   @override
-  Iterable<T> whereType<T>() {
-    return value.whereType<T>();
+  Iterable<W> whereType<W>() {
+    return value.whereType<W>();
   }
 
   @override

@@ -1,11 +1,7 @@
 import '../rx.dart';
 
 class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
-  RxMap(Map<K, V> initial) : super(initial) {
-    _value = value;
-  }
-
-  late Map<K, V> _value;
+  RxMap(Map<K, V> initial) : super(initial);
 
   @override
   V operator [](Object? key) {
@@ -13,26 +9,26 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   }
 
   @override
-  void operator []=(K key, V value) {
-    _value[key] = value;
+  void operator []=(K key, V newValue) {
+    value[key] = newValue;
     publishRxAspects();
   }
 
   @override
   void addAll(Map<K, V> other) {
-    _value.addAll(other);
+    value.addAll(other);
     publishRxAspects();
   }
 
   @override
   void addEntries(Iterable<MapEntry<K, V>> entries) {
-    _value.addEntries(entries);
+    value.addEntries(entries);
     publishRxAspects();
   }
 
   @override
   void clear() {
-    _value.clear();
+    value.clear();
     publishRxAspects();
   }
 
@@ -43,7 +39,7 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   bool containsKey(Object? key) => value.containsKey(key);
 
   @override
-  bool containsValue(Object? value) => _value.containsValue(value);
+  bool containsValue(Object? comp) => value.containsValue(comp);
 
   @override
   Iterable<MapEntry<K, V>> get entries => value.entries;
@@ -71,21 +67,21 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
 
   @override
   V putIfAbsent(K key, V Function() ifAbsent) {
-    final val = _value.putIfAbsent(key, ifAbsent);
+    final val = value.putIfAbsent(key, ifAbsent);
     publishRxAspects();
     return val;
   }
 
   @override
   V remove(Object? key) {
-    final val = _value.remove(key);
+    final val = value.remove(key);
     publishRxAspects();
     return val!;
   }
 
   @override
   void removeWhere(bool Function(K, V) test) {
-    _value.removeWhere(test);
+    value.removeWhere(test);
     publishRxAspects();
   }
 
@@ -93,18 +89,18 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   Iterable<V> get values => value.values;
 
   @override
-  String toString() => _value.toString();
+  String toString() => value.toString();
 
   @override
   V update(K key, V Function(V) update, {V Function()? ifAbsent}) {
-    final val = _value.update(key, update, ifAbsent: ifAbsent);
+    final val = value.update(key, update, ifAbsent: ifAbsent);
     publishRxAspects();
     return val;
   }
 
   @override
   void updateAll(V Function(K, V) update) {
-    _value.updateAll(update);
+    value.updateAll(update);
     publishRxAspects();
   }
 }

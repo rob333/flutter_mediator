@@ -1143,7 +1143,7 @@ For example, to write an i18n app using flutter_i18n with View Map.
 
 ```yaml
 dependencies:
-  flutter_i18n: ^0.31.0
+  flutter_i18n: ^0.32.4
   flutter_mediator: ^2.2.1
 
 flutter:

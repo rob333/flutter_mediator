@@ -1,3 +1,7 @@
+## 2.2.2
+
+- Imporve `RxList`, `RxSet`, and `RxMap`.
+
 ## 2.2.1
 
 - Fix example and document.
