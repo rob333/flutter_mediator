@@ -12,8 +12,9 @@ import 'subscriber.dart';
 class Pub {
   Pub() : publish = dummyCallback {
     assert(() {
-      if (Host.stateModels[runtimeType] != null)
+      if (Host.stateModels[runtimeType] != null) {
         throw FlutterError('Duplicate model type of <$runtimeType>');
+      }
       return true;
     }());
 
@@ -26,7 +27,7 @@ class Pub {
     // runtimeType == 'Pub' is the globalPub
     assert(() {
       if (runtimeType.toString() != 'Pub') {
-        print('RxImpl set pub to: $this');
+        debugPrint('RxImpl set pub to: $this');
       }
       return true;
     }());
@@ -42,14 +43,14 @@ class Pub {
   /// static: Get the model.
   static Model getModel<Model extends Pub>() {
     assert(ifStateModel<Model>(Host.stateModels[Model]));
-    print('Deprecated Pub.getModel<Model>(): Please use Host.model<>();');
+    debugPrint('Deprecated Pub.getModel<Model>(): Please use Host.model<>();');
     return Host.stateModels[Model] as Model;
   }
 
   /// static: Get the model, the same as getModel<Model>().
   static Model model<Model extends Pub>() {
     assert(ifStateModel<Model>(Host.stateModels[Model]));
-    print('Deprecated Pub.model<Model>(): Please use Host.model<>();');
+    debugPrint('Deprecated Pub.model<Model>(): Please use Host.model<>();');
     return Host.stateModels[Model] as Model;
   }
 

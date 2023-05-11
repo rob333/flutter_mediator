@@ -26,7 +26,7 @@ Rx<T> globalWatch<T>(T v, {Object? tag}) {
     if (!_globalWatchedVar.containsKey(T)) {
       _globalWatchedVar[T] = rx;
       assert(() {
-        print('Info: global watched variable of type: $T');
+        debugPrint('Info: global watched variable of type: $T');
         return true;
       }());
     }
@@ -56,17 +56,19 @@ Rx<T> globalWatch<T>(T v, {Object? tag}) {
 Rx globalGet<T>({Object? tag}) {
   if (tag == null) {
     assert(() {
-      if (_globalWatchedVar[T] == null)
+      if (_globalWatchedVar[T] == null) {
         throw FlutterError(
             'Error: `globalGet` gets null. Type:$T does not exists.');
+      }
       return true;
     }());
     return _globalWatchedVar[T] as Rx<T>;
   }
   assert(() {
-    if (_globalWatchedVar[tag] == null)
+    if (_globalWatchedVar[tag] == null) {
       throw FlutterError(
           'Error: `globalGet` gets null. Tag:$tag does not exists.');
+    }
     return true;
   }());
   return _globalWatchedVar[tag] as Rx;
@@ -89,7 +91,7 @@ void globalBroadcast() => _globalPub.publish();
 /// Create a consume widget that will be rebuilt whenever
 /// any watched variables changes are made.
 Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
-  final wrapFn = (BuildContext _, Pub __) => create();
+  wrapFn(BuildContext _, Pub __) => create();
   return Subscriber<Pub>(key: key, create: wrapFn);
 }
 

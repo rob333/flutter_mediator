@@ -67,7 +67,8 @@ class Host<TModel extends Pub> extends StatefulWidget {
   }
 
   @override
-  _HostState createState() {
+  // ignore: no_logic_in_create_state
+  State<Host<TModel>> createState() {
     var widget = child;
     if (child == null) {
       assert(stateChildColl.isNotEmpty,
@@ -298,7 +299,8 @@ class InheritedMediatorElement<TModel extends Pub> extends InheritedElement {
         getDependencies(dependent) as HashSet<Object>?;
     if (dependencies == null) return;
     if (dependencies.isEmpty ||
-        widget.updateShouldNotifyDependent(oldWidget, dependencies))
+        widget.updateShouldNotifyDependent(oldWidget, dependencies)) {
       dependent.didChangeDependencies();
+    }
   }
 }

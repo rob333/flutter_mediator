@@ -17,25 +17,29 @@ bool shouldNull(Object? obj, String errmsg) {
 //* Assert inheritedModel is not null. i.e. the InheritedModel works properly.
 bool ifInheritedModel<Model extends Pub>(
     InheritedMediator<Model>? inheritedModel) {
-  if (inheritedModel == null)
+  if (inheritedModel == null) {
     throw FlutterError(
         'Could not find an ancestor of InheritedMediator<$Model>, check if <$Model> is correct.');
+  }
   return true;
 }
 
 //* Assert template `<Model>` is provided.
 bool ifModelTypeCorrect(Type model, String fnstr) {
-  if (model is Pub)
+  if (model is Pub) {
     throw FlutterError('$fnstr: Please specify the model type, <$model>');
+  }
   return true;
 }
 
 //* Assert rx auto aspect is not empty, i.e. rx automatic aspect is actived.
 bool ifRxAutoAspectEmpty(List<Object> rxAutoAspectList) {
-  if (rxAutoAspectList.isEmpty)
-    print('Mediator Warning: Not finding any watched variable in the widget. '
+  if (rxAutoAspectList.isEmpty) {
+    debugPrint(
+        'Mediator Warning: Not finding any watched variable in the widget. '
         'Use `watchedVar.consume()` or `model.rxVar.touch()`, '
         'or use at least one watched variable in the widget.');
+  }
   return true;
 }
 
@@ -47,7 +51,8 @@ bool ifStateModel<Model extends Pub>(Pub? model) {
 
 //* rx_impl: Assert tag not to exceed maximum.
 bool ifTagMaximum(int rxTagCounter) {
-  if (rxTagCounter == 0x7fffffffffffffff)
+  if (rxTagCounter == 0x7fffffffffffffff) {
     throw FlutterError('Rx Tag exceeded maximum.');
+  }
   return true;
 }
