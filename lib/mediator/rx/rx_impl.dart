@@ -104,12 +104,12 @@ class RxImpl<T> {
   ///
   /// Return the value of the underlying object.
   ///
-  /// The value used inside the consume widget will cause the widget
+  /// The value used inside the consumer widget will cause the widget
   /// to rebuild when updating; or use
   ///
   ///     watchedVar.consume(() => widget)
   /// to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
-  T get value {
+  get value {
     // if rx automatic aspect is enabled. (precede over state rx aspect)
     if (stateRxAutoAspectFlag == true) {
       touch(); // Touch to activate rx automatic aspect management.
@@ -122,7 +122,13 @@ class RxImpl<T> {
       }
     }
 
-    return _value;
+    if (_value is! Function) {
+      return _value;
+    }
+    // This is a computed mediator variable.
+    final fn = _value as Function;
+    final res = fn();
+    return res;
   }
 
   /// Setter:
@@ -135,7 +141,7 @@ class RxImpl<T> {
   /// `watchedVar.ob.updateMethod(...)` to notify the host to rebuild.
   ///
   ///     watchedVar.ob = watchedVar.notify() and then return the underlying object
-  set value(T value) {
+  set value(value) {
     if (_value != value) {
       _value = value;
       assert(_pub != null);
@@ -145,14 +151,14 @@ class RxImpl<T> {
     }
   }
 
-  /// Notify the host to rebuild related consume widget and then return
+  /// Notify the host to rebuild related consumer widget and then return
   /// the underlying object.
   ///
   /// Suitable for class type [_value], like List, Map, Set, and class.
   ///
   /// ex. var is a int List: `<int>[]`,
   ///
-  ///     var.ob.add(1); // to notify the host to rebuild related consume widget.
+  ///     var.ob.add(1); // to notify the host to rebuild related consumer widget.
   T get ob {
     publishRxAspects();
     return _value;
@@ -180,8 +186,8 @@ class RxImpl<T> {
     _pub?.regAspects.add(tag);
   }
 
-  /// Create a consume widget and connect with the watched variable.
-  /// The consume widget will rebuild whenever the watched variable updates.
+  /// Create a consumer widget and connect with the watched variable.
+  /// The consumer widget will rebuild whenever the watched variable updates.
   ///
   /// e.g.
   ///

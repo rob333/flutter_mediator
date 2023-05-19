@@ -15,6 +15,11 @@ final data = globalWatch(<ListItem>[]); // list_page.dart
 const defaultLocale = 'en';
 late Rx<String> locale; // local_page.dart
 
+/// Computed Mediator Variable: locstr
+final _locstr = Rx(() => "locale: ${locale.value}" as dynamic);
+get locstr => _locstr.value;
+set locstr(value) => _locstr.value = value;
+
 final opacityValue = globalWatch(0.0); // scroll_page.dart
 
 class ListItem {
@@ -52,14 +57,14 @@ Future<void> changeLocale(BuildContext context, String countryCode) async {
   }
 }
 
-extension StringI18n on String {
+extension StringI18nExt on String {
   /// String extension for i18n.
   String i18n(BuildContext context) {
     return FlutterI18n.translate(context, this);
   }
 
   /// String extension for i18n and `locale.consume` the widget
-  /// to create consume widget for the state management.
+  /// to Create a consumer widget for the state management.
   Widget ci18n(BuildContext context, {TextStyle? style}) {
     return locale.consume(
       () => Text(FlutterI18n.translate(context, this), style: style),

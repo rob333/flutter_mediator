@@ -14,10 +14,11 @@
     <td>
     <a href="https://github.com/rob333/flutter_mediator/actions"><img src="https://github.com/rob333/flutter_mediator/workflows/Build/badge.svg" alt="Build Status"></a>
     </td>
-    <td>
+    <!--<td>
     Global Mode + Model Mode
-    </td>
+    </td>-->
   </tr>
+  <!--
   <tr>
     <td align="right">
     <a href="https://github.com/rob333/flutter_mediator_lite">Lite</a>
@@ -60,6 +61,7 @@
     <a href="https://github.com/rob333/Flutter-logins-to-a-REST-server-with-i18n-theming-persistence-and-state-management">Logins to a REST server with i18n, theming, persistence and state management.</a>
     </td>
   </tr>
+  -->
 </table>
 
 <br>
@@ -100,6 +102,7 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
     - [Case 2: List](#case-2-list)
     - [Case 3: Locale setting with Persistence by SharedPreferences](#case-3-locale-setting-with-persistence-by-sharedpreferences)
     - [Case 4: Scrolling effect](#case-4-scrolling-effect)
+    - [Use Case 5: Computed Mediator Variable](#use-case-5-computed-mediator-variable)
   - [Recap](#recap)
   - [Global Get](#global-get)
     - [Case 1: By `Type`](#case-1-by-type)
@@ -144,7 +147,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.2.1"
+  flutter_mediator: "^2.2.3"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -168,7 +171,7 @@ As of v2.1.0 introduces a `Global Mode` to support a super easy way to use the s
 
 2. Create the host with `globalHost`, or `MultiHost.create` if you want to use Model Mode together, at the top of the widget tree.
 
-3. Create a consume widget with `globalConsume` or `watchedVar.consume` to register the watched variable to the host to rebuild it when updating.
+3. Create a consumer widget with `globalConsume` or `watchedVar.consume` to register the watched variable to the host to rebuild it when updating.
 
 4. Make an update to the watched variable, by `watchedVar.value` or `watchedVar.ob.updateMethod(...)`.
 
@@ -204,7 +207,7 @@ Future<void> main() async {
 }
 ```
 
-Step 3: Create a consume widget.
+Step 3: Create a consumer widget.
 
 ```dart
 Scaffold(
@@ -213,7 +216,7 @@ Scaffold(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       const Text('You have pushed the button this many times:'),
-      //* Step3: Create a consume widget with
+      //* Step3: Create a consumer widget with
       //* `globalConsume` or `watchedVar.consume` to register the
       //* watched variable to the host to rebuild it when updating.
       globalConsume(
@@ -251,12 +254,12 @@ Step 1: Declare variable in [var.dart][example_global_mode/lib/var.dart].
 final data = globalWatch(<ListItem>[]);
 ```
 
-Step 3: Create consume widget.
+Step 3: Create a consumer widget.
 
 ```dart
 return Scaffold(
   appBar: AppBar(title: const Text('Global Mode:List Demo')),
-  //* Step3: Create a consume widget with
+  //* Step3: Create a consumer widget with
   //* `globalConsume` or `watchedVar.consume` to register the
   //* watched variable to the host to rebuild it when updating.
   body: globalConsume(
@@ -350,13 +353,13 @@ flutter:
     - assets/flutter_i18n/
 ```
 
-Step 3: Create consume widget
+Step 3: Create a consumer widget
 
 ```dart
 return SizedBox(
   child: Row(
     children: [
-      //* Step3: Create a consume widget with
+      //* Step3: Create a consumer widget with
       //* `globalConsume` or `watchedVar.consume` to register the
       //* watched variable to the host to rebuild it when updating.
       //* `watchedVar.consume()` is a helper function to
@@ -400,13 +403,13 @@ Step 1: Declare variable in [var.dart][example_global_mode/lib/var.dart].
 final opacityValue = globalWatch(0.0);
 ```
 
-Step 3: Create consume widget.
+Step 3: Create a consumer widget.
 
 ```dart
 class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //* Step3: Create a consume widget with
+    //* Step3: Create a consumer widget with
     //* `globalConsume` or `watchedVar.consume` to register the
     //* watched variable to the host to rebuild it when updating.
     return globalConsume(
@@ -438,14 +441,41 @@ class _ScrollPageState extends State<ScrollPage> {
 
 &emsp; [Table of Contents]
 
+### Use Case 5: Computed Mediator Variable
+
+Step 1: Declare the computed variable `_locstr` with a computed function in [var.dart][example_global_mode/lib/var.dart].
+
+Specify the return type of the computed function as dynamic if the return type along with the function will change.
+
+```dart
+/// Computed Mediator Variable: locstr
+final _locstr = Rx(() => "locale: ${locale.value}" as dynamic);
+get locstr => _locstr.value;
+set locstr(value) => _locstr.value = value;
+```
+
+Step 2: Create a consumer widget using `locstr` which is `_locstr.value`.
+
+```dart
+        globalConsume(
+          () => Text(
+            locstr,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+```
+
+&emsp; [Table of Contents]
+
+
 ## Recap
 
 - At step 1, `globalWatch(variable)` creates a watched variable from the variable.
 
 - At step 2, `MultiHost` works with both `Global Mode` and `Model Mode`.
 
-- At step 3, create a consume widget and register it to the host to rebuild it when updating,
-  <br> use **`globalConsume(() => widget)`** **if the value of the watched variable is used inside the consume widget**;
+- At step 3, create a consumer widget and register it to the host to rebuild it when updating,
+  <br> use **`globalConsume(() => widget)`** **if the value of the watched variable is used inside the consumer widget**;
   <br>or use **`watchedVar.consume(() => widget)`** to `touch()` the watched variable itself first and then `globalConsume(() => widget)`.
 
 - At step 4, update to the `watchedVar.value` will notify the host to rebuild; or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
@@ -536,8 +566,8 @@ class LocalePage extends StatelessWidget {
 
 ## Global Broadcast
 
-- `globalBroadcast()`, to broadcast to all the consume widgets.
-- `globalConsumeAll(Widget Function() create, {Key? key})`, to create a consume widget which will be rebuilt whenever any watched variables changes are made.
+- `globalBroadcast()`, to broadcast to all the consumer widgets.
+- `globalConsumeAll(Widget Function() create, {Key? key})`, to create a consumer widget which will be rebuilt whenever any watched variables changes are made.
 - `globalFrameAspects`, a getter, to return the updated aspects of the Global Mode.
 - `globalAllAspects`, a getter, to return all the aspects that has been registered to the Global Mode.
 

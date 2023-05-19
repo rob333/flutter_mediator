@@ -134,9 +134,9 @@ class _RadioGroupState extends State<RadioGroup> {
     '한국어',
   ];
 
-  Future<void> _handleRadioValueChange1(String? value) async {
+  _handleRadioValueChange1(Object? value) async {
     final model = Host.model<Setting>();
-    await model.changeLocale(context, value!);
+    await model.changeLocale(context, value! as String);
     setState(() {
       // model.locale.value = value; // in model.changeLocale
     });

@@ -14,7 +14,7 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Global Mode:List Demo')),
-      //* Step3: Create a consume widget with
+      //* Step3: Create a consumer widget with
       //* `globalConsume` or `watchedVar.consume` to register the
       //* watched variable to the host to rebuild it when updating.
       body: globalConsume(

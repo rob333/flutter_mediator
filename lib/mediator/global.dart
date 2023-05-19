@@ -79,16 +79,16 @@ Rx globalGet<T>({Object? tag}) {
 /// to the host to rebuild it when updating the watched variable.
 ///
 /// If the value of the watched variable is not used inside the widget,
-/// then use `watchedVar.consume` to create the consume widget to notify
+/// then use `watchedVar.consume` to create the consumer widget to notify
 /// the host to rebuild when updating the watched variable.
 SubscriberGlobal globalConsume(Widget Function() create, {Key? key}) {
   return SubscriberGlobal(key: key, create: create);
 }
 
-/// Broadcast to all the consume widgets.
+/// Broadcast to all the consumer widgets.
 void globalBroadcast() => _globalPub.publish();
 
-/// Create a consume widget that will be rebuilt whenever
+/// Create a consumer widget that will be rebuilt whenever
 /// any watched variables changes are made.
 Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
   wrapFn(BuildContext _, Pub __) => create();
@@ -96,7 +96,7 @@ Subscriber globalConsumeAll(Widget Function() create, {Key? key}) {
 }
 
 /// Create a [InheritedModel] widget to listen to the watched variables
-/// and rebuild related consume widgets when updating the watched variable.
+/// and rebuild related consumer widgets when updating the watched variable.
 ///
 /// Place at the top of the widget tree.
 Widget globalHost({

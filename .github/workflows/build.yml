@@ -42,7 +42,7 @@ jobs:
       # Setup the flutter environment.
       - uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          channel: beta
           # channel: ${{ matrix.channel }}
           # channel: "beta" # 'dev', 'alpha', default to: 'stable'
           # flutter-version: '1.12.x' # you can also specify exact version of flutter

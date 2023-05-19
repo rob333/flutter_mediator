@@ -6,8 +6,8 @@ import 'assert.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-/// Class [Host] handles the registration of consume widget with [aspects],
-/// and rebuild consume widgets with aspects when updating.
+/// Class [Host] handles the registration of consumer widget with [aspects],
+/// and rebuild consumer widgets with aspects when updating.
 @immutable
 class Host<TModel extends Pub> extends StatefulWidget {
   const Host({
@@ -34,7 +34,7 @@ class Host<TModel extends Pub> extends StatefulWidget {
   /// For MultiHost.create, to accmulate the child
   static List<Widget> stateChildColl = <Widget>[];
 
-  /// Register the consume widget [context] to the [Host] with [aspects],
+  /// Register the consumer widget [context] to the [Host] with [aspects],
   /// and add these [aspects] to [regAspects].
   /// Return the [TModel]
   static TModel register<TModel extends Pub>(
@@ -91,7 +91,7 @@ class _HostState<TModel extends Pub> extends State<Host<TModel>> {
   ///
   /// [aspects] could be:
   ///
-  ///     null: broadcast to all the consume widget of this host
+  ///     null: broadcast to all the consumer widget of this host
   ///     Iterable<Object>: all the aspects in the iterable
   ///     Rx variable: the aspects related with the Rx variableg
   ///     aspect: a single aspect

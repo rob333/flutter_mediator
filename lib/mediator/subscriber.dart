@@ -5,19 +5,19 @@ import 'host.dart';
 import 'pub.dart';
 import 'rx/rx_impl.dart';
 
-/// The consume widget class.
+/// The consumer widget class.
 @immutable
 class Subscriber<Model extends Pub> extends StatelessWidget {
-  /// Create a consume widget.
+  /// Create a consumer widget.
   ///
-  /// [aspects] : register the aspects with the consume widget. This widget
+  /// [aspects] : register the aspects with the consumer widget. This widget
   /// will rebuild whenever any aspect in the [aspects] is notified.
   ///
   /// [rxAuto] : if enable automatic aspect management, i.e. any watched
   /// variable value used inside the [create] function will rebuild the
-  /// consume widget when updating the value of the watched variable.
+  /// consumer widget when updating the value of the watched variable.
   ///
-  /// [create] : create a child widget of this consume widget.
+  /// [create] : create a child widget of this consumer widget.
   const Subscriber({
     Key? key,
     this.aspects,
@@ -50,12 +50,12 @@ class Subscriber<Model extends Pub> extends StatelessWidget {
   }
 }
 
-/// The consume widget class with automatic aspect.
+/// The consumer widget class with automatic aspect.
 @immutable
 class SubscriberAuto<Model extends Pub> extends StatelessWidget {
-  /// Create a consume widget.
+  /// Create a consumer widget.
   ///
-  /// [create] : create a child widget of this consume widget.
+  /// [create] : create a child widget of this consumer widget.
   const SubscriberAuto({
     Key? key,
     required this.create,
@@ -84,18 +84,18 @@ class SubscriberAuto<Model extends Pub> extends StatelessWidget {
   }
 }
 
-/// The consume widget class with automatic aspect and global model.
+/// The consumer widget class with automatic aspect and global model.
 ///
 /// A lite version of the Subscribe class, used specially for Global Mode.
 @immutable
 class SubscriberGlobal extends StatelessWidget {
-  /// Create a consume widget.
+  /// Create a consumer widget.
   ///
   /// Register to the host to rebuild when any of the watched variable value
   /// used inside this widget is updating; or use `watchedVar.consume` to
   /// `touch()` the watched variable first.
   ///
-  /// [create] : create a child widget of this consume widget.
+  /// [create] : create a child widget of this consumer widget.
   const SubscriberGlobal({
     Key? key,
     required this.create,

@@ -34,6 +34,12 @@ class LocalePage extends StatelessWidget {
             style: const TextStyle(fontSize: 16),
           ),
         ),
+        globalConsume(
+          () => Text(
+            locstr,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
         globalConsumeAll(() {
           final txt =
               globalFrameAspects.isEmpty ? '' : 'Updated: $globalFrameAspects';
@@ -64,7 +70,7 @@ class LocalePanel extends StatelessWidget {
       width: 250,
       child: Row(
         children: [
-          //* Step3: Create a consume widget with
+          //* Step3: Create a consumer widget with
           //* `globalConsume` or `watchedVar.consume` to register the
           //* watched variable to the host to rebuild it when updating.
           locale.consume(() => Text('${'app.hello'.i18n(context)} ')),
@@ -108,8 +114,8 @@ class _RadioGroupState extends State<RadioGroup> {
     '한국어',
   ];
 
-  Future<void> _handleRadioValueChange1(String? value) async {
-    await changeLocale(context, value!);
+  _handleRadioValueChange1(Object? value) async {
+    await changeLocale(context, value! as String);
     setState(() {});
   }
 

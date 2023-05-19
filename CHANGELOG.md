@@ -1,3 +1,16 @@
+## 2.2.3
+
+- Support mediator variable of type `Function`, to use as a **computed** mediator variable.
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For example,
+```dart
+final _sum = Rx(() => int1 + int2 + int3 as dynamic); // use `dynamic` if the return type along with the computed function will change
+get sum => _sum.value;
+set sum(value) => _sum.value = value;
+```
+
+
 ## 2.2.2
 
 - Imporve `RxList`, `RxSet`, and `RxMap`.
@@ -57,7 +70,7 @@
 ## 2.1.2
 
 - Add Global Broadcast capabilities:
-  - `globalBroadcast()`, to broadcast to all the globalConsume widgets.
+  - `globalBroadcast()`, to broadcast to all the globalconsumer widgets.
   - `globalConsumeAll(Widget Function() create, {Key? key})`, to create a widget which will be rebuilt whenever any watched variables changes are made.
   - `globalFrameAspects`, a getter, to return the updated aspects of the Global Mode.
   - `globalAllAspects`, a getter, to return all the aspects that has been registered to the Global Mode.
