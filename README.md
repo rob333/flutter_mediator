@@ -102,7 +102,7 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
     - [Case 2: List](#case-2-list)
     - [Case 3: Locale setting with Persistence by SharedPreferences](#case-3-locale-setting-with-persistence-by-sharedpreferences)
     - [Case 4: Scrolling effect](#case-4-scrolling-effect)
-    - [Use Case 5: Computed Mediator Variable](#use-case-5-computed-mediator-variable)
+    - [Case 5: Computed Mediator Variable](#case-5-computed-mediator-variable)
   - [Recap](#recap)
   - [Global Get](#global-get)
     - [Case 1: By `Type`](#case-1-by-type)
@@ -441,7 +441,7 @@ class _ScrollPageState extends State<ScrollPage> {
 
 &emsp; [Table of Contents]
 
-### Use Case 5: Computed Mediator Variable
+### Case 5: Computed Mediator Variable
 
 Step 1: Declare the computed variable `_locstr` with a computed function in [var.dart][example_global_mode/lib/var.dart].
 
