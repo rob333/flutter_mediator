@@ -104,6 +104,7 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
     - [Case 4: Scrolling effect](#case-4-scrolling-effect)
     - [Case 5: Computed Mediator Variable](#case-5-computed-mediator-variable)
   - [Recap](#recap)
+  - [`Signal`](#signal)
   - [Global Get](#global-get)
     - [Case 1: By `Type`](#case-1-by-type)
     - [Case 2: By `tag`](#case-2-by-tag)
@@ -147,7 +148,7 @@ Add the following dependency to pubspec.yaml of your flutter project:
 
 ```yaml
 dependencies:
-  flutter_mediator: "^2.2.3"
+  flutter_mediator: "^2.2.5"
 ```
 
 Import flutter_mediator in files that will be used:
@@ -481,6 +482,23 @@ Step 2: Create a consumer widget using `locstr` which is `_locstr.value`.
 - At step 4, update to the `watchedVar.value` will notify the host to rebuild; or the underlying object would be a class, then use `watchedVar.ob.updateMethod(...)` to notify the host to rebuild. <br>**`watchedVar.ob = watchedVar.notify() and then return the underlying object`.**
 
 &emsp; [Table of Contents]
+
+
+## `Signal`
+
+Mediator variables can be initialled by the `Signal` annotation, through type alias.
+
+For example,
+```dart
+final _int1 = 0.signal;
+final _int2 = Signal(0); 
+final _int3 = Signal(0); 
+// computed mediator variable
+final _sum = Signal(() => int1 + int2 + int3);
+```
+
+&emsp; [Table of Contents]
+
 
 ## Global Get
 

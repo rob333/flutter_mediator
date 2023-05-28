@@ -105,6 +105,15 @@ class RxMap<K, V> extends RxImpl<Map<K, V>> implements Map<K, V> {
   }
 }
 
-extension RxMapExtension<K, V> on Map<K, V> {
+/// `rx` extension of RxMap
+extension RxMapExt<K, V> on Map<K, V> {
   RxMap<K, V> get rx => RxMap<K, V>(this);
+}
+
+/// type alias
+typedef SignalMap<K, V> = RxMap<K, V>;
+
+/// `signal` extension of RxMap
+extension SignalMapExt<K, V> on Map<K, V> {
+  SignalMap<K, V> get signal => SignalMap<K, V>(this);
 }

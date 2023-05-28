@@ -323,21 +323,30 @@ class Rx<T> extends RxImpl<T> {
 }
 
 /// Extension for string type to Rx object.
-extension RxStringExtension on String {
+extension RxStringExt on String {
   /// Returns a `RxString` with [this] `String` as initial value.
   RxString get rx => RxString(this);
 }
 
 /// Extension for bool type to Rx object.
-extension RxBoolExtension on bool {
+extension RxBoolExt on bool {
   /// Returns a `RxBool` with [this] `bool` as initial value.
   RxBool get rx => RxBool(this);
 }
 
 /// Extension for all others type to Rx object.
-extension RxExtension<T> on T {
+extension RxExt<T> on T {
   /// Returns a `Rx` instace with [this] `T` as initial value.
   Rx<T> get rx => Rx<T>(this);
+}
+
+/// type alias
+typedef Signal<T> = Rx<T>;
+
+/// Extension for Signal type aliase.
+extension SignalExt<T> on T {
+  /// Returns a `Signal` type alias with [this] of type `T` as the initial value.
+  Signal<T> get signal => Signal<T>(this);
 }
 
 /// Encode a number into a string

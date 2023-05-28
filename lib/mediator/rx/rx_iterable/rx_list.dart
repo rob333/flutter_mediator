@@ -324,6 +324,15 @@ class RxList<E> extends RxImpl<List<E>> implements List<E> {
   }
 }
 
-extension RxListExtension<E> on List<E> {
+/// `rx` extension of RxList
+extension RxListExt<E> on List<E> {
   RxList<E> get rx => RxList<E>(this);
+}
+
+/// type alias
+typedef SignalList<T> = RxList<T>;
+
+/// `signal` extension of RxList
+extension SignalListExt<E> on List<E> {
+  SignalList<E> get signal => SignalList<E>(this);
 }
