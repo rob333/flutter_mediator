@@ -3,21 +3,20 @@
 - Adds a type alias of Rx class as `Signal`. Allows you to initialize mediator variables with the `Signal` annotation.
   
   For example,
-  ```dart
-  final _int1 = 0.signal;
-  final _int2 = Signal(0); 
-  final _int3 = Signal(0); 
-  // computed mediator variable
-  final _sum = Signal(() => int1 + int2 + int3);
-  ```
+```dart
+final _int1 = 0.signal;
+final _int2 = Signal(0); 
+final _int3 = Signal(0); 
+// computed mediator variable
+final _sum = Signal(() => int1 + int2 + int3);
+```
 
 
 ## 2.2.3
 
 - Support mediator variable of type `Function`, to use as a **computed** mediator variable.
 
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For example,
+  For example,
 ```dart
 final _sum = Rx(() => int1 + int2 + int3 as dynamic); // use `dynamic` if the return type along with the computed function will change
 get sum => _sum.value;
