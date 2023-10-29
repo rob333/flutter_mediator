@@ -142,22 +142,36 @@ Flutter mediator is a state management package base on the [InheritedModel][] wi
 
 <hr>
 
-## Setting up
+## Getting started
 
-Add the following dependency to pubspec.yaml of your flutter project:
+Run this command:
+
+With Flutter:
+
+```
+ $ flutter pub add flutter_mediator
+```
+
+This will add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 
 ```yaml
 dependencies:
   flutter_mediator: "^2.2.5"
 ```
 
-Import flutter_mediator in files that will be used:
+Alternatively, your editor might support flutter pub get. Check the docs for your editor to learn more.
+
+
+### Import it
+
+Now in your Dart code, you can use:
 
 ```dart
 import 'package:flutter_mediator/mediator.dart';
 ```
 
 For help getting started with Flutter, view the online [documentation](https://flutter.dev/docs).
+
 
 &emsp; [Table of Contents]
 
