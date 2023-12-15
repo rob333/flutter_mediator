@@ -78,7 +78,7 @@ Lite:
 [![Build](https://github.com/rob333/flutter_mediator_lite/workflows/Build/badge.svg)](https://github.com/rob333/flutter_mediator_lite/actions)
 -->
 
-Flutter mediator is a state management package base on the [InheritedModel][] with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
+Flutter mediator is a signal state management package base on the [InheritedModel][] with automatic aspect management to make it simpler and easier to use and rebuild widgets only when necessary.
 
 <table border="0" align="center">
   <tr>

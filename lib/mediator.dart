@@ -1,3 +1,5 @@
+library flutter_mediator;
+
 export 'mediator/assert.dart';
 export 'mediator/controller.dart';
 export 'mediator/global.dart';
