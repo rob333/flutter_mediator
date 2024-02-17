@@ -171,7 +171,7 @@ Widget allSubscriber() {
         textAlign: TextAlign.center,
       );
     },
-  ).sizeBox(width: Width, height: 30);
+  ).sizeBox(width: Width, height: 70);
 }
 
 //* Subscribe two aspects

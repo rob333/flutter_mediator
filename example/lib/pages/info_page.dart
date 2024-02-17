@@ -13,7 +13,7 @@ Widget infoPage() {
       children: [
         const SizedBox(height: 50),
         SizedBox(
-          height: 125,
+          height: 135,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
